@@ -1,1 +1,26 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.custom-modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    right: 36%;
+    top: 60%;
+    position: absolute !important;
+    border-radius: 5px;
+    border: solid 2px lightgray;
+    z-index: 10000;
+}
+
+/* styles.css or your component's stylesheet */
+.modal-overlay {
+    // background-color: rgba(0, 0, 0, 0.5); /* Adjust opacity as needed */
+    // backdrop-filter: blur(8px); /* Fallback for browsers that support backdrop-filter */
+    // -webkit-backdrop-filter: blur(8px); /* For Safari */
+    // z-index: 999; /* Ensure the overlay is above other content */
+    // filter: blur(8px);
+}

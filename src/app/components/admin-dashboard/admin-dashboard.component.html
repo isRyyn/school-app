@@ -5,7 +5,7 @@
           <div class="card-body">
             <h5 class="card-title">Student Details</h5>
             <p class="card-text">Manage student information and miscellaneous details.</p>
-            <a routerLink="/login" class="btn btn-primary" (click)="goToPath('student-details')">Go to Student Details</a>
+            <a class="btn btn-primary" (click)="goToPath('student-details')">Go to Student Details</a>
           </div>
         </div>
       </div>
@@ -14,7 +14,7 @@
           <div class="card-body">
             <h5 class="card-title">Fee Details</h5>
             <p class="card-text">Manage student fee details and transactions.</p>
-            <a routerLink="/admin/fee-details" class="btn btn-primary">Go to Fee Details</a>
+            <a routerLink="fee-details" class="btn btn-primary">Go to Fee Details</a>
           </div>
         </div>
       </div>
@@ -23,10 +23,11 @@
           <div class="card-body">
             <h5 class="card-title">Marks Details</h5>
             <p class="card-text">Manage student marks and academic performance.</p>
-            <a routerLink="/admin/marks-details" class="btn btn-primary">Go to Marks Details</a>
+            <a routerLink="marks-details" class="btn btn-primary">Go to Marks Details</a>
           </div>
         </div>
       </div>
     </div>
   </div>
+  <router-outlet></router-outlet>
   

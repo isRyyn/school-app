@@ -1,0 +1,17 @@
+.input-marks {
+    display: flex;
+
+    input {
+        width: 10%;
+        height: fit-content;
+    }
+
+    span {
+        font-size: 2em;
+        margin: -5px 10px;
+    }
+
+    div:nth-child(2) {
+        margin-left: 35px;
+    }
+}

@@ -7,7 +7,7 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { 
         path: 'private/admin-dashboard', 
-        loadChildren: () => import('./components/admin-dashboard/admin-dashboard.routes').then(m => m.adminRoutes) 
+        loadChildren: () => import('./components/admin-dashboard/admin-dashboard.module').then(m => m.AdminDashboardModule) 
     },    
     { path: 'private/student-dashboard', component: StudentDashboardComponent },
 ];

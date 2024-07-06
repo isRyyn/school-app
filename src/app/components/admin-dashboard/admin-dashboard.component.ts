@@ -1,21 +1,28 @@
 import { Router, RouterModule } from '@angular/router';
-import { Component } from '@angular/core';
-import { adminRoutes } from './admin-dashboard.routes';
+import { Component, OnInit } from '@angular/core';
+import { ModalService } from '../../services/modal.service';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [],
+  imports: [RouterModule],
   templateUrl: './admin-dashboard.component.html',
   styleUrl: './admin-dashboard.component.scss'
 })
-export class AdminDashboardComponent {
+export class AdminDashboardComponent implements OnInit {
+  
+  constructor(
+    private router: Router,
+    private readonly modalService: ModalService
+  ) {
+  }
 
-  constructor(private router: Router) {
-
+  ngOnInit(): void {
+      
   }
 
   goToPath(path: string): void {
-    this.router.navigate([`/private/admin-dashboard/${path}`]);
+    this.modalService.openModal();
+    //this.router.navigate([`/private/admin-dashboard/${path}`]);
   }
 }

@@ -1,0 +1,47 @@
+<div *ngIf="isViewMode; else showAddMode"></div>
+<ng-template #showAddMode>
+  <form [formGroup]="marksForm">
+    <ng-select [items]="items"
+           bindLabel="name"
+           bindValue="id"
+           placeholder="Select item"
+           >
+</ng-select>
+     <!-- <ng-select
+      [items]="studentsList"
+      [placeholder]="'Select a student...'"
+      formControlName="selectedStudent"
+    ></ng-select> -->
+<!--
+    <ng-select
+      [items]="examsList"
+      [placeholder]="'Select exam...'"
+      formControlName="examType"
+    ></ng-select>
+
+    <ng-select
+      [items]="subjectsList"
+      [placeholder]="'Select subject...'"
+      formControlName="subject"
+    ></ng-select>
+
+    <ng-select
+      [items]="sessionsList"
+      [placeholder]="'Select session...'"
+      formControlName="session"
+    ></ng-select>-->
+
+    <div class="input-marks">
+        <div>Marks Obtained</div>
+        <div>Total Marks</div> 
+    </div>
+
+    <div class="input-marks">
+        <input type="number" formControlName="marksObtained" class="form-control"/>
+        <span>/</span>
+        <input type="number" formControlName="totalMarks" class="form-control"/> 
+    </div>
+    
+
+  </form>
+</ng-template>
