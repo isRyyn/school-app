@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { MatDialogContent, MatDialogActions, MatDialogRef, MatDialogClose } from '@angular/material/dialog';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogContent, MatDialogActions, MatDialogRef, MatDialogClose, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,13 +10,29 @@ import { Router } from '@angular/router';
   templateUrl: './modal.component.html',
   styleUrl: './modal.component.scss'
 })
-export class ModalComponent {
+export class ModalComponent implements OnInit {
 
   showTitle?: boolean;
+  path?: string;
+  checkButton!: string;
+  addButton!: string;
 
-  constructor(private router: Router,
-    public dialogRef: MatDialogRef<ModalComponent>){
+  constructor(
+    private router: Router,
+    public dialogRef: MatDialogRef<ModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ){
+  }
 
+  ngOnInit(): void {
+    this.path = this.data['path'];
+    if(this.path == 'marks-details') {
+      this.checkButton = this.addButton = 'Marks';
+    } else if (this.path == 'fee-details') {
+      this.checkButton = this.addButton = 'Fee';
+    } else {
+      this.checkButton = this.addButton = 'Details';
+    }
   }
 
   onClose(): void {
@@ -24,10 +40,9 @@ export class ModalComponent {
   }
 
   goToPath(option: string): void {
-    this.router.navigate([`/private/admin-dashboard/marks-details`], {
+     this.dialogRef.close();
+     this.router.navigate([`/private/admin-dashboard/${this.path}`], {
       queryParams: { selection: option }
      });
-     this.onClose();
   }
-
 }

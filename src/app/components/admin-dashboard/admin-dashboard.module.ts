@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminDashboardComponent } from './admin-dashboard.component';
@@ -16,7 +17,8 @@ const adminRoutes: Routes = [
 @NgModule({
   declarations: [],
   imports: [
-    RouterModule.forChild(adminRoutes)
+    RouterModule.forChild(adminRoutes),
+    HttpClientModule
   ]
 })
 export class AdminDashboardModule { }

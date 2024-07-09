@@ -1,3 +1,14 @@
+ng-select {
+    width: 200px;
+    margin-bottom: 20px;
+}
+
+.marks-row {
+    ng-select {
+        margin-right: 30px;
+    }
+}
+
 .input-marks {
     display: flex;
 
@@ -15,3 +26,4 @@
         margin-left: 35px;
     }
 }
+

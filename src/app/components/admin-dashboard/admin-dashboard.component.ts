@@ -22,7 +22,6 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   goToPath(path: string): void {
-    this.modalService.openModal();
-    //this.router.navigate([`/private/admin-dashboard/${path}`]);
+    this.modalService.openModal(path);
   }
 }

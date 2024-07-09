@@ -9,18 +9,19 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     justify-content: center;
     align-items: center;
     right: 36%;
-    top: 60%;
+    top: 45%;
     position: absolute !important;
     border-radius: 5px;
     border: solid 2px lightgray;
-    z-index: 10000;
+    z-index: 1000;
+    border: none;
 }
 
-/* styles.css or your component's stylesheet */
-.modal-overlay {
-    // background-color: rgba(0, 0, 0, 0.5); /* Adjust opacity as needed */
-    // backdrop-filter: blur(8px); /* Fallback for browsers that support backdrop-filter */
-    // -webkit-backdrop-filter: blur(8px); /* For Safari */
-    // z-index: 999; /* Ensure the overlay is above other content */
-    // filter: blur(8px);
-}
+// TODO: Check
+// .modal-overlay {
+//     background-color: rgba(0, 0, 0, 0.5); 
+//     backdrop-filter: blur(8px); 
+//     -webkit-backdrop-filter: blur(8px); /* For Safari */
+//     z-index: 999; 
+//     filter: blur(8px);
+// }
