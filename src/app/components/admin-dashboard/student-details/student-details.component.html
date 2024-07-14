@@ -1,1 +1,222 @@
-<p>student-details works!</p>
+<ng-container *ngIf="isLoaded">
+    <ng-container *ngIf="actionType === actions.PRIMARY; else showOther">
+        <form [formGroup]="studentForm" class="container">
+            <section class="d-flex justify-content-md-around student-links-container">
+                <a class="student-links col-xs-12" (click)="goToSection('basicDetails')">
+                    <i class="fa-solid fa-pen-nib"></i>
+                </a>
+                <a class="student-links" (click)="goToSection('contactDetails')">
+                    <i class="fa-solid fa-phone"></i>
+                </a>
+                <a class="student-links" (click)="goToSection('parentsDetails')">
+                    <i class="fa-solid fa-people-roof"></i>
+                </a>
+                <a class="student-links" (click)="goToSection('transportationDetails')">
+                    <i class="fa-solid fa-van-shuttle"></i>
+                </a>
+                <a class="student-links" (click)="goToSection('utilitiesDetails')">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </a>
+            </section>
+            <section class="mt-5" #sections>
+                <div class="mb-4 pt-3">
+                    <i class="fa-solid fa-pen-nib"></i>
+                    <h4 class="student-section-heading mx-3">Basic Details</h4>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <label>First name</label>
+                        <input class="form-control" formControlName="firstName" placeholder="Enter first name"/> 
+                    </div>
+                    <div class="col-4">
+                        <label>Middle name</label>
+                        <input class="form-control" formControlName="middleName" placeholder="Enter middle name"/> 
+                    </div>
+                    <div class="col-4">
+                        <label>Last name</label>
+                        <input class="form-control" formControlName="lastName" placeholder="Enter last name"/> 
+                    </div>
+                </div>
+    
+                <div class="row mt-4">
+                    <div class="col-4">
+                        <label>Date of Birth</label>
+                        <input type="date" class="form-control" formControlName="dob"/>
+                    </div>
+                    <div class="col-4">
+                        <label>Gender</label>
+                        <select formControlName="gender" class="form-control form-select">
+                            <option value="">Select Gender</option>
+                            @for (item of genders; track item) {
+                                <option value="{{item.value}}">{{ item.name }}</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-4">
+                        <label>Class</label>
+                        <select formControlName="standard" class="form-control form-select">
+                            <option value="" class="form-disabled-option">Select Class</option>
+                            @for (item of classList; track item) {
+                                <option value="{{item.value}}">{{ item.name }}</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-4">
+                        <label>Session</label>
+                        <input type="text" class="form-control" formControlName="session" placeholder="Enter session"/>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-4">
+                        <label>Roll No</label>
+                        <input type="number" formArrayName="rollNo" class="form-control" placeholder="Enter roll no"/>
+                    </div>
+                    <div class="col-4">
+                        <label>U-Dias Code</label>
+                        <input type="number" formArrayName="uDiasCode" class="form-control" placeholder="Enter U-Dias Code"/>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-4">
+                        <label>Profile Picture</label> 
+                        <input type="file" class="form-control" formControlName="picture"/>
+                    </div>
+                    <div class="col-4">
+                        <label>Previous School</label>
+                        <input type="text" class="form-control" formControlName="previousSchool" placeholder="Enter previous school"/>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mt-5" #sections>
+                <div class="mb-4">
+                    <i class="fa-solid fa-phone"></i>
+                    <h4 class="student-section-heading mx-3">Contact Details</h4>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <label>Mobile</label>
+                        <input type="number" class="form-control" formControlName="mobile" placeholder="Enter mobile no"/>
+                    </div>
+                    <div class="col-4">
+                        <label>Email</label>
+                        <input type="email" class="form-control" formControlName="email" placeholder="Enter email id"/>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-8">
+                        <label>Address</label>
+                        <textarea class="form-control" placeholder="Enter address" formControlName="address"></textarea> 
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-4">
+                        <label>State</label>
+                        <input type="text" class="form-control" formControlName="state" placeholder="Enter state"/>
+                    </div>
+                    <div class="col-4">
+                        <label>City</label>
+                        <input type="text" class="form-control" formControlName="city" placeholder="Enter city"/>
+                    </div>
+                    <div class="col-4">
+                        <label>Pincode</label>
+                        <input type="text" class="form-control" formControlName="pincode" placeholder="Enter pincode"/>
+                    </div>
+                </div>
+            </section>
+            <section class="mt-5" #sections>
+                <div class="mb-4">
+                    <i class="fa-solid fa-people-roof"></i>
+                    <h4 class="student-section-heading mx-3">Parents Details</h4>
+                    <i class="fa-solid fa-user-plus add-parent" (click)="addParent()"></i>
+                </div>
+                <form [formGroup]="parentForm" *ngIf="showParentForm">
+                    <ng-container formArrayName="items">
+                        <form class="parent-form" *ngFor="let item of items.controls; let i = index" [formGroupName]="i">
+                            <div class="row mt-5">
+                                <div class="col-4">
+                                    <label>First name</label>
+                                    <input class="form-control" formControlName="firstName" placeholder="Enter first name"/> 
+                                </div>
+                                <div class="col-4">
+                                    <label>Middle name</label>
+                                    <input class="form-control" formControlName="middleName" placeholder="Enter middle name"/> 
+                                </div>
+                                <div class="col-4">
+                                    <label>Last name</label>
+                                    <input class="form-control" formControlName="lastName" placeholder="Enter last name"/> 
+                                </div>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-4">
+                                    <label>Mobile Number</label>
+                                    <input class="form-control" formControlName="mobile" placeholder="Enter first name"/> 
+                                </div>
+                                <div class="col-4">
+                                    <label>Gender</label>
+                                    <select formControlName="gender" class="form-control form-select">
+                                        <option value="">Select Gender</option>
+                                        @for (item of genders; track item) {
+                                            <option value="{{item.value}}">{{ item.name }}</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-4">
+                                    <label>Relation</label>
+                                    <input class="form-control" formControlName="relation" placeholder="Enter last name"/> 
+                                </div>
+                            </div>
+                        </form>
+                    </ng-container>
+                </form>
+            </section>
+            <form [formGroup]="vehicleForm" class="mt-5" #sections>
+                <div class="mb-4">
+                    <i class="fa-solid fa-van-shuttle"></i>
+                    <h4 class="student-section-heading mx-3">Transportation Details</h4>
+                </div>
+                <div class="row mt-5">
+                    <div class="col-4">
+                        <label>Vehicle Name</label>
+                        <input class="form-control" formControlName="name" placeholder="Enter vehicle name"/>
+                    </div>
+                    <div class="col-4">
+                        <label>Vehicle Number</label>
+                        <input class="form-control" formControlName="number" placeholder="Enter vehicle number"/>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col-8">
+                        <label>Vehicle Route</label>
+                        <textarea class="form-control" formControlName="route" placeholder="Enter vehicle route"></textarea>
+                    </div>
+                </div>
+            </form>
+            <section class="mt-5" #sections>
+                <div class="mb-4">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <h4 class="student-section-heading mx-3">Utilities Details</h4>
+                </div>
+                <div class="row">
+                    <div class="col-2">
+                        <input type="checkbox" formControlName="uniform"/>
+                        <label>Uniform Provided</label>
+                    </div>
+                    <div class="col-2">
+                        <input type="checkbox" formControlName="course"/>
+                        <label>Course Provided</label>
+                    </div>
+                </div>
+            </section>
+            <div class="d-flex justify-content-center student-details-btn mt-3">
+                <button class="btn btn-success" (click)="onSave()">Save</button>
+                <button class="btn btn-danger" (click)="onCancel()">Cancel</button>
+            </div>
+        </form>
+    </ng-container>
+    <ng-template #showOther>
+
+    </ng-template>
+</ng-container>

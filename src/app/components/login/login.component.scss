@@ -1,0 +1,44 @@
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-form-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    height: 50vh;
+}
+
+input, select {
+    min-width: 250px;
+    width: 250px;
+    height: 30px;
+    font-size: 0.9em;
+}
+
+select {
+    padding: 0px 10px;
+}
+
+.form-row {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.form-icon {
+    font-size: 2em;
+    width: 50px;
+}
+
+.form-button {
+    min-width: 140px;
+    height: 35px;
+    padding: 4px;
+    background: black;
+    margin-left: 95px;
+}
+
+.invalid {
+    border: solid 1px rgb(235, 99, 99);
+}

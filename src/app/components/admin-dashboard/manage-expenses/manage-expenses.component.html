@@ -1,0 +1,39 @@
+<form [formGroup]="expenseForm" (ngSubmit)="onSubmit()" *ngIf="isLoaded && actionType != action.TERTIARY">
+    <label>Amount</label>
+    <input type="number" class="form-control" formControlName="amount"/>
+
+    <label>Category</label>
+    <input type="text" class="form-control" formControlName="category"/>
+
+    <label>Date</label>
+    <input type="date" class="form-control" formControlName="date"/>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<ng-container *ngIf="actionType === action.TERTIARY">
+    <div>Passbook</div>
+    <table>
+        <thead>
+            <tr>
+                <th>S. No</th>
+                <th>Transaction Type</th>
+                <th>Amount</th>
+                <th>Category</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (transaction of transactions; track transaction; let i= $index) {
+                <tr>
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ transaction.type }}</td>
+                    <td>{{ transaction.amount }}</td>
+                    <td>{{ transaction.category }}</td>
+                    <td>{{ transaction.date }}</td>
+                </tr>
+                
+            }  
+        </tbody>
+    </table>
+</ng-container>

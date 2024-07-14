@@ -1,20 +1,43 @@
-/* You can add global styles to this file, and also import other style files */
-
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { 
+    margin: 0; 
+    font-family: Roboto, "Helvetica Neue", sans-serif; 
+    background-image: url('assets/images/background.jpg');
+    background-size: auto;
+    background-position: center center;
+    background-repeat: no-repeat;
+    margin: 0;
+    height: 100vh;
+}
 
 
 .custom-modal {
     display: flex;
     justify-content: center;
     align-items: center;
-    right: 36%;
-    top: 45%;
-    position: absolute !important;
     border-radius: 5px;
     border: solid 2px lightgray;
-    z-index: 1000;
     border: none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    height: 8vw;
+}
+
+@media (max-width: 900px) {
+    .custom-modal {
+        height: 12vw;
+    }
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+    .custom-modal {
+        height: 23vw;
+    }
 }
 
 // TODO: Check

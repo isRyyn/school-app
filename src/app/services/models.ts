@@ -17,6 +17,17 @@ export interface Transaction {
     id: number;
     amount: number;
     category: string;
-    time: string;
+    date: string;
     type: TransactionType;
+}
+
+export enum Action {
+    PRIMARY = 'primary', 
+    SECONDARY = 'secondary',
+    TERTIARY = 'tertiary'
+}
+
+export type ArrayObject = {
+    name: string;
+    value: any;
 }

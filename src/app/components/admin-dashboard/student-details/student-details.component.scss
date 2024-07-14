@@ -1,0 +1,93 @@
+.container {
+    scroll-behavior: smooth;
+    box-shadow: 0px 7px 10px 1px;
+}
+
+.student-links-container {
+    position: fixed;
+    flex-direction: column;
+    align-items: flex-start;
+    left: 0;
+
+    background: white;
+    padding: 5px;
+    border-radius: 0px 20px 20px 0px;
+}
+
+.student-links {
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0px 10px;
+    margin: 10px 0px;
+}
+
+
+.student-section-heading {
+    display: inline-block;
+}
+
+.parent-form {
+    box-shadow: 0px 7px 10px 1px;
+    padding: 0px 11px 10px;
+}
+
+label {
+    margin-left: 13px;
+    margin-bottom: 5px;
+    font-style: italic;
+    font-size: 0.9em;
+    white-space: nowrap;
+}
+
+input, select, textarea {
+    font-size: 0.9em;
+}
+
+.form-select option:first-child {
+    color: grey;
+}
+
+.add-parent {
+    color: cornflowerblue;
+    border: solid 1px black;
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+
+    &:hover {
+        color: blue;
+    }
+}
+
+.student-details-btn {
+    position: sticky;
+    bottom: 0;
+    z-index: 1002;
+    background: rgb(0, 0, 0);
+    padding: 10px;
+    border-radius: 10px;
+    width: fit-content;
+    margin: auto;
+
+    button {
+        margin: 0px 10px;
+        min-width: 150px;
+    }    
+}
+
+
+// media-queries
+@media (max-width: 440px) {
+    .container{
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 825px) {
+    .student-links-container {
+        top: 116px;
+        flex-direction: row;
+        position: inherit;
+        border-radius: 0px 0px 20px 20px;
+    }
+}

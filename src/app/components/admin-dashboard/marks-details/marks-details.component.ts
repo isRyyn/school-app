@@ -3,25 +3,26 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { MatSelectModule } from '@angular/material/select';
 import { ApiService } from '../../../services/api.service';
-import { Student } from '../../../services/models';
+import { Action, Student } from '../../../services/models';
 
 @Component({
   selector: 'app-marks-details',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NgSelectModule, MatSelectModule],
+  imports: [CommonModule, ReactiveFormsModule, NgSelectModule],
   providers: [ApiService],
   templateUrl: './marks-details.component.html',
   styleUrl: './marks-details.component.scss',
 })
 export class MarksDetailsComponent implements OnInit {
+    action = Action;
   isViewMode?: boolean;
   studentsList: Student[] = [];
   examsList: [] = [];
   subjectsList: [] = [];
   sessionsList: [] = [];
   marksForm!: FormGroup;
+  isActionPrimary?: boolean;
   items = [
     { id: 1, name: 'Item 1' },
     { id: 2, name: 'Item 2' },
@@ -37,7 +38,7 @@ export class MarksDetailsComponent implements OnInit {
     this.fetchStudents();
     this.loadForm();
     this.route.queryParams.subscribe((params) => {
-      this.isViewMode = params['selection'] === 'check';
+      this.isActionPrimary = params['action'] === this.action.PRIMARY;
     });
   }
 

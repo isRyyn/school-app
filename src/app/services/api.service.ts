@@ -20,4 +20,8 @@ export class ApiService {
         return this.httpClient.get<Transaction[]>(`${this.baseUrl}/transactions`);
     }
 
+    saveTransaction(payload: Transaction): Observable<Transaction> {
+        return this.httpClient.post<Transaction>(`${this.baseUrl}/transactions`, payload);
+    }
+
 }
