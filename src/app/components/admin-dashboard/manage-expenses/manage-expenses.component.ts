@@ -1,15 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Action, Transaction, TransactionType } from '../../../services/models';
+import { Transaction } from '../../../services/models';
+import { Action } from "../../../services/enums";
+import { TransactionType } from "../../../services/enums";
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../../services/api.service';
-import { SharedService } from '../../../services/shared.service';
+import { DatePickerComponent } from "../../common/date-picker/date-picker.component";
 
 @Component({
   selector: 'app-manage-expenses',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, DatePickerComponent],
   providers: [ApiService],
   templateUrl: './manage-expenses.component.html',
   styleUrl: './manage-expenses.component.scss'
@@ -25,8 +27,7 @@ export class ManageExpensesComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private router: Router,
-        private apiService: ApiService,
-        private readonly sharedService: SharedService
+        private apiService: ApiService
     ){}
 
     ngOnInit(): void {
@@ -35,7 +36,7 @@ export class ManageExpensesComponent implements OnInit {
             this.actionType = params['action'];
 
             if(this.actionType == this.action.TERTIARY) {
-                this.transactions =  this.sharedService.getTransactionsList();
+                this.apiService.getAllTransactions().subscribe(r => this.transactions = r);
             }
             this.isLoaded = true;
         });

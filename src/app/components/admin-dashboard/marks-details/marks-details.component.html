@@ -1,59 +1,50 @@
 <div *ngIf="isViewMode; else showAddMode">
-  <ng-select
-    [items]="studentsList"
-    bindValue="id"
-    bindLabel="name"
-    [placeholder]="'Select a student...'"
-    formControlName="student"
-  >
-  </ng-select>
+    <ng-select [items]="studentsList" bindValue="id" bindLabel="name" [placeholder]="'Select a student...'"
+        formControlName="student">
+    </ng-select>
 </div>
 <ng-template #showAddMode>
-  <form [formGroup]="marksForm">
-    <ng-select
-      [items]="studentsList"
-      bindLabel="name"
-      bindValue="id"
-      [placeholder]="'Select a student...'"
-      formControlName="student"
-    >
-    </ng-select>
-
-    <div class="d-flex marks-row">
-      <ng-select
-        [items]="examsList"
-        [placeholder]="'Select exam...'"
-        formControlName="examType"
-      >
-      </ng-select>
-
-      <ng-select
-        [items]="subjectsList"
-        [placeholder]="'Select subject...'"
-        formControlName="subject"
-      >
-      </ng-select>
-    </div>
-
-    <ng-select
-      [items]="sessionsList"
-      [placeholder]="'Select session...'"
-      formControlName="session"
-    ></ng-select>
-
-    <div class="input-marks">
-      <div>Marks Obtained</div>
-      <div>Total Marks</div>
-    </div>
-
-    <div class="input-marks">
-      <input
-        type="number"
-        formControlName="marksObtained"
-        class="form-control"
-      />
-      <span>/</span>
-      <input type="number" formControlName="totalMarks" class="form-control" />
-    </div>
-  </form>
+    <form [formGroup]="marksForm" class="container pt-5 pb-3">
+        <div class="row">
+            <div class="col-lg-3 col-md-6">
+                <app-student-select></app-student-select>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-lg-3 col-md-6">
+                <label>Exam</label>
+                <select class="form-control form-select" formControlName="examType" [ngClass]="{ 'invalid-field': isFieldInvalid('examType') }">
+                    <option value="" disabled>Select Exam</option>
+                    @for (item of examsList; track item) {
+                    <option value="{{item.value}}">{{ item.name }}</option>
+                    }
+                </select>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <label>Subject</label>
+                <select class="form-control form-select" formControlName="subject" [ngClass]="{ 'invalid-field': isFieldInvalid('subject') }">
+                    <option value="" disabled>Select Subject</option>
+                    @for (item of subjectsList; track item) {
+                    <option value="{{item.value}}">{{ item.name }}</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-lg-3 col-md-6">
+                <label>Marks Obtained</label>
+                <input type="number" formControlName="marksObtained" class="form-control" [ngClass]="{ 'invalid-field': isFieldInvalid('marksObtained') }"/>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <label>Total Marks</label>
+                <input type="number" formControlName="totalMarks" class="form-control" [ngClass]="{ 'invalid-field': isFieldInvalid('totalMarks') }"/>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="d-flex justify-content-center detail-btn">
+                <button class="btn btn-success m-right-5" (click)="onSave()">Save</button>
+                <button class="btn btn-danger m-left-5" (click)="onCancel()">Cancel</button>
+            </div>
+        </div>
+    </form>
 </ng-template>

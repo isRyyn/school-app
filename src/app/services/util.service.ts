@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ArrayObject } from './models';
-import { EnumType } from 'typescript';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
     providedIn: 'root'
@@ -18,5 +18,9 @@ export class UtilService {
             });
         });
         return finalArray;
+    }
+
+    isFieldInvalid(form: FormGroup, field: string): boolean {
+        return !!(form.get(field)?.invalid && form.get(field)?.touched);
     }
 }

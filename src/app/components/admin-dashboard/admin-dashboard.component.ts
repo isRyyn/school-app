@@ -1,8 +1,9 @@
-import { Transaction, TransactionType, Action } from './../../services/models';
+import { Transaction } from './../../services/models';
+import { Action } from "../../services/enums";
+import { TransactionType } from "../../services/enums";
 import { Router, RouterModule } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
-import { SharedService } from '../../services/shared.service';
 
 @Component({
     selector: 'app-admin-dashboard',
@@ -19,8 +20,7 @@ export class AdminDashboardComponent implements OnInit {
 
     constructor(
         private router: Router,
-        private readonly apiService: ApiService,
-        private readonly sharedService: SharedService
+        private readonly apiService: ApiService
     ) { }
 
     ngOnInit(): void {
@@ -30,7 +30,6 @@ export class AdminDashboardComponent implements OnInit {
     calculateTotal(): void {
         this.apiService.getAllTransactions().subscribe(response => { 
             this.transactions = response;
-            this.sharedService.setTransactionsList(response);
             this.availableAmount = this.getAmount(TransactionType.INCOME) - this.getAmount(TransactionType.EXPENSE);    
         });
     }

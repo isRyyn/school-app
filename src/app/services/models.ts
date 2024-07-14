@@ -1,16 +1,24 @@
+import { Month, TransactionType } from "./enums";
+
 export type ModalConfig = {
     data?: object
 }; 
 
-export interface Student {
-    id: number;
-    name: string
-    totalFees: number;
+
+export type ArrayObject = {
+    name: string;
+    value: any;
 }
 
-export enum TransactionType {
-    INCOME = 'INCOME',
-    EXPENSE = 'EXPENSE'
+
+
+
+// DB entities
+export interface Student {
+    id: number;
+    firstName: string
+    lastName: string;
+    totalFees: number;
 }
 
 export interface Transaction {
@@ -21,13 +29,10 @@ export interface Transaction {
     type: TransactionType;
 }
 
-export enum Action {
-    PRIMARY = 'primary', 
-    SECONDARY = 'secondary',
-    TERTIARY = 'tertiary'
-}
-
-export type ArrayObject = {
-    name: string;
-    value: any;
+export interface Fee {
+    id: number;
+    student: Student;
+    amount: number;
+    month: Month;
+    date: string;
 }

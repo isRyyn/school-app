@@ -1,7 +1,13 @@
-html, body { height: 100%; }
-body { 
-    margin: 0; 
-    font-family: Roboto, "Helvetica Neue", sans-serif; 
+@import './styles/date-picker.scss';
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
     background-image: url('assets/images/background.jpg');
     background-size: auto;
     background-position: center center;
@@ -11,34 +17,60 @@ body {
 }
 
 
-.custom-modal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 5px;
-    border: solid 2px lightgray;
-    border: none;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 9999;
-    height: 8vw;
+.invalid-field {
+    box-shadow: 0px 0px 5px 2px red;
 }
 
-@media (max-width: 900px) {
-    .custom-modal {
-        height: 12vw;
+.detail-btn {
+    width: fit-content;
+    margin: auto;
+    background: black;
+    padding: 10px;
+    border-radius: 10px;
+
+    .btn {
+        min-width: 100px;
     }
 }
 
-/* Media query for mobile devices */
-@media (max-width: 768px) {
-    .custom-modal {
-        height: 23vw;
-    }
+.m-right-5 {
+    margin-right: 5px;
 }
+
+.m-left-5 {
+    margin-left: 5px;
+}
+
+
+
+// .custom-modal {
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     border-radius: 5px;
+//     border: solid 2px lightgray;
+//     border: none;
+//     position: fixed;
+//     top: 0;
+//     bottom: 0;
+//     left: 0;
+//     right: 0;
+//     z-index: 9999;
+//     height: 8vw;
+// }
+
+// @media (max-width: 900px) {
+//     .custom-modal {
+//         height: 12vw;
+//     }
+// }
+
+// /* Media query for mobile devices */
+// @media (max-width: 768px) {
+//     .custom-modal {
+//         height: 23vw;
+//     }
+// }
 
 // TODO: Check
 // .modal-overlay {

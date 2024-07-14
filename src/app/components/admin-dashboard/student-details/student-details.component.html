@@ -41,7 +41,7 @@
                 <div class="row mt-4">
                     <div class="col-4">
                         <label>Date of Birth</label>
-                        <input type="date" class="form-control" formControlName="dob"/>
+                        <app-date-picker controlName="dob"></app-date-picker>
                     </div>
                     <div class="col-4">
                         <label>Gender</label>
@@ -57,7 +57,7 @@
                     <div class="col-4">
                         <label>Class</label>
                         <select formControlName="standard" class="form-control form-select">
-                            <option value="" class="form-disabled-option">Select Class</option>
+                            <option value="">Select Class</option>
                             @for (item of classList; track item) {
                                 <option value="{{item.value}}">{{ item.name }}</option>
                             }
@@ -177,7 +177,7 @@
                     <i class="fa-solid fa-van-shuttle"></i>
                     <h4 class="student-section-heading mx-3">Transportation Details</h4>
                 </div>
-                <div class="row mt-5">
+                <div class="row">
                     <div class="col-4">
                         <label>Vehicle Name</label>
                         <input class="form-control" formControlName="name" placeholder="Enter vehicle name"/>
@@ -200,13 +200,13 @@
                     <h4 class="student-section-heading mx-3">Utilities Details</h4>
                 </div>
                 <div class="row">
-                    <div class="col-2">
+                    <div class="col-lg-2 col-sm-6 col-xs-6">
                         <input type="checkbox" formControlName="uniform"/>
-                        <label>Uniform Provided</label>
+                        <label class="checkbox-label">Uniform Provided</label>
                     </div>
-                    <div class="col-2">
+                    <div class="col-lg-2 col-sm-6 col-xs-6">
                         <input type="checkbox" formControlName="course"/>
-                        <label>Course Provided</label>
+                        <label class="checkbox-label">Course Provided</label>
                     </div>
                 </div>
             </section>

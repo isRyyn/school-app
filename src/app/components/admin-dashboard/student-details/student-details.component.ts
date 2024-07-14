@@ -2,15 +2,17 @@ import { ApiService } from './../../../services/api.service';
 import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Action, ArrayObject } from '../../../services/models';
+import { ArrayObject } from '../../../services/models';
+import { Action } from "../../../services/enums";
 import { CommonModule } from '@angular/common';
 import { Gender, Standard } from '../../../services/enums';
 import { UtilService } from '../../../services/util.service';
+import { DatePickerComponent } from "../../common/date-picker/date-picker.component";
 
 @Component({
   selector: 'app-student-details',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, DatePickerComponent],
   providers: [ApiService],
   templateUrl: './student-details.component.html',
   styleUrl: './student-details.component.scss'

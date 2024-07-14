@@ -1,0 +1,10 @@
+<form [formGroup]="parentForm.form">
+    <input type="text" 
+        placeholder="Select date" 
+        class="form-control"
+        [ngClass]="{ 'invalid-field': parentForm.form.get(controlName)?.invalid }"
+        bsDatepicker 
+        [formControlName]="controlName" 
+        [bsConfig]="{ dateInputFormat: 'DD/MM/YYYY', containerClass: 'theme-dark-blue' }"
+    />
+</form>

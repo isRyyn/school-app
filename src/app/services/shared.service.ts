@@ -9,19 +9,9 @@ export class SharedService {
     private isLoggedInSubject = new Subject<boolean>();
     isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-    private transactionsList: Transaction[] = [];
-
     constructor() { }
 
     updateLogStatus(isLoggedIn: boolean): void {
         this.isLoggedInSubject.next(isLoggedIn);
-    }
-
-    setTransactionsList(list: Transaction[]): void {
-        this.transactionsList = list;
-    }
-
-    getTransactionsList(): Transaction[] {
-        return this.transactionsList;
     }
 }

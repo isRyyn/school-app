@@ -1,0 +1,9 @@
+<form [formGroup]="parentForm.form">
+    <label>Student</label>
+    <select formControlName="student" class="form-control form-select" [ngClass]="{ 'invalid-field': isFieldInvalid() }">
+        <option value="" class="form-disabled-option" disabled>Select Student</option>
+        @for (item of studentsList; track item) {
+        <option value="{{item}}">{{ item.firstName }} {{ item.lastName }}</option>
+        }
+    </select>
+</form>

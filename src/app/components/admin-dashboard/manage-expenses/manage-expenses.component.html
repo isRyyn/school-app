@@ -6,7 +6,7 @@
     <input type="text" class="form-control" formControlName="category"/>
 
     <label>Date</label>
-    <input type="date" class="form-control" formControlName="date"/>
+    <app-date-picker></app-date-picker>
 
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
@@ -31,8 +31,7 @@
                     <td>{{ transaction.amount }}</td>
                     <td>{{ transaction.category }}</td>
                     <td>{{ transaction.date }}</td>
-                </tr>
-                
+                </tr>   
             }  
         </tbody>
     </table>

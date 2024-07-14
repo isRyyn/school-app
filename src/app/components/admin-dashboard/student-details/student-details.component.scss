@@ -39,6 +39,12 @@ label {
     white-space: nowrap;
 }
 
+.checkbox-label {
+    font-size: 0.95em;
+    font-style: normal;
+    white-space: wrap;
+}
+
 input, select, textarea {
     font-size: 0.9em;
 }
@@ -80,6 +86,10 @@ input, select, textarea {
 @media (max-width: 440px) {
     .container{
         font-size: 0.8em;
+    }
+    
+    .student-details-btn button {
+        min-width: 100px;
     }
 }
 
