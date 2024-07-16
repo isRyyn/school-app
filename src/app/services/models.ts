@@ -1,8 +1,8 @@
-import { Month, TransactionType } from "./enums";
+import { ExamType, Gender, Month, Relation, Role, Standard, Subject, TransactionType } from './enums';
 
 export type ModalConfig = {
     data?: object
-}; 
+};
 
 
 export type ArrayObject = {
@@ -14,11 +14,39 @@ export type ArrayObject = {
 
 
 // DB entities
+export interface User {
+    id: number;
+    email: string;
+    password: string;
+    mobile: string;
+    role: Role;
+}
+
+
 export interface Student {
     id: number;
-    firstName: string
+    firstName: string;
+    middleName: string;
     lastName: string;
-    totalFees: number;
+    dob: string;
+    gender: Gender;
+    session: string;
+    standard: Standard;
+    rollNo: number
+    picture: File;
+    uDiasCode: string;
+    previousSchool: string;
+    mobile: number;
+    email: string;
+    address: string;
+    city: string;
+    state: string;
+    pincode: number;
+    uniform: boolean;
+    course: boolean;
+    vehicleName: string;
+    vehicleNumber: string;
+    vehicleRoute: string;
 }
 
 export interface Transaction {
@@ -35,4 +63,22 @@ export interface Fee {
     amount: number;
     month: Month;
     date: string;
+}
+
+export interface Marks {
+    id: number;
+    student: Student;
+    examType: ExamType;
+    subject: Subject;
+    marksObtained: number;
+    totalMarks: number;
+}
+
+export interface Parent {
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    mobile: number;
+    gender: Gender;
+    relation: Relation;   
 }

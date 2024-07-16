@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Transaction } from '../../../services/models';
 import { Action } from "../../../services/enums";
@@ -7,6 +7,7 @@ import { TransactionType } from "../../../services/enums";
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../../services/api.service';
 import { DatePickerComponent } from "../../common/date-picker/date-picker.component";
+import { UtilService } from '../../../services/util.service';
 
 @Component({
   selector: 'app-manage-expenses',
@@ -27,7 +28,8 @@ export class ManageExpensesComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private router: Router,
-        private apiService: ApiService
+        private apiService: ApiService,
+        private readonly utilService: UtilService
     ){}
 
     ngOnInit(): void {
@@ -45,9 +47,9 @@ export class ManageExpensesComponent implements OnInit {
 
     loadForm(): void {
         this.expenseForm = new FormGroup({
-            amount: new FormControl(),
+            amount: new FormControl('', Validators.required),
             category: new FormControl(),
-            date: new FormControl()
+            date: new FormControl(new Date())
         });
     }
 
@@ -60,16 +62,28 @@ export class ManageExpensesComponent implements OnInit {
         return TransactionType.INCOME;
     }
 
-    onSubmit(): void {
-        const payload = {
-            ...this.expenseForm.value,
-            type: this.selectedType
-        };
-
-        this.apiService.saveTransaction(payload).subscribe(() => {
-            alert('Transaction completed!');
-            this.router.navigate(['private/admin-dashboard']);
-        });
+    onSave(): void {
+        if(this.expenseForm.valid) {
+            const payload = {
+                ...this.expenseForm.value,
+                type: this.selectedType
+            };
+    
+            this.apiService.saveTransaction(payload).subscribe(() => {
+                alert('Transaction completed!');
+                this.router.navigate(['private/admin-dashboard']);
+            });
+        } else {
+            this.expenseForm.get('amount')?.markAsTouched()
+        }
         
+    }
+
+    onCancel(): void {
+        this.router.navigate(['/private/admin-dashboard']);
+    }
+
+    isFieldInvalid(field: string): boolean {
+        return this.utilService.isFieldInvalid(this.expenseForm, field);
     }
 }

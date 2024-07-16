@@ -3,7 +3,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChildren }
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ArrayObject } from '../../../services/models';
-import { Action } from "../../../services/enums";
+import { Action, Relation } from "../../../services/enums";
 import { CommonModule } from '@angular/common';
 import { Gender, Standard } from '../../../services/enums';
 import { UtilService } from '../../../services/util.service';
@@ -31,9 +31,11 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
     actions = Action;
     standard = Standard;
     gender = Gender;
+    relation = Relation;
 
     classList!: Array<ArrayObject>;
     genders!: Array<ArrayObject>;
+    relations!: Array<ArrayObject>;
 
     private sectionMap: Map<string, ElementRef | undefined> = new Map();
 
@@ -47,7 +49,6 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         this.initializeArrays();
         this.loadForm();
-        this.loadVehicleForm();
         this.loadParentForm();
         this.route.queryParams.subscribe((params) => {
             this.actionType = params['action'];
@@ -65,6 +66,7 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
     initializeArrays(): void {
         this.classList = this.utilService.intializeArrayWithEnums(this.standard);
         this.genders = this.utilService.intializeArrayWithEnums(this.gender);
+        this.relations = this.utilService.intializeArrayWithEnums(this.relation);
     }
 
     loadForm(): void {
@@ -89,7 +91,9 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
             pincode: new FormControl(),
             uniform: new FormControl(),
             course: new FormControl(),
-            status: new FormControl()
+            vehicleName: new FormControl(),
+            vehicleNumber: new FormControl(),
+            vehicleRoute: new FormControl()
         });
     }
 
@@ -107,14 +111,6 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
             mobile: new FormControl(),
             gender: new FormControl(),
             relation: new FormControl()
-        });
-    }
-
-    loadVehicleForm(): void {
-        this.vehicleForm = new FormGroup({
-            name: new FormControl(),
-            number: new FormControl(),
-            route: new FormControl()
         });
     }
 
@@ -148,6 +144,7 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
 
     onSave(): void {
         console.log('form', this.studentForm.value); 
+        this.utilService.convertToBase64(this.studentForm.value.picture[0])
     }
 
     onCancel(): void {

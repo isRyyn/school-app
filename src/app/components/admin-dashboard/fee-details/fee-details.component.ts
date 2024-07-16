@@ -48,7 +48,8 @@ export class FeeDetailsComponent implements OnInit {
     }
 
     onSave(): void {
-        console.log('form', this.feeForm.value);
+        this.apiService.saveFee(this.feeForm.value).subscribe(r => {
+        });
     }
 
     onCancel(): void {

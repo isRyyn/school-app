@@ -165,14 +165,19 @@
                                 </div>
                                 <div class="col-4">
                                     <label>Relation</label>
-                                    <input class="form-control" formControlName="relation" placeholder="Enter last name"/> 
+                                    <select formControlName="relation" class="form-control form-select">
+                                        <option value="">Select Relation</option>
+                                        @for (item of relations; track item) {
+                                            <option value="{{item.value}}">{{ item.name }}</option>
+                                        }
+                                    </select> 
                                 </div>
                             </div>
                         </form>
                     </ng-container>
                 </form>
             </section>
-            <form [formGroup]="vehicleForm" class="mt-5" #sections>
+            <section class="mt-5" #sections>
                 <div class="mb-4">
                     <i class="fa-solid fa-van-shuttle"></i>
                     <h4 class="student-section-heading mx-3">Transportation Details</h4>
@@ -180,20 +185,20 @@
                 <div class="row">
                     <div class="col-4">
                         <label>Vehicle Name</label>
-                        <input class="form-control" formControlName="name" placeholder="Enter vehicle name"/>
+                        <input class="form-control" formControlName="vehicleName" placeholder="Enter vehicle name"/>
                     </div>
                     <div class="col-4">
                         <label>Vehicle Number</label>
-                        <input class="form-control" formControlName="number" placeholder="Enter vehicle number"/>
+                        <input class="form-control" formControlName="vehicleNumber" placeholder="Enter vehicle number"/>
                     </div>
                 </div>
                 <div class="row mt-5">
                     <div class="col-8">
                         <label>Vehicle Route</label>
-                        <textarea class="form-control" formControlName="route" placeholder="Enter vehicle route"></textarea>
+                        <textarea class="form-control" formControlName="vehicleRoute" placeholder="Enter vehicle route"></textarea>
                     </div>
                 </div>
-            </form>
+            </section>
             <section class="mt-5" #sections>
                 <div class="mb-4">
                     <i class="fa-solid fa-graduation-cap"></i>

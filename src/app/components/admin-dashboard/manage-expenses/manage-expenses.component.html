@@ -1,15 +1,3 @@
-<form [formGroup]="expenseForm" (ngSubmit)="onSubmit()" *ngIf="isLoaded && actionType != action.TERTIARY">
-    <label>Amount</label>
-    <input type="number" class="form-control" formControlName="amount"/>
-
-    <label>Category</label>
-    <input type="text" class="form-control" formControlName="category"/>
-
-    <label>Date</label>
-    <app-date-picker></app-date-picker>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
 
 <ng-container *ngIf="actionType === action.TERTIARY">
     <div>Passbook</div>
@@ -36,3 +24,28 @@
         </tbody>
     </table>
 </ng-container>
+
+<form [formGroup]="expenseForm" class="container pt-1 pb-3" *ngIf="isLoaded && actionType != action.TERTIARY">
+    <div class="row mt-5">
+        <div class="col-lg-3 col-md-6">
+            <label>Amount</label>
+            <input type="number" placeholder="Enter amount" formControlName="amount" class="form-control" [ngClass]="{ 'invalid-field': isFieldInvalid('amount') }"/>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-lg-3 col-md-6">
+            <label>Category</label>
+            <input type="text" placeholder="Enter category" formControlName="category" class="form-control"/>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <label>Date</label>
+            <app-date-picker></app-date-picker>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="d-flex justify-content-center detail-btn">
+            <button class="btn btn-success m-right-5" (click)="onSave()">Save</button>
+            <button class="btn btn-danger m-left-5" (click)="onCancel()">Cancel</button>
+        </div>
+    </div>
+</form>

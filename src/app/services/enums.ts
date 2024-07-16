@@ -1,3 +1,7 @@
+/**
+ * Backend Enums
+ */
+
 export enum Standard {
     NURSERY = 'Nursery',
     LKG = 'LKG',
@@ -64,7 +68,16 @@ export enum Month {
     DECEMBER = 'December'
 }
 
+export enum Relation {
+    FATHER = 'Father',
+    MOTHER = 'Mother',
+    GUARDIAN = 'Guardian'
+}
 
+
+/**
+ * Frontend Enums
+ */
 export enum Action {
     PRIMARY = 'primary',
     SECONDARY = 'secondary',

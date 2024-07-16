@@ -23,4 +23,14 @@ export class UtilService {
     isFieldInvalid(form: FormGroup, field: string): boolean {
         return !!(form.get(field)?.invalid && form.get(field)?.touched);
     }
+
+    convertToBase64(file: File) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+            const result = reader.result as string; 
+            const base64String = result.split(',')[1]; 
+        };
+    }
+
 }
