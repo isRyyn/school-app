@@ -1,4 +1,4 @@
-import { ExamType, Gender, Month, Relation, Role, Standard, Subject, TransactionType } from './enums';
+import { ExamType, Gender, Month, Relation, Role, TransactionType } from './enums';
 
 export type ModalConfig = {
     data?: object
@@ -23,7 +23,7 @@ export interface User {
 }
 
 
-export interface Student {
+export interface StudentModel {
     id: number;
     firstName: string;
     middleName: string;
@@ -31,7 +31,6 @@ export interface Student {
     dob: string;
     gender: Gender;
     session: string;
-    standard: Standard;
     rollNo: number
     picture: File;
     uDiasCode: string;
@@ -47,9 +46,15 @@ export interface Student {
     vehicleName: string;
     vehicleNumber: string;
     vehicleRoute: string;
+
+    standardId: number;
+    subjectIds: number[];
+    marksIds: number[];
+    parentsIds: number[];
+    feeIds: number[];
 }
 
-export interface Transaction {
+export interface TransactionModel {
     id: number;
     amount: number;
     category: string;
@@ -57,28 +62,46 @@ export interface Transaction {
     type: TransactionType;
 }
 
-export interface Fee {
+export interface FeeModel {
     id: number;
-    student: Student;
+    studentId: number;
     amount: number;
     month: Month;
     date: string;
 }
 
-export interface Marks {
+export interface SubjectModel {
     id: number;
-    student: Student;
-    examType: ExamType;
-    subject: Subject;
-    marksObtained: number;
+    name: string;
+    standardIds: number[];
+    studentIds: number[];
+    marksIds: number[];
+}
+
+export interface StandardModel {
+    id: number;
+    name: string;
+    studentIds: number[];
+    subjectIds: number[];
+    marksIds: number[];
+}
+
+export interface MarksModel {
+    id: number;
+    studentId: number;
+    examName: ExamType;
+    subjectId: number;
+    standardId: number;
+    marks: number;
     totalMarks: number;
 }
 
-export interface Parent {
+export interface ParentModel {
     firstName: string;
     middleName: string;
     lastName: string;
     mobile: number;
     gender: Gender;
     relation: Relation;   
+    studentIds: number[];
 }

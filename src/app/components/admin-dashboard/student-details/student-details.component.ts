@@ -1,21 +1,23 @@
 import { ApiService } from './../../../services/api.service';
 import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ArrayObject } from '../../../services/models';
+import { ArrayObject, StandardModel } from '../../../services/models';
 import { Action, Relation } from "../../../services/enums";
 import { CommonModule } from '@angular/common';
-import { Gender, Standard } from '../../../services/enums';
+import { Gender } from '../../../services/enums';
 import { UtilService } from '../../../services/util.service';
 import { DatePickerComponent } from "../../common/date-picker/date-picker.component";
+import { ShowStudentDetailsComponent } from "./show-student-details/show-student-details.component";
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
-  selector: 'app-student-details',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DatePickerComponent],
-  providers: [ApiService],
-  templateUrl: './student-details.component.html',
-  styleUrl: './student-details.component.scss'
+    selector: 'app-student-details',
+    standalone: true,
+    imports: [CommonModule, ReactiveFormsModule, NgSelectModule, DatePickerComponent, ShowStudentDetailsComponent],
+    providers: [ApiService],
+    templateUrl: './student-details.component.html',
+    styleUrl: './student-details.component.scss'
 })
 export class StudentDetailsComponent implements OnInit, AfterViewInit {
     @ViewChildren('sections') sections!: QueryList<ElementRef>;
@@ -29,11 +31,10 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
     parentFormCounter: number = 0;
 
     actions = Action;
-    standard = Standard;
     gender = Gender;
     relation = Relation;
 
-    classList!: Array<ArrayObject>;
+    classList: StandardModel[] = [];
     genders!: Array<ArrayObject>;
     relations!: Array<ArrayObject>;
 
@@ -42,17 +43,18 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
     constructor(
         private readonly route: ActivatedRoute,
         private readonly router: Router,
-        private readonly ApiService: ApiService,
+        private readonly apiService: ApiService,
         private readonly utilService: UtilService
-    ){}
+    ) { }
 
     ngOnInit() {
+        this.fetchStudentsData();
         this.initializeArrays();
         this.loadForm();
         this.loadParentForm();
         this.route.queryParams.subscribe((params) => {
             this.actionType = params['action'];
-            this.isLoaded = true;
+            //this.isLoaded = true;
         });
     }
 
@@ -63,8 +65,23 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
         });
     }
 
+    fetchStudentsData(): void {
+        // this.apiService.getStudentById(1).subscribe(data => {
+        //     this.student = data;
+        //     this.pictureUrl = `data:image/jpeg;base64,${btoa(
+        //       new Uint8Array(this.student.picture).reduce((data, byte) => data + String.fromCharCode(byte), '')
+        //     )}`;
+        //   });
+
+        // For HTML
+        //<img *ngIf="pictureUrl" [src]="pictureUrl" alt="Student Picture" />
+    }
+
     initializeArrays(): void {
-        this.classList = this.utilService.intializeArrayWithEnums(this.standard);
+        this.apiService.getAllStandards().subscribe(r => {
+            this.classList = r;
+            this.isLoaded = true;
+        });
         this.genders = this.utilService.intializeArrayWithEnums(this.gender);
         this.relations = this.utilService.intializeArrayWithEnums(this.relation);
     }
@@ -76,9 +93,9 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
             middleName: new FormControl(),
             lastName: new FormControl(),
             dob: new FormControl(),
-            gender: new FormControl(''),
+            gender: new FormControl(),
             session: new FormControl(),
-            standard: new FormControl(''),
+            standardId: new FormControl(null, Validators.required),
             rollNo: new FormControl(),
             picture: new FormControl(),
             uDiasCode: new FormControl(),
@@ -99,7 +116,7 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
 
     loadParentForm(): void {
         this.parentForm = new FormGroup({
-            items: new FormArray([])   
+            items: new FormArray([])
         });
     }
 
@@ -115,10 +132,10 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
     }
 
     goToSection(section: string): void {
-        const element = this.sectionMap.get(section); 
+        const element = this.sectionMap.get(section);
         console.log('here', element);
-        if(element) {
-            element.nativeElement.scrollIntoView({ 
+        if (element) {
+            element.nativeElement.scrollIntoView({
                 behavior: 'smooth',
                 block: 'end',
                 inline: 'nearest'
@@ -132,7 +149,7 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
 
     addParent(): void {
         this.parentFormCounter++;
-        if(this.parentFormCounter <= 3) {
+        if (this.parentFormCounter <= 3) {
             this.showParentForm = true;
             window.scrollBy({
                 top: 300,
@@ -143,11 +160,35 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
     }
 
     onSave(): void {
-        console.log('form', this.studentForm.value); 
-        this.utilService.convertToBase64(this.studentForm.value.picture[0])
+        if(this.studentForm.valid) {
+            console.log('form', this.studentForm.value);
+            const formData = new FormData();
+            const studentData = { ...this.studentForm.value };
+            delete studentData['picture'];
+    
+            formData.append('student', JSON.stringify(studentData));
+            if(this.studentForm.value?.picture) {
+                 //this.utilService.convertToBase64(this.studentForm.value.picture[0])
+                formData.append('picture', this.studentForm.get('picture')?.value);
+            }
+    
+            this.apiService.saveStudent(formData).subscribe(response => {
+                console.log('Student saved successfully', response);
+                this.onCancel();
+            });
+        }
     }
 
     onCancel(): void {
         this.router.navigate(['/private/admin-dashboard']);
+    }
+
+    onFileChange(event: any) {
+        if (event.target.files.length > 0) {
+            const file = event.target.files[0];
+            this.studentForm.patchValue({
+                picture: file
+            });
+        }
     }
 }

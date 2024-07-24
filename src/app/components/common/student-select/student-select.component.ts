@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
-import { Student } from '../../../services/models';
+import { StudentModel } from '../../../services/models';
 import { FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 import { UtilService } from '../../../services/util.service';
 
@@ -14,7 +14,7 @@ import { UtilService } from '../../../services/util.service';
   styleUrl: './student-select.component.scss'
 })
 export class StudentSelectComponent implements OnInit {
-    studentsList: Student[] = [];    
+    studentsList: StudentModel[] = [];    
     
     constructor(
         private readonly apiService: ApiService,

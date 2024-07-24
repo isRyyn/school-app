@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Transaction } from '../../../services/models';
+import { TransactionModel } from '../../../services/models';
 import { Action } from "../../../services/enums";
 import { TransactionType } from "../../../services/enums";
 import { CommonModule } from '@angular/common';
@@ -18,7 +18,7 @@ import { UtilService } from '../../../services/util.service';
   styleUrl: './manage-expenses.component.scss'
 })
 export class ManageExpensesComponent implements OnInit {
-    transactions: Transaction[] = [];
+    transactions: TransactionModel[] = [];
     expenseForm!: FormGroup;
     isActionPrimary = false;
     action = Action;

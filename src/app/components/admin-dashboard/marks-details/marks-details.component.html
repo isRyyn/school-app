@@ -1,50 +1,35 @@
-<div *ngIf="isViewMode; else showAddMode">
-    <ng-select [items]="studentsList" bindValue="id" bindLabel="name" [placeholder]="'Select a student...'"
-        formControlName="student">
-    </ng-select>
-</div>
-<ng-template #showAddMode>
-    <form [formGroup]="marksForm" class="container pt-5 pb-3">
-        <div class="row">
-            <div class="col-lg-3 col-md-6">
-                <app-student-select></app-student-select>
-            </div>
-        </div>
-        <div class="row mt-5">
-            <div class="col-lg-3 col-md-6">
-                <label>Exam</label>
-                <select class="form-control form-select" formControlName="examType" [ngClass]="{ 'invalid-field': isFieldInvalid('examType') }">
-                    <option value="" disabled>Select Exam</option>
-                    @for (item of examsList; track item) {
-                    <option value="{{item.value}}">{{ item.name }}</option>
-                    }
-                </select>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <label>Subject</label>
-                <select class="form-control form-select" formControlName="subject" [ngClass]="{ 'invalid-field': isFieldInvalid('subject') }">
-                    <option value="" disabled>Select Subject</option>
-                    @for (item of subjectsList; track item) {
-                    <option value="{{item.value}}">{{ item.name }}</option>
-                    }
-                </select>
-            </div>
-        </div>
-        <div class="row mt-5">
-            <div class="col-lg-3 col-md-6">
-                <label>Marks Obtained</label>
-                <input type="number" formControlName="marksObtained" class="form-control" [ngClass]="{ 'invalid-field': isFieldInvalid('marksObtained') }"/>
-            </div>
-            <div class="col-lg-3 col-md-6">
-                <label>Total Marks</label>
-                <input type="number" formControlName="totalMarks" class="form-control" [ngClass]="{ 'invalid-field': isFieldInvalid('totalMarks') }"/>
-            </div>
-        </div>
-        <div class="row mt-5">
-            <div class="d-flex justify-content-center detail-btn">
-                <button class="btn btn-success m-right-5" (click)="onSave()">Save</button>
-                <button class="btn btn-danger m-left-5" (click)="onCancel()">Cancel</button>
-            </div>
-        </div>
-    </form>
-</ng-template>
+<form class="container" *ngIf="isDataLoaded" [formGroup]="marksForm" (ngSubmit)="saveMarks()">
+    <div class="row">
+        <label>Select Class</label>
+        <ng-select [items]="standardsList" bindLabel="name" bindValue="id"
+             formControlName="id" placeholder="Select class">
+        </ng-select>
+    </div>
+
+    <div class="row mt-3">
+        <label>Select Exam</label>
+        <ng-select [items]="examsList" bindLabel="name" bindValue="value"
+            formControlName="exam" placeholder="Select exam"></ng-select>
+    </div>
+
+    <table *ngIf="isDataFiltered">
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th *ngFor="let subject of subjectsList">{{ subject.name }}</th>
+          <th>Total Marks</th>
+        </tr>
+      </thead>
+      <tbody formArrayName="marksArray">
+        <tr *ngFor="let student of studentsList; let i = index">
+          <td>{{ studentsList[i]?.firstName }}</td>
+          <td *ngFor="let subject of subjectsList; let j = index" [formGroupName]="groupName(i, j)">
+            <input type="number" formControlName="marks" />
+          </td>
+          <td>{{ totalMarks }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <button type="submit" class="btn btn-success">Save Marks</button>
+    <button type="button" *ngIf="showMarks" class="btn btn-primary" (click)="onShow()">Show Marks</button>
+  </form>      

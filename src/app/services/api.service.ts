@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Fee, Marks, Parent, Student, Transaction, User } from './models';
+import { FeeModel, MarksModel, ParentModel, StandardModel, StudentModel, SubjectModel, TransactionModel, User } from './models';
+import { ExamType } from './enums';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class ApiService {
 
@@ -25,40 +26,84 @@ export class ApiService {
         return this.httpClient.post<string>(`${this.baseUrl}/api/auth/register`, payload);
     }
 
-    getAllStudents(): Observable<Student[]> {
-        return this.httpClient.get<Student[]>(`${this.baseUrl}/students`);
+
+    /**
+     * 
+     * Students api
+     * 
+     */
+    getAllStudents(): Observable<StudentModel[]> {
+        return this.httpClient.get<StudentModel[]>(`${this.baseUrl}/students`);
     }
 
-    saveStudent(payload: Student): Observable<Student> {
-        return this.httpClient.post<Student>(`${this.baseUrl}/students`, payload);
+    saveStudent(payload: FormData): Observable<StudentModel> {
+        return this.httpClient.post<StudentModel>(`${this.baseUrl}/students`, payload);
     }
 
-    saveParent(payload: Parent): Observable<Parent> {
-        return this.httpClient.post<Parent>(`${this.baseUrl}/parents`, payload);
+    saveParent(payload: ParentModel): Observable<ParentModel> {
+        return this.httpClient.post<ParentModel>(`${this.baseUrl}/parents`, payload);
     }
 
-    getAllTransactions(): Observable<Transaction[]> {
-        return this.httpClient.get<Transaction[]>(`${this.baseUrl}/transactions`);
+    getAllTransactions(): Observable<TransactionModel[]> {
+        return this.httpClient.get<TransactionModel[]>(`${this.baseUrl}/transactions`);
     }
 
-    saveTransaction(payload: Transaction): Observable<Transaction> {
-        return this.httpClient.post<Transaction>(`${this.baseUrl}/transactions`, payload);
+
+    /**
+     * 
+     * Transactions api
+     * 
+     */
+    saveTransaction(payload: TransactionModel): Observable<TransactionModel> {
+        return this.httpClient.post<TransactionModel>(`${this.baseUrl}/transactions`, payload);
     }
 
-    getAllMarks(): Observable<Marks[]> {
-        return this.httpClient.get<Marks[]>(`${this.baseUrl}/marks`);
+    getAllFee(): Observable<FeeModel[]> {
+        return this.httpClient.get<FeeModel[]>(`${this.baseUrl}/fee`);
     }
 
-    saveMarks(payload: Marks): Observable<Marks> {
-        return this.httpClient.post<Marks>(`${this.baseUrl}/marks`, payload);
+    saveFee(payload: FeeModel): Observable<FeeModel> {
+        return this.httpClient.post<FeeModel>(`${this.baseUrl}/fee`, payload);
     }
 
-    getAllFee(): Observable<Fee[]> {
-        return this.httpClient.get<Fee[]>(`${this.baseUrl}/fee`);
+    /**
+     * 
+     * Marks api 
+     *  
+     */
+    saveMarks(marks: MarksModel[]): Observable<void> {
+        return this.httpClient.post<void>(`${this.baseUrl}/marks/save`, marks);
     }
 
-    saveFee(payload: Fee): Observable<Fee> {
-        return this.httpClient.post<Fee>(`${this.baseUrl}/fee`, payload);
+    getMarksForStandardAndExamName(standardId: number, examName: ExamType): Observable<MarksModel[]> {
+        return this.httpClient.get<MarksModel[]>(`${this.baseUrl}/marks/get/${standardId}/${examName}`);
     }
- 
+
+
+    /**
+     * 
+     * Subjects api
+     * 
+     */
+    getAllSubjects(): Observable<SubjectModel[]> {
+        return this.httpClient.get<SubjectModel[]>(`${this.baseUrl}/subject`);
+    }
+
+    saveSubject(payload: SubjectModel): Observable<SubjectModel> {
+        return this.httpClient.post<SubjectModel>(`${this.baseUrl}/subject`, payload);
+    }
+
+
+    /**
+     * 
+     * Standard api
+     * 
+     */
+    getAllStandards(): Observable<StandardModel[]> {
+        return this.httpClient.get<StandardModel[]>(`${this.baseUrl}/standard`);
+    }
+
+    saveStandard(payload: StandardModel): Observable<StandardModel> {
+        return this.httpClient.post<StandardModel>(`${this.baseUrl}/standard`, payload);
+    }
 }

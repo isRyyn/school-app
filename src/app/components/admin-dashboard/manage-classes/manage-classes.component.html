@@ -1,0 +1,43 @@
+<div class="container-fluid">
+    <button class="btn btn-success" (click)="addClass()">{{ buttonText }}</button>
+    <button class="btn btn-danger" *ngIf="showAddClass" (click)="onCancel()">Cancel</button>
+    <ng-container *ngIf="showAddClass">
+        <form [formGroup]="classForm">
+            <div class="row">
+                <label>Class Name:</label>
+                <input class="form-control" formControlName="name" type="text" />
+            </div>
+            <div class="row mt-3">
+                <label>Select Subjects for this class:</label>
+                <ng-select [items]="subjectsList" bindLabel="name" bindValue="id" [multiple]="true"
+                    formControlName="subjectIds" placeholder="Select subjects">
+                </ng-select>
+            </div>
+        </form>
+    </ng-container>
+
+    <ng-container *ngIf="isDataLoaded">
+        <table>
+            <thead>
+                <tr>
+                    <th>S. No.</th>
+                    <th>Class</th>
+                    <th>Subjects</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let standard of standardsList; let i=index">
+                    <td>{{i+1}}</td>
+                    <td>{{standard?.name}}</td>
+                    <td>{{standard?.subjectIds}}</td>
+                    <td>
+                        <a (click)="editClass()">Edit</a>
+                        <span>/</span>
+                        <a (click)="deleteClass()">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </ng-container>
+</div>

@@ -46,7 +46,7 @@
                     <div class="col-4">
                         <label>Gender</label>
                         <select formControlName="gender" class="form-control form-select">
-                            <option value="">Select Gender</option>
+                            <option selected>Select Gender</option>
                             @for (item of genders; track item) {
                                 <option value="{{item.value}}">{{ item.name }}</option>
                             }
@@ -56,12 +56,13 @@
                 <div class="row mt-4">
                     <div class="col-4">
                         <label>Class</label>
-                        <select formControlName="standard" class="form-control form-select">
-                            <option value="">Select Class</option>
-                            @for (item of classList; track item) {
-                                <option value="{{item.value}}">{{ item.name }}</option>
-                            }
-                        </select>
+                        <ng-select
+                            [items]="classList"
+                            formControlName="standardId"
+                            placeholder="Select Class"
+                            bindLabel="name"
+                            bindValue="id"
+                        ></ng-select>
                     </div>
                     <div class="col-4">
                         <label>Session</label>
@@ -81,7 +82,7 @@
                 <div class="row mt-4">
                     <div class="col-4">
                         <label>Profile Picture</label> 
-                        <input type="file" class="form-control" formControlName="picture"/>
+                        <input type="file" (change)="onFileChange($event)" class="form-control" formControlName="picture"/>
                     </div>
                     <div class="col-4">
                         <label>Previous School</label>
@@ -157,7 +158,7 @@
                                 <div class="col-4">
                                     <label>Gender</label>
                                     <select formControlName="gender" class="form-control form-select">
-                                        <option value="">Select Gender</option>
+                                        <option>Select Gender</option>
                                         @for (item of genders; track item) {
                                             <option value="{{item.value}}">{{ item.name }}</option>
                                         }
@@ -222,6 +223,6 @@
         </form>
     </ng-container>
     <ng-template #showOther>
-
+        <app-show-student-details></app-show-student-details>
     </ng-template>
 </ng-container>

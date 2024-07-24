@@ -1,4 +1,4 @@
-import { Transaction } from './../../services/models';
+import { TransactionModel } from './../../services/models';
 import { Action } from "../../services/enums";
 import { TransactionType } from "../../services/enums";
 import { Router, RouterModule } from '@angular/router';
@@ -15,7 +15,7 @@ import { ApiService } from '../../services/api.service';
 })
 export class AdminDashboardComponent implements OnInit {
     action = Action;
-    transactions: Transaction[] = [];
+    transactions: TransactionModel[] = [];
     availableAmount = 0;
 
     constructor(
@@ -41,7 +41,7 @@ export class AdminDashboardComponent implements OnInit {
         }, 0);
     }   
 
-    goToPath(path: string, actionType: Action): void {
+    goToPath(path: string, actionType?: Action): void {
         this.router.navigate([`/private/admin-dashboard/${path}`], {
             queryParams: { action: actionType }
         });
