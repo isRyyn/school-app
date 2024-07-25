@@ -36,6 +36,7 @@ export class MarksDetailsComponent implements OnInit {
     isDataFiltered: boolean = false;
     showMarks: boolean = true;
     totalMarks!: number;
+    percentage!: number;
 
     constructor(
         private readonly route: ActivatedRoute,
@@ -102,6 +103,10 @@ export class MarksDetailsComponent implements OnInit {
 
     groupName(row: number, col: number): number {
         return (row * this.subjectsList.length) + col;
+    }
+
+    onInputChange(): void {
+        this.isDataFiltered = false;
     }
 
     saveMarks() {    

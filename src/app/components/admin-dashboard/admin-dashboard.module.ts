@@ -10,21 +10,26 @@ import { ManageClassesComponent } from './manage-classes/manage-classes.componen
 import { ManageSubjectsComponent } from './manage-subjects/manage-subjects.component';
 
 const adminRoutes: Routes = [
-  { path: '', component: AdminDashboardComponent },
-  { path: 'student-details', component: StudentDetailsComponent },
-  { path: 'fee-details', component: FeeDetailsComponent },
-  { path: 'marks-details', component: MarksDetailsComponent }, 
-  { path: 'manage-expenses', component: ManageExpensesComponent },
-  { path: 'manage-classes', component: ManageClassesComponent},
-  { path: 'manage-subjects', component: ManageSubjectsComponent }
+    {
+        path: '',
+        component: AdminDashboardComponent,
+        children: [
+            { path: 'students', component: StudentDetailsComponent },
+            { path: 'fees', component: FeeDetailsComponent },
+            { path: 'exams', component: MarksDetailsComponent },
+            { path: 'expenses', component: ManageExpensesComponent },
+            { path: 'classes', component: ManageClassesComponent },
+            { path: 'subjects', component: ManageSubjectsComponent }
+        ]
+    }
 ];
 
 
 @NgModule({
-  declarations: [],
-  imports: [
-    RouterModule.forChild(adminRoutes),
-    HttpClientModule
-  ]
+    declarations: [],
+    imports: [
+        RouterModule.forChild(adminRoutes),
+        HttpClientModule
+    ]
 })
 export class AdminDashboardModule { }

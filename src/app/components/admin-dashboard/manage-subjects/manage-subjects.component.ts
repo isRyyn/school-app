@@ -1,9 +1,11 @@
+import { forkJoin } from 'rxjs';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../../../services/api.service';
 import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { StandardModel, SubjectModel } from '../../../services/models';
+import { UtilService } from '../../../services/util.service';
 
 @Component({
   selector: 'app-manage-subjects',
@@ -14,63 +16,85 @@ import { StandardModel, SubjectModel } from '../../../services/models';
   styleUrl: './manage-subjects.component.scss'
 })
 export class ManageSubjectsComponent implements OnInit {
-    showAddSubject: boolean = false;
     isDataLoaded: boolean = false;
-    buttonText = 'Add Subject';
-
     subjectForm!: FormGroup;
 
     standardsList: StandardModel[] = [];
     subjectsList: SubjectModel[] = [];
 
+    classesMap = new Map<number, string>([]);
+
     constructor(
-        private readonly apiService: ApiService
+        private readonly apiService: ApiService,
+        private readonly utilService: UtilService
     ){}
 
     ngOnInit(): void {
-        this.apiService.getAllSubjects().subscribe(r => {
-            this.subjectsList = r;
+        this.loadData();
+        this.loadForm();
+    }
+
+    loadData(): void {
+        forkJoin({
+            data1: this.apiService.getAllStandards(),
+            data2: this.apiService.getAllSubjects()
+        }).subscribe(r => {
+            this.standardsList = r.data1;
+            this.subjectsList = r.data2;
+            this.setClassesMap();
             this.isDataLoaded = true;
         });
-        this.apiService.getAllStandards().subscribe(r => this.standardsList = r);
-        this.loadForm();
+    }
+
+    setClassesMap(): void {
+        this.standardsList.forEach(standard => {
+            this.classesMap.set(standard.id, standard.name);
+        });
+    }
+
+    getClasses(ids: number[]): string[] {
+        const classesArr: string[] = [];
+        ids.forEach(id => {
+            classesArr.push(this.classesMap.get(id) ?? '');
+        });
+        return classesArr;
     }
 
     loadForm(): void {
         this.subjectForm = new FormGroup({
             id: new FormControl(),
-            name: new FormControl(),
+            name: new FormControl(null, Validators.required),
             standardIds: new FormControl(),
             studentIds: new FormControl(),
             marksIds: new FormControl()
         });
     }
 
-    addSubject(): void {
-        if(this.buttonText == 'Save Subject') {
-            const payload = this.subjectForm.value;
-            this.apiService.saveSubject(payload).subscribe(r => console.log(r));
+    onSave(): void {
+        if(this.subjectForm.valid) {
             this.isDataLoaded = false;
-            this.apiService.getAllSubjects().subscribe(r => {
-                this.subjectsList = r;
-                this.isDataLoaded = true;
+            this.apiService.saveSubject(this.subjectForm.value).subscribe(() => {
+                this.apiService.getAllSubjects().subscribe(r => {
+                    this.subjectsList = r;
+                    this.subjectForm.reset();
+                    setTimeout(() => this.isDataLoaded = true, 100);
+                });
             });
+        } else {
+            this.subjectForm.get('name')?.markAsTouched();
         }
-
-        this.showAddSubject = !this.showAddSubject;
-        this.buttonText = this.showAddSubject ? 'Save Subject' : 'Add Subject';
     }
 
-    onCancel(): void {
-        this.showAddSubject = false;
-        this.buttonText = 'Add Subject';
+    onReset(): void {
+        this.subjectForm.reset();
     }
 
-    editSubject(): void {
-
+    editSubject(index: number): void {
+        const subject = this.subjectsList[index];
+        this.subjectForm.patchValue(subject);
     }
 
-    deleteSubject(): void {
-
+    isFieldInvalid(field: string): boolean {
+        return this.utilService.isFieldInvalid(this.subjectForm, field);
     }
 }

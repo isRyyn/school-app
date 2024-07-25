@@ -1,23 +1,35 @@
-<div class="container-fluid">
-    <button class="btn btn-success" (click)="addSubject()">{{ buttonText }}</button>
-    <button class="btn btn-danger" *ngIf="showAddSubject" (click)="onCancel()">Cancel</button>
-    <ng-container *ngIf="showAddSubject">
-        <form [formGroup]="subjectForm">
-            <div class="row">
-                <label>Subject Name:</label>
-                <input class="form-control" formControlName="name" type="text" />
+<div class="box-container">
+    <h4 class="mb-3">
+        <i class="fa-solid fa-circle-right"></i>
+        Add New Subject
+    </h4>
+    <form [formGroup]="subjectForm">
+        <div>
+            <label>Subject Name</label>
+            <input class="form-control" placeholder="Enter subject name" formControlName="name" type="text" [ngClass]="{ 'invalid-field': isFieldInvalid('name') }" />
+        </div>
+        <div class="mt-3">
+            <label>Classes</label>
+            <ng-select [items]="standardsList" bindLabel="name" bindValue="id" [multiple]="true"
+                 formControlName="standardIds" placeholder="Select classes">
+            </ng-select>
+        </div>
+        <div class="row mt-5">
+            <div class="d-flex justify-content-center detail-btn">
+                <button class="btn btn-success m-right-5" (click)="onSave()">Save</button>
+                <button class="btn btn-danger m-left-5" (click)="onReset()">Reset</button>
             </div>
-            <div class="row mt-3">
-                <label>Select Classes for this subject:</label>
-                <ng-select [items]="standardsList" bindLabel="name" bindValue="id" [multiple]="true"
-                     formControlName="standardIds" placeholder="Select classes">
-                </ng-select>
-            </div>
-        </form>
-    </ng-container>
+        </div>
+    </form>
+</div>
 
-    <ng-container *ngIf="isDataLoaded">
-        <table>
+<div class="box-container" *ngIf="isDataLoaded">
+    <h4 class="mb-3">
+        <i class="fa-solid fa-circle-right"></i>
+        Subjects
+    </h4>
+    <div class="app-table-container">
+        <table class="app-table">
             <thead>
                 <tr>
                     <th>S. No.</th>
@@ -30,14 +42,12 @@
                 <tr *ngFor="let subject of subjectsList; let i=index">
                     <td>{{i+1}}</td>
                     <td>{{subject?.name}}</td>
-                    <td>{{subject?.standardIds}}</td>
+                    <td>{{ getClasses(subject.standardIds) }}</td>
                     <td>
-                        <a (click)="editSubject()">Edit</a>
-                        <span>/</span>
-                        <a (click)="deleteSubject()">Delete</a>
+                        <a class="link-primary" (click)="editSubject(i)">Edit</a>
                     </td>
                 </tr>
             </tbody>
         </table>
-    </ng-container>
+    </div>
 </div>

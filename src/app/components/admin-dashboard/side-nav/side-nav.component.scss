@@ -1,0 +1,49 @@
+.side-nav-container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    background: white;
+    margin-left: -20px;
+    height: 100%;
+    position: static;
+    width: 13.5rem;
+
+    div {
+        padding: 10px 0px;
+        border-bottom: solid 1px black;
+
+        &:hover {
+            color: blue;
+            font-size: 1.01em;
+            cursor: pointer;
+        }
+
+        span {
+            padding-left: 15px;
+        }
+    }
+}
+
+.collapsed {
+    padding-right: 30px;
+    width: 70px;
+
+    i:hover {
+        color: blue;
+        cursor: pointer;
+    }
+}
+
+
+@media (max-width:600px) {
+    .side-nav-container {
+        position: sticky;
+        width: 300px;
+        z-index: 1001;
+    }
+
+    .collapsed {
+        width: 70px;
+    }
+}

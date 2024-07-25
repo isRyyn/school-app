@@ -12,7 +12,6 @@ export type ArrayObject = {
 
 
 
-
 // DB entities
 export interface User {
     id: number;
@@ -30,7 +29,6 @@ export interface StudentModel {
     lastName: string;
     dob: string;
     gender: Gender;
-    session: string;
     rollNo: number
     picture: File;
     uDiasCode: string;
@@ -43,15 +41,19 @@ export interface StudentModel {
     pincode: number;
     uniform: boolean;
     course: boolean;
-    vehicleName: string;
-    vehicleNumber: string;
-    vehicleRoute: string;
+    vehicleId: number;
 
     standardId: number;
-    subjectIds: number[];
     marksIds: number[];
     parentsIds: number[];
     feeIds: number[];
+
+    docTC: boolean;
+    docMarksheet: boolean;
+    docAadhaar: boolean;
+    docParentAadhaar: boolean;
+    docPhotograph: boolean;
+    docDobCertificate: boolean;
 }
 
 export interface TransactionModel {
@@ -64,18 +66,17 @@ export interface TransactionModel {
 
 export interface FeeModel {
     id: number;
-    studentId: number;
     amount: number;
     month: Month;
     date: string;
+    studentId: number;
+    sessionId: number;
 }
 
 export interface SubjectModel {
     id: number;
     name: string;
     standardIds: number[];
-    studentIds: number[];
-    marksIds: number[];
 }
 
 export interface StandardModel {
@@ -92,6 +93,7 @@ export interface MarksModel {
     examName: ExamType;
     subjectId: number;
     standardId: number;
+    sessionId: number;
     marks: number;
     totalMarks: number;
 }

@@ -1,0 +1,34 @@
+<nav class="col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-5 col-6 side-nav-container" [ngClass]="{ 'collapsed': !isExpanded }" [ngStyle]="{'top': navbarPosition}">
+    <div (click)="goToPath('home')">
+        <i class="fa-solid fa-house"></i>
+        <span *ngIf="isExpanded">Dashboard</span>
+    </div>
+    <div (click)="goToPath('students')">
+        <i class="fa-solid fa-user-graduate"></i>
+        <span *ngIf="isExpanded">Students</span>
+    </div>
+    <div (click)="goToPath('teachers')">
+        <i class="fa-solid fa-person-chalkboard"></i>
+        <span *ngIf="isExpanded">Teachers</span>
+    </div>
+    <div (click)="goToPath('classes')">
+        <i class="fa-solid fa-pen-ruler"></i>
+        <span *ngIf="isExpanded">Classes</span>
+    </div>
+    <div (click)="goToPath('subjects')">
+        <i class="fa-solid fa-book"></i>
+        <span *ngIf="isExpanded">Subjects</span>
+    </div>
+    <div (click)="goToPath('exams')">
+        <i class="fa-solid fa-marker"></i>
+        <span *ngIf="isExpanded">Exams</span>
+    </div>
+    <div (click)="goToPath('fees')">
+        <i class="fa-solid fa-comments-dollar"></i>
+        <span *ngIf="isExpanded">Fees</span>
+    </div>
+    <div (click)="goToPath('expenses')">
+        <i class="fa-solid fa-money-check-dollar"></i>
+        <span *ngIf="isExpanded">Expenses</span>
+    </div>
+</nav>

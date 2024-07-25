@@ -4,28 +4,35 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+    selector: 'app-header',
+    standalone: true,
+    imports: [CommonModule],
+    templateUrl: './header.component.html',
+    styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
-  isLoggedIn?: boolean = false;
+    isLoggedIn?: boolean = false;
+    isExpanded: boolean = true;
+    user: string = 'Admin';
 
-  constructor(
-    private router: Router,
-    private sharedService: SharedService
-  ) {
+    constructor(
+        private router: Router,
+        private sharedService: SharedService
+    ) {
 
-  }
+    }
 
-  ngOnInit(): void {
-     this.sharedService.isLoggedIn$.subscribe(response => this.isLoggedIn = response);
-  }
+    ngOnInit(): void {
+        this.sharedService.isLoggedIn$.subscribe(response => this.isLoggedIn = response);
+    }
 
-  logout(): void {
-    this.isLoggedIn = false;
-    this.router.navigate(['/login']);
-  }
+    logout(): void {
+        this.isLoggedIn = false;
+        this.router.navigate(['/login']);
+    }
+
+    updateSideNav(): void { 
+        this.isExpanded = !this.isExpanded;
+        this.sharedService.updateSideNav();
+    }
 }

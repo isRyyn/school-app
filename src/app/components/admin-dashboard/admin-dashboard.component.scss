@@ -1,46 +1,17 @@
-.card-deck {
-    display: flex;
-    justify-content: space-evenly;
-    margin-top: 20px;
+.w-70 {
+    width: 70px;
 }
 
-.card-title {
-    margin-left: 20px;
+.container-fluid {
+    overflow: scroll;
+}
 
-    i {
-        margin-left: 15px;
+@media (max-width: 600px) {
+    .nav-container {
+        width: 70px;
     }
-}
 
-.card-text {
-    margin-left: 20px;
-    font-size: small;
-}
-
-.child-btn {
-    flex: 1;
-    margin: 0px 10px;
-    
-    .btn {
-        min-width: 115px;
-    }
-}
-
-.expense-btn {
-    padding: 0px;
-    font-size: 1.5em;
-    font-weight: bolder;
-}
-
-.btn-warning {
-    width: 100px;
-    font-size: 0.8em;
-    padding: 5px;
-    margin-top: 11px;
-}
-
-@media (max-width: 990px) {
-    .btn-warning {
-        margin-left: 10px;
+    .container-fluid {
+        width: 100%;
     }
 }

@@ -36,6 +36,10 @@ export class ApiService {
         return this.httpClient.get<StudentModel[]>(`${this.baseUrl}/students`);
     }
 
+    getStudentsByStandard(standardId: number): Observable<StudentModel[]> {
+        return this.httpClient.get<StudentModel[]>(`${this.baseUrl}/students/standard/${standardId}`);
+    }
+
     saveStudent(payload: FormData): Observable<StudentModel> {
         return this.httpClient.post<StudentModel>(`${this.baseUrl}/students`, payload);
     }
@@ -44,16 +48,15 @@ export class ApiService {
         return this.httpClient.post<ParentModel>(`${this.baseUrl}/parents`, payload);
     }
 
-    getAllTransactions(): Observable<TransactionModel[]> {
-        return this.httpClient.get<TransactionModel[]>(`${this.baseUrl}/transactions`);
-    }
-
-
     /**
      * 
      * Transactions api
      * 
      */
+    getAllTransactions(): Observable<TransactionModel[]> {
+        return this.httpClient.get<TransactionModel[]>(`${this.baseUrl}/transactions`);
+    }
+
     saveTransaction(payload: TransactionModel): Observable<TransactionModel> {
         return this.httpClient.post<TransactionModel>(`${this.baseUrl}/transactions`, payload);
     }

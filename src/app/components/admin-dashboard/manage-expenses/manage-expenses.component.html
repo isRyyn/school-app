@@ -1,51 +1,96 @@
+<div class="box-container" *ngIf="isLoaded">
+    <h4>
+        <i class="fa-solid fa-circle-right"></i>
+        Current Balance = Rs.{{ availableAmount }}/-
+    </h4>
+</div>
+<div class="box-container">
+    <h4 class="mb-3">
+        <i class="fa-solid fa-circle-right"></i>
+        New Transaction
+    </h4>
+    <form [formGroup]="expenseForm">
+        <div class="row">
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 pb-2">
+                <label>Type</label>
+                <ng-select
+                    [ngClass]="{ 'invalid-field': isFieldInvalid('type') }"
+                    [items]="transactionTypeList"
+                    bindLabel="name"
+                    class="form-ng-select"
+                    bindValue="value"
+                    formControlName="type"
+                    placeholder="Select Type"
+                ></ng-select>
+            </div>
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 pb-2">
+                <label>Amount</label>
+                <input type="number" placeholder="Enter amount" formControlName="amount" class="form-control" [ngClass]="{ 'invalid-field': isFieldInvalid('amount') }"/>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 pb-2">
+                <label>Category</label>
+                <input type="text" placeholder="Enter category" formControlName="category" class="form-control"/>
+            </div>
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 pb-2">
+                <label>Date</label>
+                <app-date-picker></app-date-picker>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="d-flex justify-content-center detail-btn">
+                <button class="btn btn-success m-right-5" (click)="onSave()">Save</button>
+                <button class="btn btn-danger m-left-5" (click)="onReset()">Reset</button>
+            </div>
+        </div>
+    </form>
+</div>
 
-<ng-container *ngIf="actionType === action.TERTIARY">
-    <div>Passbook</div>
-    <table>
-        <thead>
-            <tr>
-                <th>S. No</th>
-                <th>Transaction Type</th>
-                <th>Amount</th>
-                <th>Category</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (transaction of transactions; track transaction; let i= $index) {
+<div class="box-container" *ngIf="isLoaded">
+    <h4 class="mb-3">
+        <i class="fa-solid fa-circle-right"></i>
+        Passbook
+    </h4>
+    <div class="app-table-container">
+        <table class="app-table">
+            <thead>
                 <tr>
-                    <td>{{ i + 1 }}</td>
-                    <td>{{ transaction.type }}</td>
-                    <td>{{ transaction.amount }}</td>
-                    <td>{{ transaction.category }}</td>
-                    <td>{{ transaction.date }}</td>
-                </tr>   
-            }  
-        </tbody>
-    </table>
-</ng-container>
-
-<form [formGroup]="expenseForm" class="container pt-1 pb-3" *ngIf="isLoaded && actionType != action.TERTIARY">
-    <div class="row mt-5">
-        <div class="col-lg-3 col-md-6">
-            <label>Amount</label>
-            <input type="number" placeholder="Enter amount" formControlName="amount" class="form-control" [ngClass]="{ 'invalid-field': isFieldInvalid('amount') }"/>
-        </div>
+                    <th>S. No</th>
+                    <th (click)="sortTable('type')">
+                        <span>Transaction Type</span>
+                        <i *ngIf="sortMap.get('type')" class="fa-solid fa-sort-down"></i>
+                        <i *ngIf="!sortMap.get('type')" class="fa-solid fa-sort-up"></i>   
+                    </th>
+                    <th (click)="sortTable('amount')">
+                        Amount
+                        <i *ngIf="sortMap.get('amount')" class="fa-solid fa-sort-down"></i>
+                        <i *ngIf="!sortMap.get('amount')" class="fa-solid fa-sort-up"></i> 
+                    </th>
+                    <th (click)="sortTable('category')">
+                        Category
+                        <i *ngIf="sortMap.get('category')" class="fa-solid fa-sort-down"></i>
+                        <i *ngIf="!sortMap.get('category')" class="fa-solid fa-sort-up"></i> 
+                    </th>
+                    <th (click)="sortTable('date')">
+                        Date
+                        <i *ngIf="sortMap.get('date')" class="fa-solid fa-sort-down"></i>
+                        <i *ngIf="!sortMap.get('date')" class="fa-solid fa-sort-up"></i> 
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (transaction of transactions; track transaction; let i= $index) {
+                    <tr>
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ transaction.type | titlecase }}</td>
+                        <td>{{ transaction.amount }}</td>
+                        <td>{{ transaction.category }}</td>
+                        <td>{{ transaction.date | slice:0:10 }}</td>
+                    </tr>   
+                }  
+            </tbody>
+        </table>
     </div>
-    <div class="row mt-5">
-        <div class="col-lg-3 col-md-6">
-            <label>Category</label>
-            <input type="text" placeholder="Enter category" formControlName="category" class="form-control"/>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <label>Date</label>
-            <app-date-picker></app-date-picker>
-        </div>
-    </div>
-    <div class="row mt-5">
-        <div class="d-flex justify-content-center detail-btn">
-            <button class="btn btn-success m-right-5" (click)="onSave()">Save</button>
-            <button class="btn btn-danger m-left-5" (click)="onCancel()">Cancel</button>
-        </div>
-    </div>
-</form>
+    
+</div>

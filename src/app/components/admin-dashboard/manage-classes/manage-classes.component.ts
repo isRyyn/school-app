@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SubjectModel, StandardModel } from '../../../services/models';
 import { ApiService } from '../../../services/api.service';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { UtilService } from '../../../services/util.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-manage-classes',
@@ -14,63 +16,89 @@ import { NgSelectModule } from '@ng-select/ng-select';
   styleUrl: './manage-classes.component.scss'
 })
 export class ManageClassesComponent implements OnInit {
-    showAddClass: boolean = false;
     isDataLoaded: boolean = false;
-    buttonText = 'Add Class';
 
     classForm!: FormGroup;
 
     standardsList: StandardModel[] = [];
     subjectsList: SubjectModel[] = [];
 
+    subjectMap = new Map<number, string>([]);
+    
+
     constructor(
-        private readonly apiService: ApiService
+        private readonly apiService: ApiService,
+        private readonly utilService: UtilService
     ){}
 
     ngOnInit(): void {
-        this.apiService.getAllStandards().subscribe(r => {
-            this.standardsList = r;
+        this.loadData();
+        this.loadForm();
+    }
+
+    loadData(): void {
+        forkJoin({
+            data1: this.apiService.getAllStandards(),
+            data2: this.apiService.getAllSubjects()
+        }).subscribe(r => {
+            this.standardsList = r.data1;
+            this.subjectsList = r.data2;
+            this.setSubjectMap();
             this.isDataLoaded = true;
         });
-        this.apiService.getAllSubjects().subscribe(r => this.subjectsList = r);
-        this.loadForm();
+    }
+
+    setSubjectMap(): void {
+        this.subjectsList.forEach(subject => {
+            this.subjectMap.set(subject.id, subject.name);
+        });
+    }
+
+    getSubjects(ids: number[]): string[] {
+        const subjectsArr: string[] = [];
+        ids.forEach(id => {
+            subjectsArr.push(this.subjectMap.get(id) ?? '');
+        });
+        return subjectsArr;
     }
 
     loadForm(): void {
         this.classForm = new FormGroup({
             id: new FormControl(),
-            name: new FormControl(),
+            name: new FormControl(null, Validators.required),
             subjectIds: new FormControl(),
             studentIds: new FormControl(),
             marksIds: new FormControl()
         });
     }
 
-    addClass(): void {
-        if(this.buttonText == 'Save Class') {
-            const payload = this.classForm.value;
-            this.apiService.saveStandard(payload).subscribe(r => console.log(r));
+    onSave(): void {
+        if(this.classForm.valid) {
             this.isDataLoaded = false;
-            this.apiService.getAllStandards().subscribe(r => {
-                this.standardsList = r;
-                this.isDataLoaded = true;
+
+            
+            this.apiService.saveStandard(this.classForm.value).subscribe(() => {
+                this.apiService.getAllStandards().subscribe(r => {
+                    this.standardsList = r;
+                    this.classForm.reset();
+                    setTimeout(() => this.isDataLoaded = true, 100);
+                });
             });
+        } else {
+            this.classForm.get('name')?.markAsTouched();
         }
-
-        this.showAddClass = !this.showAddClass;
-        this.buttonText = this.showAddClass ? 'Save Class' : 'Add Class';
     }
 
-    onCancel(): void {
-        this.showAddClass = false;
-        this.buttonText = 'Add Class';
+    onReset(): void {
+        this.classForm.reset();
     }
 
-    editClass(): void {
-
+    editClass(index: number): void {
+        const standard = this.standardsList[index];
+        this.classForm.patchValue(standard);
     }
 
-    deleteClass(): void {
-
+    isFieldInvalid(field: string): boolean {
+        return this.utilService.isFieldInvalid(this.classForm, field);
     }
 }

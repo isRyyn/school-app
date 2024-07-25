@@ -1,1 +1,34 @@
-<p>show-student-details works!</p>
+<div class="container" *ngIf="isDataLoaded">
+    <div class="row">
+        <label>Select Class</label>
+        <ng-select [items]="standardsList" bindLabel="name" bindValue="id"
+             formControlName="id" placeholder="Select class" (change)="onStandardChange($event)">
+        </ng-select>
+    </div>
+    <div class="row mt-3">
+        <table *ngIf="isDataFiltered">
+            <thead>
+                <tr>
+                    <th>S. No</th>
+                    <th>First Name</th>
+                    <th>Roll No</th>
+                    <th>Mobile</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let student of filteredStudentsList; let i = index">
+                    <td>{{i+1}}</td>
+                    <td>{{ student?.firstName }}</td>
+                    <td>{{ student?.rollNo }}</td>
+                    <td>{{ student?.mobile }}</td>
+                    <td>
+                        <a>View/Edit</a>
+                        <span> | </span>
+                        <a>Delete</a>
+                    </td> 
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
