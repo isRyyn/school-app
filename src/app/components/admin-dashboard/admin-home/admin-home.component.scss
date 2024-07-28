@@ -1,0 +1,36 @@
+.stats-icon {
+    font-size: 60px;
+}
+
+strong {
+    font-size: 30px;
+}
+
+.admin-card {
+    border-radius: 20px;
+    padding: 10px;
+    padding-left: 35px;
+    background: black;
+    color: chartreuse;
+    width: fit-content;
+    min-width: 320px;
+    border: solid 2px darkorange;
+
+    strong {
+        color: darkorange;
+    }
+}
+
+@media (max-width: 500px) {
+    .stats-icon {
+        font-size: 45px;
+    }
+
+    strong {
+        font-size: 20px;
+    }
+
+    .admin-card {
+        min-width: 2rem;
+    }
+}

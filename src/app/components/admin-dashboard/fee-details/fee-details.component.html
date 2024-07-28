@@ -1,34 +1,77 @@
-<form [formGroup]="feeForm" class="container pt-5 pb-3">
-    <div class="row">
-        <div class="col-lg-3 col-md-6">
-            <app-student-select></app-student-select>
-        </div>
+<ng-container *ngIf="!studentId">
+    <div class="box-container">
+        <h4 class="mb-3">
+            <i class="fa-solid fa-circle-right"></i>
+            Add Fees
+        </h4>
+        <form [formGroup]="feeForm" class="pb-3">
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 pt-1">
+                    <app-student-select (emitStudent)="onStudentChange($event.id)"></app-student-select>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 pt-1">
+                    <label>Amount</label>
+                    <input type="number" placeholder="Enter fee amount" formControlName="amount" class="form-control" [ngClass]="{ 'invalid-field': isFieldInvalid('amount') }"/>
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 pt-2">
+                    <label>Month</label>
+                    <ng-select 
+                        placeholder="Select month"
+                        formControlName="month"
+                        bindLabel="name"
+                        bindValue="value"
+                        [items]="monthsList">
+                    </ng-select>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 pt-2">
+                    <label>Date</label>
+                    <app-date-picker></app-date-picker>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="d-flex justify-content-center detail-btn">
+                    <button class="btn btn-success m-right-5" (click)="onSave()">Save</button>
+                    <button class="btn btn-danger m-left-5" (click)="onReset()">Reset</button>
+                </div>
+            </div>
+        </form>
+    </div>    
+</ng-container>
+
+<ng-container *ngIf="studentId">
+    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-4 col-xs-4 col-4 pt-3 pb-1">
+        <button class="btn btn-danger" title="Go back" (click)="goBack()"><i class="fa-solid fa-backward"></i></button>
     </div>
-    <div class="row mt-5">
-        <div class="col-lg-3 col-md-6">
-            <label>Amount</label>
-            <input type="number" placeholder="Enter fee amount" formControlName="amount" class="form-control" [ngClass]="{ 'invalid-field': isFieldInvalid('amount') }"/>
-        </div>
+</ng-container>
+<div class="box-container">
+    <h4 class="mb-3">
+        <i class="fa-solid fa-circle-right"></i>
+        Fee Details
+    </h4>
+    <div class="app-table-container" *ngIf="isDataFiltered">
+        <table class="app-table">
+            <thead>
+                <tr>
+                    <th>S. No</th>
+                    <th>Amount</th>
+                    <th>Month</th>
+                    <th>Date</th>
+                    <th *ngIf="!studentId">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let fee of filteredFeesList; let i = index">
+                    <td>{{i+1}}</td>
+                    <td>{{ fee?.amount }}</td>
+                    <td>{{ fee?.month | titlecase }}</td>
+                    <td>{{ fee?.date | slice:0:10 }}</td>
+                    <td *ngIf="!studentId">
+                        <a appScrollPageToSection class="link-primary" (click)="onEdit(fee)">Edit</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="row mt-5">
-        <div class="col-lg-3 col-md-6">
-            <label>Month</label>
-            <select class="form-control form-select" formControlName="month">
-                <option value="">Select Month</option>
-                @for (item of monthsList; track item) {
-                <option value="{{item.value}}">{{ item.name }}</option>
-                }
-            </select>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <label>Date</label>
-            <app-date-picker></app-date-picker>
-        </div>
-    </div>
-    <div class="row mt-5">
-        <div class="d-flex justify-content-center detail-btn">
-            <button class="btn btn-success m-right-5" (click)="onSave()">Save</button>
-            <button class="btn btn-danger m-left-5" (click)="onCancel()">Cancel</button>
-        </div>
-    </div>
-</form>
+</div>

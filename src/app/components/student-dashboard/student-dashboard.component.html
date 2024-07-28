@@ -1,1 +1,107 @@
-<p>student-dashboard works!</p>
+<section class="py-3 py-md-5" *ngIf="showMainContent">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-10 col-xl-10 col-xxl-8">
+                <div class="card widget-card border-light shadow-sm bg-primary">
+                    <div class="card-body p-4">
+                        <div class="row align-items-center justify-content-center">
+                            <div class="col-6">
+                                <p class="mb-0 fs-7 text-white">Hello,</p>
+                                <h5 class="card-title widget-card-title text-white mb-1">{{ studentData.firstName }}</h5>
+                            </div>
+                            <div class="col-6 d-flex align-items-center justify-content-end">
+                                <span
+                                    class="fs-1 bsb-w-85 bsb-h-85 text-white border border-3 border-primary-subtle rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-people"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card mt-5 border-0">
+                            <div class="card-body">
+                                <div class="row gy-4">
+                                    <div class="col-12">
+                                        <div class="card bg-primary-subtle text-primary border-0">
+                                            <div class="card-body">
+                                                <div class="row align-items-center">
+                                                    <div class="col-8">
+                                                        <div class="d-flex align-items-center">
+                                                            <span
+                                                                class="fs-6 bsb-w-35 bsb-h-35 text-bg-primary rounded-circle d-flex align-items-center justify-content-center me-2">
+                                                                <i class="fa-solid fa-book"></i>
+                                                            </span>
+                                                            <div>
+                                                                <h4 class="m-0 student-detail-heading">Details</h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <h3 class="h3 text-end m-0">
+                                                            <i class="fa-solid fa-right-to-bracket"
+                                                                (click)="goToSection('info')"></i>
+                                                        </h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="card bg-success-subtle text-success border-0">
+                                            <div class="card-body">
+                                                <div class="row align-items-center">
+                                                    <div class="col-8">
+                                                        <div class="d-flex align-items-center">
+                                                            <span
+                                                                class="fs-6 bsb-w-35 bsb-h-35 text-bg-success rounded-circle d-flex align-items-center justify-content-center me-2">
+                                                                <i class="fa-solid fa-money-check-dollar"></i>
+                                                            </span>
+                                                            <div>
+                                                                <h4 class="m-0 student-detail-heading">Fees</h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <h6 class="h3 text-end m-0">
+                                                            <i class="fa-solid fa-right-to-bracket"
+                                                                (click)="goToSection('fees')"></i>
+                                                        </h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="card bg-primary-subtle text-primary border-0">
+                                            <div class="card-body">
+                                                <div class="row align-items-center">
+                                                    <div class="col-8">
+                                                        <div class="d-flex align-items-center">
+                                                            <span
+                                                                class="fs-6 bsb-w-35 bsb-h-35 text-bg-warning rounded-circle d-flex align-items-center justify-content-center me-2">
+                                                                <i class="fa-solid fa-calculator"></i>
+                                                            </span>
+                                                            <div>
+                                                                <h4 class="m-0 student-detail-heading">Marks</h4>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <h6 class="h3 text-end m-0">
+                                                            <i class="fa-solid fa-right-to-bracket"
+                                                                (click)="goToSection('marks')"></i>
+                                                        </h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<router-outlet></router-outlet>

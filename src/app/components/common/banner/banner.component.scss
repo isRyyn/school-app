@@ -1,0 +1,23 @@
+.message {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1em;
+    text-align: center;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000; 
+    color: white;
+}
+
+.error {
+    background-color: rgb(251, 62, 62);
+}
+
+.success {
+    background-color: rgb(62, 251, 62);
+}
+
+.info {
+    background-color: rgp(62, 62, 251);
+}

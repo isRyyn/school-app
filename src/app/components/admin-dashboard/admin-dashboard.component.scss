@@ -1,17 +1,27 @@
-.w-70 {
-    width: 70px;
+.admin-dashboard-container {
+    margin: 0px -20px;
+    display: flex;
+    justify-content: space-between;
 }
 
-.container-fluid {
-    overflow: scroll;
+.collapsed-side-bar {
+    min-width: 70px !important;
+    max-width: 70px;
 }
 
-@media (max-width: 600px) {
-    .nav-container {
-        width: 70px;
-    }
+.main-content {
+    flex: 5;
+    padding: 10px;
+    padding-right: 20px;
+    min-width: 305px;
+}
 
-    .container-fluid {
-        width: 100%;
-    }
+.side-bar {
+    flex: 1;
+    padding: 10px;
+    padding-left: 0px;
+
+    position: relative;
+    top: -70px;
+    min-width: 210px;
 }

@@ -1,0 +1,75 @@
+<div class="box-container">
+    <h4 class="mb-3">
+        <i class="fa-solid fa-circle-right"></i>
+        Add New User
+    </h4>
+    <form [formGroup]="userForm">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 pb-2">
+                <label>Role</label>
+                <ng-select [items]="roles" bindValue="value" bindLabel="name" formControlName="role" (change)="onRoleChange($event)"
+                    placeholder="Select role" [ngClass]="{ 'invalid-field': isFieldInvalid('role') }"></ng-select>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 pb-2" *ngIf="showUserSelect">
+                <label>Select {{ roleSelected | titlecase }}</label>
+                <ng-container *ngIf="roleSelected == 'STUDENT'">
+                    <app-student-select controlName="userId" [showLabel]="false"></app-student-select>
+                </ng-container>
+                <ng-container *ngIf="roleSelected == 'TEACHER'">
+                    <ng-select [items]="teacherList" bindValue="id" bindLabel="firstName" formControlName="userId"
+                        placeholder="Select teacher"
+                        [ngClass]="{ 'invalid-field': isFieldInvalid('userId') }"></ng-select>
+                </ng-container>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 pb-2">
+                <label>Email/Mobile</label>
+                <input type="text" placeholder="Enter email or mobile no" formControlName="username" class="form-control"
+                    [ngClass]="{ 'invalid-field': isFieldInvalid('username') }" />
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 pb-2">
+                <label>Password</label>
+                <input type="text" placeholder="Enter password" formControlName="password" class="form-control" [ngClass]="{ 'invalid-field': isFieldInvalid('password') }"/>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="d-flex justify-content-center detail-btn">
+                <button class="btn btn-success m-right-5" (click)="onSave()">Save</button>
+                <button class="btn btn-danger m-left-5" (click)="onReset()">Reset</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="box-container" *ngIf="isDataLoaded">
+    <h4 class="mb-3">
+        <i class="fa-solid fa-circle-right"></i>
+        Users
+    </h4>
+    <div class="app-table-container">
+        <table class="app-table">
+            <thead>
+                <tr>
+                    <th>S. No.</th>
+                    <th>Role</th>
+                    <th>Email/Mobile</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of userList; let i=index">
+                    <td>{{i+1}}</td>
+                    <td>{{user?.role | titlecase}}</td>
+                    <td>{{user?.username}}</td>
+                    <td *ngIf="user.role.toString() != 'ADMIN'">
+                        <a appScrollPageToSection class="link-primary" (click)="editUser(i)">Edit</a>
+                        <span class="separator-icon">|</span>
+                        <a appScrollPageToSection class="link-danger" (click)="deleteUser(user.id)">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

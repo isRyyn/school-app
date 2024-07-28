@@ -1,21 +1,18 @@
 .side-nav-container {
     display: flex;
     flex-direction: column;
-    padding: 10px 20px;
+    height: calc(100% + 70px);
+
     font-size: 1.2em;
-    background: white;
-    margin-left: -20px;
-    height: 100%;
-    position: static;
-    width: 13.5rem;
+    background: black;
+    color: white;
 
     div {
-        padding: 10px 0px;
+        padding: 10px 20px;
         border-bottom: solid 1px black;
 
         &:hover {
-            color: blue;
-            font-size: 1.01em;
+            color: #cd9cf7;
             cursor: pointer;
         }
 
@@ -26,24 +23,34 @@
 }
 
 .collapsed {
-    padding-right: 30px;
     width: 70px;
 
-    i:hover {
-        color: blue;
+    i:hover :not(.header-nav) {
+        color: #cd9cf7;
         cursor: pointer;
+    }
+
+    .header-nav {
+        padding-left: 5px !important;
     }
 }
 
+.selected {
+    color: black;
+    background: #cd9cf7;
 
-@media (max-width:600px) {
-    .side-nav-container {
-        position: sticky;
-        width: 300px;
-        z-index: 1001;
+    i:hover, &:hover {
+        color: black !important; 
     }
+}
 
-    .collapsed {
-        width: 70px;
+.header-nav {
+    background: #cd9cf7;
+    color: black;
+    padding: 15px 15px 9px 10px !important;
+    font-size: 1.2em;
+
+    &:hover {
+        color: black !important;
     }
 }

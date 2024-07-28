@@ -1,8 +1,12 @@
 <div>
-    <div class="app-header">
+    <app-banner></app-banner>
+    <div class="app-header" *ngIf="isLoggedIn">
         <app-header></app-header>
     </div>
     <div class="app-container">
         <router-outlet></router-outlet>
     </div>
+    <ng-container *ngIf="isLoggedIn">
+        <app-footer></app-footer>
+    </ng-container>
 </div>

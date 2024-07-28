@@ -1,4 +1,5 @@
-import { ExamType, Gender, Month, Relation, Role, TransactionType } from './enums';
+import { __exportStar } from 'tslib';
+import { BannerType, ExamType, Gender, Month, Relation, Role, TransactionType } from './enums';
 
 export type ModalConfig = {
     data?: object
@@ -10,15 +11,21 @@ export type ArrayObject = {
     value: any;
 }
 
+export type BannerObject = {
+    type: BannerType;
+    message?: string;
+    timer?: number;
+}
+
 
 
 // DB entities
-export interface User {
+export interface UserModel {
     id: number;
-    email: string;
+    username: string;
     password: string;
-    mobile: string;
     role: Role;
+    userId: number;
 }
 
 
@@ -33,7 +40,7 @@ export interface StudentModel {
     picture: File;
     uDiasCode: string;
     previousSchool: string;
-    mobile: number;
+    mobile: string;
     email: string;
     address: string;
     city: string;
@@ -50,8 +57,8 @@ export interface StudentModel {
 
     docTC: boolean;
     docMarksheet: boolean;
-    docAadhaar: boolean;
-    docParentAadhaar: boolean;
+    docAadhar: boolean;
+    docParentAadhar: boolean;
     docPhotograph: boolean;
     docDobCertificate: boolean;
 }
@@ -99,11 +106,42 @@ export interface MarksModel {
 }
 
 export interface ParentModel {
+    id: number;
     firstName: string;
     middleName: string;
     lastName: string;
-    mobile: number;
+    mobile: string;
     gender: Gender;
     relation: Relation;   
-    studentIds: number[];
+    childIds: number[];
+}
+
+export interface TeacherModel {
+    id: number;
+    firstName: string;
+    lastName: string;
+    mobile: string;
+    gender: Gender;
+    subjectIds: number[];
+    standardIds: number[];
+}
+
+export interface VehicleModel {
+    id: number;
+    name: string;
+    number: string;
+    route: string;
+    driver: string;
+}
+
+export interface SessionModel {
+    id: number;
+    name: string;
+}
+
+export interface PageModel {
+    id: number;
+    content: string;
+    title: string;
+    author: string;
 }

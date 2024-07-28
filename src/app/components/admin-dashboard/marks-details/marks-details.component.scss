@@ -1,19 +1,28 @@
-.container {
-    box-shadow: 0px 7px 10px 1px !important;
-}
+.app-table {
+    table-layout: fixed;
 
-label {
-    margin-left: 13px;
-    margin-bottom: 5px;
-    font-style: italic;
-    font-size: 0.9em;
-    white-space: nowrap;
-}
+    .student-name {
+        width: 20%;
+       // min-width: 70px ;
+    }
 
-input, select {
-    font-size: 0.9em;
-}
+    .subject-name {
+        width: 10%;
+        //min-width: 70px ;
+    }
 
-.form-select option:first-child {
-    color: grey;
+    .student-total {
+        //min-width: 70px ;
+        width: 8%;
+    }
+
+    .student-percent {
+       // min-width: 70px ;
+        width: 8%;
+    }
+
+    input {
+        //min-width: 70px ;
+        width: 100%;
+    }
 }

@@ -1,29 +1,21 @@
-.container {
-    scroll-behavior: smooth;
-    box-shadow: 0px 7px 10px 1px;
-}
-
-.student-links-container {
-    position: fixed;
-    flex-direction: column;
-    align-items: flex-start;
-    left: 0;
-
-    background: white;
-    padding: 5px;
-    border-radius: 0px 20px 20px 0px;
-}
-
-.student-links {
-    cursor: pointer;
-    text-decoration: underline;
-    padding: 0px 10px;
-    margin: 10px 0px;
-}
-
-
 .student-section-heading {
     display: inline-block;
+    color: grey;
+    font-size: 22px;
+}
+
+.expand-link {
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+h4 {
+    .fa-circle-plus {
+        color: green;
+    }
+    .fa-circle-minus {
+        color: red !important;
+    }
 }
 
 .parent-form {
@@ -90,14 +82,5 @@ input, select, textarea {
     
     .student-details-btn button {
         min-width: 100px;
-    }
-}
-
-@media (max-width: 825px) {
-    .student-links-container {
-        top: 116px;
-        flex-direction: row;
-        position: inherit;
-        border-radius: 0px 0px 20px 20px;
     }
 }

@@ -1,0 +1,70 @@
+<div class="box-container">
+    <h4 class="mb-3">
+        <i class="fa-solid fa-circle-right"></i>
+        Add New Vehicle
+    </h4>
+    <form [formGroup]="vehicleForm">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 pb-2">
+                <label>Name</label>
+                <input type="text" placeholder="Enter vehicle name" formControlName="name" class="form-control"/>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 pb-2">
+                <label>Number</label>
+                <input type="text" placeholder="Enter vehicle number" formControlName="number" class="form-control" [ngClass]="{ 'invalid-field': isFieldInvalid('number') }"/>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 pb-2">
+                <label>Route</label>
+                <input type="text" placeholder="Enter vehicle route" formControlName="route" class="form-control" [ngClass]="{ 'invalid-field': isFieldInvalid('driver') }"/>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 pb-2">
+                <label>Driver</label>
+                <input type="text" placeholder="Enter vehicle driver" formControlName="driver" class="form-control"/>
+            </div>
+        </div>
+        
+        <div class="row mt-5">
+            <div class="d-flex justify-content-center detail-btn">
+                <button class="btn btn-success m-right-5" (click)="onSave()">Save</button>
+                <button class="btn btn-danger m-left-5" (click)="onReset()">Reset</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="box-container" *ngIf="isDataLoaded">
+    <h4 class="mb-3">
+        <i class="fa-solid fa-circle-right"></i>
+        Vehicles
+    </h4>
+    <div class="app-table-container">
+        <table class="app-table">
+            <thead>
+                <tr>
+                    <th>S. No.</th>
+                    <th>Name</th>
+                    <th>Number</th>
+                    <th>Driver</th>
+                    <th>Route</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let vehicle of vehicleList; let i=index">
+                    <td>{{i+1}}</td>
+                    <td>{{vehicle?.name}}</td>
+                    <td>{{vehicle?.number}}</td>
+                    <td>{{vehicle?.driver}}</td>
+                    <td>{{vehicle?.route}}</td>
+                    <td>
+                        <a appScrollPageToSection class="link-primary" (click)="editVehicle(i)">Edit</a>
+                        <span class="separator-icon">|</span>
+                        <a appScrollPageToSection class="link-danger" (click)="deleteVehicle(vehicle.id)">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,8 +1,9 @@
-<div class="d-flex">
-    <div class="col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-5 col-6 nav-container" [ngClass]="{ 'w-70': !isExpanded }">
-        <app-side-nav [isExpanded]="isExpanded"></app-side-nav>
+<div class="admin-dashboard-container">
+    <div class="side-bar" [ngClass]="isExpanded ? 'expanded-side-bar': 'collapsed-side-bar'">
+        <app-side-nav [isExpanded]="isExpanded" (emitState)="isExpanded = $event"></app-side-nav>
     </div>
-    <div class="container-fluid">
+    <div class="main-content" [ngClass]="isExpanded ? 'expanded-content' : 'collapsed-content'">
+        <app-banner></app-banner>
         <router-outlet></router-outlet>
     </div>
 </div>

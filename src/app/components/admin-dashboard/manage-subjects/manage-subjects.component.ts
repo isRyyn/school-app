@@ -6,11 +6,12 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { StandardModel, SubjectModel } from '../../../services/models';
 import { UtilService } from '../../../services/util.service';
+import { DirectiveModule } from '../../../directives/directive.module';
 
 @Component({
   selector: 'app-manage-subjects',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NgSelectModule],
+  imports: [CommonModule, ReactiveFormsModule, NgSelectModule, DirectiveModule],
   providers: [ApiService],
   templateUrl: './manage-subjects.component.html',
   styleUrl: './manage-subjects.component.scss'
@@ -52,12 +53,12 @@ export class ManageSubjectsComponent implements OnInit {
         });
     }
 
-    getClasses(ids: number[]): string[] {
-        const classesArr: string[] = [];
+    getClasses(ids: number[]): string {
+        let classesString = '';
         ids.forEach(id => {
-            classesArr.push(this.classesMap.get(id) ?? '');
+            classesString += `${this.classesMap.get(id)}, `;
         });
-        return classesArr;
+        return classesString.slice(0, -2);
     }
 
     loadForm(): void {

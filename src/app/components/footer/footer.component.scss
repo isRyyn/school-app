@@ -1,0 +1,41 @@
+.footer {
+    background-color: #cd9cf7;
+    margin-top: -5px;
+}
+
+.links-list {
+    padding-right: 25px;
+
+    .links-heading {
+        font-size: 0.9em;
+    }
+
+    .fa-phone {
+        color: #60b660;
+        &:hover {
+            color: #07d607;
+        }
+    }
+    
+    .fa-square-instagram {
+        color: #e85c74;
+        &:hover {
+            color: #fb2e51;
+        }
+    }
+
+    .fa-facebook {
+        color: #6868f4;
+        &:hover {
+            color: blue;
+        }
+    }
+}
+
+
+@media (max-width: 420px) {
+    .links-heading {
+        display: none;
+    }
+}
+

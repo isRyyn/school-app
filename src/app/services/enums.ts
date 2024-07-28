@@ -35,7 +35,7 @@ export enum Month {
     JUNE = 'June',
     JULY = 'July',
     AUGUST = 'August',
-    SEPTEMBE = 'September',
+    SEPTEMBER = 'September',
     OCTOBER = 'October',
     NOVEMBER = 'November', 
     DECEMBER = 'December'
@@ -57,3 +57,14 @@ export enum Action {
     TERTIARY = 'tertiary'
 }
 
+
+export enum BannerType {
+    ERROR = 'ERROR',
+    INFO = 'INFO',
+    SUCCESS = 'SUCCESS'
+}
+
+export enum MaxMarks {
+    TEST = 20,
+    EXAM = 100
+}

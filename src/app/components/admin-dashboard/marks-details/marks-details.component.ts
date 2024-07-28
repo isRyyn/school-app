@@ -5,11 +5,12 @@ import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } fr
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
 import { ArrayObject, MarksModel, StandardModel, StudentModel, SubjectModel } from '../../../services/models';
-import { Action } from "../../../services/enums";
+import { Action, MaxMarks } from "../../../services/enums";
 import { UtilService } from '../../../services/util.service';
 import { ExamType } from '../../../services/enums';
 import { StudentSelectComponent } from "../../common/student-select/student-select.component";
 import { forkJoin } from 'rxjs';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
     selector: 'app-marks-details',
@@ -31,28 +32,33 @@ export class MarksDetailsComponent implements OnInit {
 
     marksForm!: FormGroup;
 
-    isViewMode?: boolean;
     isDataLoaded: boolean = false;
     isDataFiltered: boolean = false;
-    showMarks: boolean = true;
-    totalMarks!: number;
-    percentage!: number;
+
+    showBtn: boolean = true;
+    editBtn: boolean = false;
+    saveBtn: boolean = false;
+
+    totalMarksMap: Map<number, number> = new Map();
+    percentageMap: Map<number, number> = new Map();
+
+    sortMap = new Map<string, boolean>([
+        ['total', false],
+        ['percent', false]
+    ]);
 
     constructor(
         private readonly route: ActivatedRoute,
         private readonly apiService: ApiService,
         private readonly utilService: UtilService,
-        private readonly router: Router,
-        private readonly fb: FormBuilder
+        private readonly fb: FormBuilder,
+        private readonly authService: AuthService
     ) { }
 
     ngOnInit(): void {
         this.loadData();
         this.examsList = this.utilService.intializeArrayWithEnums(this.examType);
         this.loadForm();
-        this.route.queryParams.subscribe((params) => {
-            this.isViewMode = params['action'] === this.action.SECONDARY;
-        });
     }
 
     loadData(): void {
@@ -70,35 +76,36 @@ export class MarksDetailsComponent implements OnInit {
 
     loadForm(): void {
         this.marksForm = this.fb.group({
-            id: [''],
-            exam: [''],
+            id: [],
+            exam: [],
             marksArray: this.fb.array([])
         });
     }
 
-    private updateMarksArray() {
+    private updateMarksArray(totalMarks: number) {
         const marksArray = this.marksForm.get('marksArray') as FormArray;
         marksArray.clear();
 
         this.studentsList.forEach((student, i) => {
             this.subjectsList.forEach((subject, j) => {
-            
                 
                 const group = this.groupName(i, j);
-                console.log('list', this.marksList[group]?.marks);
                 const formGroup = this.fb.group({
                     id: [this.marksList[group]?.id ?? null],
                     examName: [this.marksForm.value?.exam],
                     marks: [this.marksList[group]?.marks ?? null],
-                    totalMarks: [this.totalMarks],
+                    totalMarks: [totalMarks],
                     standardId: [this.marksForm.value?.id],
                     subjectId: [subject?.id],
                     studentId: [student?.id]
                 });
                 marksArray.push(formGroup);
-                this.isDataFiltered = true;
             });
         });
+        this.showBtn = false;
+        this.editBtn = true;
+        this.isDataFiltered = true;
+        this.marksForm.get('marksArray')?.disable();
     }
 
     groupName(row: number, col: number): number {
@@ -106,39 +113,98 @@ export class MarksDetailsComponent implements OnInit {
     }
 
     onInputChange(): void {
+        this.editBtn = this.saveBtn = false;
+        this.showBtn = true;
         this.isDataFiltered = false;
-    }
-
-    saveMarks() {    
-        this.apiService.saveMarks(this.marksForm.value.marksArray).subscribe(() => {
-            this.isDataFiltered = false;
-            this.marksForm.reset();
-            this.showMarks = true;
+        forkJoin({
+            students: this.apiService.getAllStudents(),
+            subjects: this.apiService.getAllSubjects()
+        }).subscribe(r => {
+            this.studentsList = r.students;
+            this.subjectsList = r.subjects;
         });
     }
 
-    onCancel(): void {
-        this.router.navigate(['/private/admin-dashboard']);
+    onSubmit() {    
+        const payload = this.marksForm.value.marksArray.map((x: MarksModel) => {
+            return {
+                ...x,
+                sessionId: this.authService.getSessionId()
+            }
+        });
+
+        this.apiService.saveMarks(payload).subscribe(() => {
+            this.isDataFiltered = false;
+            this.saveBtn = false;
+            this.showBtn = true;
+            this.marksForm.reset();
+        });
     }
 
-    isFieldInvalid(field: string): boolean {
-        return this.utilService.isFieldInvalid(this.marksForm, field);
+    onEdit(): void {
+        this.marksForm.get('marksArray')?.enable();
+        this.editBtn = false;
+        this.saveBtn = true;
     }
 
     onShow(): void { 
         this.isDataFiltered = false;
         const standardId = this.marksForm.get('id')?.value;
         const exam = this.marksForm.get('exam')?.value;
-        this.totalMarks = (exam == 'FA_1' || exam == 'FA_2') ? 20 : 100;
-
+        const totalMarks = exam == 'FA_1' || exam == 'FA_2' ? MaxMarks.TEST : MaxMarks.EXAM;
         if (standardId && exam) {
-            this.showMarks = false;
             this.studentsList = this.studentsList.filter(x => x.standardId == standardId);
             this.subjectsList = this.subjectsList.filter(x => x.standardIds.includes(standardId));
             this.apiService.getMarksForStandardAndExamName(standardId, exam).subscribe(r => {
                 this.marksList = r;
-                this.updateMarksArray();
+                this.setTotalAndPercentageMaps(totalMarks)
+                this.updateMarksArray(totalMarks);
             });
         }
+    }
+
+    setTotalAndPercentageMaps(maxMarks: number): void {
+        this.studentsList.forEach(student => {
+            let sum = 0;
+            this.marksList.filter(x => x.studentId == student.id).forEach(y => {
+                sum += y.marks;
+            });
+            this.totalMarksMap.set(student.id, sum);
+
+            const percent = (sum / (this.subjectsList.length * maxMarks)) * 100;
+            this.percentageMap.set(student.id, percent);
+        });
+    }
+
+    getTotalMarks(id: number): number {
+        return this.totalMarksMap.get(id) ?? 0;
+    }
+
+    getPercentage(id: number): number {
+        return this.percentageMap.get(id) ?? 0;
+    }
+
+    
+    sortTable(key: string) {
+        const order = this.sortMap.get(key);
+        // apply sorting logic
+        this.sortMap.set(key, !order);
+    }
+
+
+    isFieldInvalid(field: string): boolean {
+        return this.utilService.isFieldInvalid(this.marksForm, field);
+    }
+
+    get saveBtnDisabled(): boolean {
+        return !(this.marksForm.value.id && this.marksForm.value.exam);
+    }
+
+    print(): void {
+
+    }
+
+    download(): void {
+        
     }
 }

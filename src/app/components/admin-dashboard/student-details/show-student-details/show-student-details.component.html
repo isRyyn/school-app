@@ -1,16 +1,20 @@
-<div class="container" *ngIf="isDataLoaded">
-    <div class="row">
+<div *ngIf="isDataLoaded">
+    <h4 class="mb-3">
+        <i class="fa-solid fa-circle-right"></i>
+        Students
+    </h4>
+    <div class="mb-3 col-xl-3 col-lg-4 col-md-5 col-sm-6 col-xs-12">
         <label>Select Class</label>
-        <ng-select [items]="standardsList" bindLabel="name" bindValue="id"
-             formControlName="id" placeholder="Select class" (change)="onStandardChange($event)">
+        <ng-select [items]="standardsList" bindLabel="name" bindValue="id" [(ngModel)]="classValue"
+             placeholder="Select class" (change)="onStandardChange($event)">
         </ng-select>
     </div>
-    <div class="row mt-3">
-        <table *ngIf="isDataFiltered">
+    <div class="app-table-container" *ngIf="isDataFiltered">
+        <table class="app-table">
             <thead>
                 <tr>
                     <th>S. No</th>
-                    <th>First Name</th>
+                    <th>Name</th>
                     <th>Roll No</th>
                     <th>Mobile</th>
                     <th>Action</th>
@@ -19,14 +23,16 @@
             <tbody>
                 <tr *ngFor="let student of filteredStudentsList; let i = index">
                     <td>{{i+1}}</td>
-                    <td>{{ student?.firstName }}</td>
+                    <td>{{ student?.firstName }} {{ student?.lastName }}</td>
                     <td>{{ student?.rollNo }}</td>
                     <td>{{ student?.mobile }}</td>
                     <td>
-                        <a>View/Edit</a>
-                        <span> | </span>
-                        <a>Delete</a>
-                    </td> 
+                        <a appScrollPageToSection class="link-primary" (click)="onSelect(student, true)">Edit</a>
+                        <span class="separator-icon">|</span>
+                        <a appScrollPageToSection class="link-success" (click)="onSelect(student, false)">View</a>
+                        <span appScrollPageToSection class="separator-icon">|</span>
+                        <a appScrollToS class="link-danger">Delete</a>
+                    </td>
                 </tr>
             </tbody>
         </table>

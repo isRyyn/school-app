@@ -1,0 +1,10 @@
+<ng-container *ngIf="showBanner">
+    <div class="message" 
+        [ngClass]="{ 
+            'error':  type == bannerType.ERROR, 
+            'success': type == bannerType.SUCCESS, 
+            'info': type == bannerType.INFO 
+        }">
+        {{ message }} 
+    </div>
+</ng-container>

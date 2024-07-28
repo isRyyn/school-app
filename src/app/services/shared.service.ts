@@ -1,23 +1,30 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
+import { BannerObject } from './models';
+import { BannerType } from './enums';
 
 @Injectable({
     providedIn: 'root'
 })
 export class SharedService {
-    private isLoggedInSubject = new Subject<boolean>();
-    isLoggedIn$ = this.isLoggedInSubject.asObservable();
+    private updateLogStatusSubject = new Subject<void>();
+    updateLogStatus$ = this.updateLogStatusSubject.asObservable();
 
-    private updateSideNavSubject = new BehaviorSubject<boolean>(true);
-    updateSideNav$ = this.updateSideNavSubject.asObservable();
+    private showBannerSubject = new Subject<BannerObject>();
+    showBanner$ = this.showBannerSubject.asObservable();
 
     constructor() { }
 
-    updateLogStatus(isLoggedIn: boolean): void {
-        this.isLoggedInSubject.next(isLoggedIn);
+    updateLogStatus(): void {
+        this.updateLogStatusSubject.next();
     }
 
-    updateSideNav(): void {
-        this.updateSideNavSubject.next(!this.updateSideNavSubject.getValue());
+    showBanner(type: BannerType, message?: string, timer?: number): void {
+        const obj: BannerObject = {
+            type: type,
+            message: message,
+            timer: timer
+        }
+        this.showBannerSubject.next(obj);
     }
 }

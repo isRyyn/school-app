@@ -19,16 +19,17 @@ a {
 .box-container {
     box-shadow: 0px 7px 10px 1px !important;
     background-color: white;
-    margin: 20px 0px;
+    margin: 25px 0px;
     padding: 20px;
+    border-radius: 10px;
 }
 
 .separator-icon {
     margin: 0px 5px;
 }
 
-ng-select {
-    border-radius: 5px;
+ng-select, select {
+    font-size: 0.9em;
 }
 
 label {
@@ -40,7 +41,7 @@ label {
 }
 
 input {
-    font-size: 0.9em;
+    font-size: 0.9em !important;
 }
 
 

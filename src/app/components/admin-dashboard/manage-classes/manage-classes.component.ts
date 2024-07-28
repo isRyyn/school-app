@@ -6,11 +6,12 @@ import { ApiService } from '../../../services/api.service';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { UtilService } from '../../../services/util.service';
 import { forkJoin } from 'rxjs';
+import { DirectiveModule } from '../../../directives/directive.module';
 
 @Component({
   selector: 'app-manage-classes',
   standalone: true,
-  imports: [CommonModule, NgSelectModule, ReactiveFormsModule],
+  imports: [CommonModule, NgSelectModule, ReactiveFormsModule, DirectiveModule],
   providers: [ApiService],
   templateUrl: './manage-classes.component.html',
   styleUrl: './manage-classes.component.scss'
@@ -54,12 +55,12 @@ export class ManageClassesComponent implements OnInit {
         });
     }
 
-    getSubjects(ids: number[]): string[] {
-        const subjectsArr: string[] = [];
+    getSubjects(ids: number[]): string {
+        let subjectString = '';
         ids.forEach(id => {
-            subjectsArr.push(this.subjectMap.get(id) ?? '');
+            subjectString += `${this.subjectMap.get(id)}, `
         });
-        return subjectsArr;
+        return subjectString.slice(0, -2);
     }
 
     loadForm(): void {

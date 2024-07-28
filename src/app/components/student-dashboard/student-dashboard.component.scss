@@ -1,0 +1,18 @@
+i {
+    &:not(.fa-right-to-bracket) {
+        font-size: 2em !important;
+    }
+    
+}
+
+.fa-right-to-bracket {
+    cursor: pointer;
+
+    &:hover {
+        color: black;
+    }
+}
+
+.widget-card {
+    background-color: #945ac6 !important;
+}

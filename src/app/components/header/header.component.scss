@@ -1,38 +1,30 @@
 .header-container {
     font-size: 1.2em;
-    background-color: white;
-}
-
-.pull-right { 
+    background-color: #cd9cf7;
     text-align: right;
-}
-
-.header-name {
-    padding: 15px 0px 15px 30px;
-    display: flex;
-}
-
-@media (min-width: 900px) and (max-width: 1200px),
-       (min-width: 650px) and (max-width: 775px) {
-    .header-name {
-        width: 13.5rem;
-    }
-}
-
-.header-actions {
     padding: 15px 30px 15px 0px;
-    span {
-        &:nth-child(1) {
-            vertical-align: 2px;
-        }
-
-        &:nth-child(2) {
-            margin-left: 10px;
-        }
-    
-    }
 }
 
 .header-user-type {
-    font-size: 0.8em;
+    font-size: 0.7em;
+    vertical-align: 2px;
+    animation: colorChange 1s infinite;
+}
+
+@keyframes colorChange {
+    0% { color: red; }
+    100% { color: gray; }
+}
+
+.logout-btn {
+    cursor: pointer;
+    margin-left: 10px;
+    color: rgb(250, 122, 122);
+    background: black;
+    padding: 0px 2px;
+    border-radius: 15px;
+
+    &:hover {
+        color: red;
+    }
 }

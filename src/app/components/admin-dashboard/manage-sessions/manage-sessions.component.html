@@ -1,0 +1,47 @@
+<div class="box-container">
+    <h4 class="mb-3">
+        <i class="fa-solid fa-circle-right"></i>
+        Add New Session
+    </h4>
+    <form [formGroup]="sessionForm">
+        <div class="row">
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 pb-2">
+                <label>Name</label>
+                <input type="text" placeholder="Enter session name" formControlName="name" class="form-control" [ngClass]="{ 'invalid-field': isFieldInvalid('number') }"/>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="d-flex justify-content-center detail-btn">
+                <button class="btn btn-success m-right-5" (click)="onSave()">Save</button>
+                <button class="btn btn-danger m-left-5" (click)="onReset()">Reset</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="box-container" *ngIf="isDataLoaded">
+    <h4 class="mb-3">
+        <i class="fa-solid fa-circle-right"></i>
+        Sessions
+    </h4>
+    <div class="app-table-container">
+        <table class="app-table">
+            <thead>
+                <tr>
+                    <th>S. No.</th>
+                    <th>Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let session of sessionList let i=index">
+                    <td>{{i+1}}</td>
+                    <td>{{session?.name}}</td>
+                    <td>
+                        <a appScrollPageToSection class="link-primary" (click)="editVehicle(i)">Edit</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

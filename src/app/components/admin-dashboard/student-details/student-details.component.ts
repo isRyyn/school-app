@@ -1,50 +1,61 @@
 import { ApiService } from './../../../services/api.service';
-import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ArrayObject, StandardModel } from '../../../services/models';
+import { ArrayObject, ParentModel, StandardModel, StudentModel, VehicleModel } from '../../../services/models';
 import { Action, Relation } from "../../../services/enums";
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Gender } from '../../../services/enums';
 import { UtilService } from '../../../services/util.service';
 import { DatePickerComponent } from "../../common/date-picker/date-picker.component";
 import { ShowStudentDetailsComponent } from "./show-student-details/show-student-details.component";
 import { NgSelectModule } from '@ng-select/ng-select';
+import { elementAt, forkJoin } from 'rxjs';
+import { ViewStudentComponent } from "./view-student/view-student.component";
+import { DirectiveModule } from '../../../directives/directive.module';
 
 @Component({
     selector: 'app-student-details',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, NgSelectModule, DatePickerComponent, ShowStudentDetailsComponent],
-    providers: [ApiService],
+    imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    NgSelectModule,
+    DatePickerComponent,
+    ShowStudentDetailsComponent,
+    ViewStudentComponent,
+    ViewStudentComponent,
+    DirectiveModule
+    ],
+    providers: [ApiService, DatePipe],
     templateUrl: './student-details.component.html',
     styleUrl: './student-details.component.scss'
 })
-export class StudentDetailsComponent implements OnInit, AfterViewInit {
-    @ViewChildren('sections') sections!: QueryList<ElementRef>;
+export class StudentDetailsComponent implements OnInit {
+    @ViewChild(ShowStudentDetailsComponent) showStudentDetailsComponent!: ShowStudentDetailsComponent;
 
     studentForm!: FormGroup;
     parentForm!: FormGroup;
     vehicleForm!: FormGroup;
-    actionType!: string;
     isLoaded: boolean = false;
+    isExpanded: boolean = false;
     showParentForm: boolean = false;
     parentFormCounter: number = 0;
+    isViewMode: boolean = false;
+    selectedStudent!: StudentModel;
 
     actions = Action;
     gender = Gender;
     relation = Relation;
 
     classList: StandardModel[] = [];
+    vehicleList: VehicleModel[] = [];
     genders!: Array<ArrayObject>;
     relations!: Array<ArrayObject>;
 
-    private sectionMap: Map<string, ElementRef | undefined> = new Map();
-
     constructor(
-        private readonly route: ActivatedRoute,
-        private readonly router: Router,
         private readonly apiService: ApiService,
-        private readonly utilService: UtilService
+        private readonly utilService: UtilService,
+        private readonly datePipe: DatePipe
     ) { }
 
     ngOnInit() {
@@ -52,17 +63,6 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
         this.initializeArrays();
         this.loadForm();
         this.loadParentForm();
-        this.route.queryParams.subscribe((params) => {
-            this.actionType = params['action'];
-            //this.isLoaded = true;
-        });
-    }
-
-    ngAfterViewInit(): void {
-        const sectionNames = ['basicDetails', 'contactDetails', 'parentsDetails', 'transportationDetails', 'utilitiesDetails'];
-        this.sections.forEach((section, index) => {
-            this.sectionMap.set(sectionNames[index], section);
-        });
     }
 
     fetchStudentsData(): void {
@@ -78,8 +78,12 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
     }
 
     initializeArrays(): void {
-        this.apiService.getAllStandards().subscribe(r => {
-            this.classList = r;
+        forkJoin({
+            standards: this.apiService.getAllStandards(),
+            vehicles: this.apiService.getAllVehicles()
+        }).subscribe(r => {
+            this.classList = r.standards;
+            this.vehicleList = r.vehicles;
             this.isLoaded = true;
         });
         this.genders = this.utilService.intializeArrayWithEnums(this.gender);
@@ -89,16 +93,15 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
     loadForm(): void {
         this.studentForm = new FormGroup({
             id: new FormControl(),
-            firstName: new FormControl(),
-            middleName: new FormControl(),
-            lastName: new FormControl(),
+            firstName: new FormControl(null, Validators.required),
+            middleName: new FormControl(''),
+            lastName: new FormControl(''),
             dob: new FormControl(),
             gender: new FormControl(),
-            session: new FormControl(),
             standardId: new FormControl(null, Validators.required),
             rollNo: new FormControl(),
             picture: new FormControl(),
-            uDiasCode: new FormControl(),
+            uDiasCode: new FormControl(''),
             previousSchool: new FormControl(),
             mobile: new FormControl(),
             email: new FormControl(),
@@ -108,9 +111,7 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
             pincode: new FormControl(),
             uniform: new FormControl(),
             course: new FormControl(),
-            vehicleName: new FormControl(),
-            vehicleNumber: new FormControl(),
-            vehicleRoute: new FormControl()
+            vehicleId: new FormControl()
         });
     }
 
@@ -127,20 +128,9 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
             lastName: new FormControl(),
             mobile: new FormControl(),
             gender: new FormControl(),
-            relation: new FormControl()
+            relation: new FormControl(),
+            childIds: new FormControl()
         });
-    }
-
-    goToSection(section: string): void {
-        const element = this.sectionMap.get(section);
-        console.log('here', element);
-        if (element) {
-            element.nativeElement.scrollIntoView({
-                behavior: 'smooth',
-                block: 'end',
-                inline: 'nearest'
-            });
-        }
     }
 
     get items(): FormArray {
@@ -161,9 +151,15 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
 
     onSave(): void {
         if(this.studentForm.valid) {
-            console.log('form', this.studentForm.value);
             const formData = new FormData();
-            const studentData = { ...this.studentForm.value };
+            
+            const studentData = { 
+                ...this.studentForm.value
+            };
+
+            if(this.studentForm.value.dob) {
+                studentData['dob'] = this.datePipe.transform(this.studentForm.value.dob, 'dd-MM-yyyy');
+            }
             delete studentData['picture'];
     
             formData.append('student', JSON.stringify(studentData));
@@ -173,14 +169,60 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
             }
     
             this.apiService.saveStudent(formData).subscribe(response => {
-                console.log('Student saved successfully', response);
-                this.onCancel();
+                if(this.parentFormCounter) {
+                    this.saveParent(response?.id);
+                } else {
+                    this.onCancel();
+                    this.showStudentDetailsComponent.classValue = undefined;
+                    this.showStudentDetailsComponent.isDataFiltered = false;
+                }
+            });
+        } else {
+            this.studentForm.markAllAsTouched();
+        }
+    }
+
+    saveParent(studentId: number): void {
+        let parentForms = this.parentForm.get('items')?.value;
+        parentForms = parentForms.map((x: ParentModel) => {
+            const childIds = x.childIds ? x.childIds : [];
+            childIds.push(studentId);
+            return {
+                ...x,
+                childIds: childIds
+            }
+        });
+        this.apiService.saveMultipleParents(parentForms).subscribe(r => {
+            this.onCancel();
+            this.showStudentDetailsComponent.classValue = undefined;
+            this.showStudentDetailsComponent.isDataFiltered = false;
+        });
+    }
+
+    onCancel(): void {
+        this.studentForm.reset();
+        this.isExpanded = false;
+    }
+
+    onEdit(student: StudentModel): void {
+        this.studentForm.reset();
+        this.isExpanded = true;
+        this.studentForm.patchValue(student);
+        
+        if(student.parentsIds.length) {
+            this.showParentForm = true;
+            student.parentsIds.forEach((id, index) => {
+                this.parentFormCounter++;
+                this.apiService.getParentById(id).subscribe(r => {
+                    this.parentForm.get('items')?.get(index.toString())?.patchValue(r);
+                });
             });
         }
     }
 
-    onCancel(): void {
-        this.router.navigate(['/private/admin-dashboard']);
+    
+    isFieldInvalid(field: string): boolean {
+        return this.utilService.isFieldInvalid(this.studentForm, field);
     }
 
     onFileChange(event: any) {
@@ -190,5 +232,14 @@ export class StudentDetailsComponent implements OnInit, AfterViewInit {
                 picture: file
             });
         }
+    }
+
+    expandSection(): void {
+        this.isExpanded = !this.isExpanded;
+    }
+
+    showStudent(student: StudentModel): void {
+        this.isViewMode = true;
+        this.selectedStudent = student;
     }
 }

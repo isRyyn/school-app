@@ -1,0 +1,108 @@
+<div class="container">
+    <div class="d-flex mt-3">
+        <div class="col-xl-2 col-lg-2 col-md-3 col-sm-4 col-xs-4 col-4">
+            <button class="btn btn-danger" title="Go back" (click)="goBack()"><i class="fa-solid fa-backward"></i></button>
+        </div>
+        <div class="col-xl-10 col-lg-10 col-md-9 col-sm-8 col-xs-8 col-8">
+            <button class="btn btn-primary mx-3" title="Print" (click)="print()"><i class="fa-solid fa-print"></i></button>
+            <button class="btn btn-success" title="Download" (click)="download()"><i class="fa-solid fa-file-arrow-down"></i></button>
+        </div>
+    </div>
+    <div class="card my-2">
+        <div class="card-header text-center">
+            <h3>Student</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    <img src="../../../../../assets/images/male.jpg" class="student-image" />
+                    <!-- <img [src]="student.picture" alt="Student Photo" class="img-thumbnail"> -->
+                </div>
+                <div class="col-md-9">
+                    <div class="row mb-2">
+                        <div class="col-md-6"><strong>First Name:</strong> {{ student?.firstName }}</div>
+                        <div class="col-md-6"><strong>Middle/Last Name:</strong> {{ student?.middleName }} {{ student?.lastName }}</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-6"><strong>Date of birth:</strong> {{ student?.dob }}</div>
+                        <div class="col-md-6"><strong>Gender:</strong> {{ student?.gender | titlecase }}</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-6"><strong>Class:</strong> {{ studentStandard }}</div>
+                        <div class="col-md-6"><strong>Roll No:</strong> {{ student?.rollNo }}</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-6"><strong>UDias Code:</strong> {{ student?.uDiasCode }}</div>
+                        <div class="col-md-6"><strong>Previous school:</strong> {{ student?.previousSchool }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <hr>
+                <h6>Contact Details</h6>
+                <div class="row mb-2">
+                    <div class="col-md-6"><strong>Mobile:</strong> {{ student?.mobile }}</div>
+                    <div class="col-md-6"><strong>Email address:</strong> {{ student?.email }}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-6"><strong>Address:</strong> {{ student?.address }}</div>
+                    <div class="col-md-6"><strong>Pincode:</strong> {{ student?.pincode }}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-6"><strong>City:</strong> {{ student?.city }}</div>
+                    <div class="col-md-6"><strong>State:</strong> {{ student?.state }}</div>
+                </div>
+            </div>
+            <hr>
+            <ng-container *ngFor="let parent of parents; let i = index">
+                <div class="row mt-3">
+                    <h6>Parents' Details ({{ parent.relation }})</h6>
+                    <div class="row mb-2">
+                        <div class="col-md-6"><strong>First Name:</strong> {{ parent?.firstName }}</div>
+                        <div class="col-md-6"><strong>Middle/Last Name:</strong> {{ parent?.middleName }} {{ parent?.lastName }}</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-6"><strong>Mobile:</strong> {{ parent?.mobile }}</div>
+                        <div class="col-md-6"><strong>Gender:</strong> {{ parent?.gender }}</div>
+                    </div>
+                </div>
+            </ng-container>
+            <div class="row mt-3">
+                <hr>
+                <h6>Transportation Details</h6>
+                <div class="row mb-2">
+                    <div class="col-md-6"><strong>Vehicle Name:</strong> {{ vehicle?.name }}</div>
+                    <div class="col-md-6"><strong>Vehicle Number:</strong> {{ vehicle?.number }}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-6"><strong>Vehicle Driver:</strong> {{ vehicle?.driver }}</div>
+                    <div class="col-md-6"><strong>Vehicle Route:</strong> {{ vehicle?.route }}</div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <hr>
+                <h6>Utilities Details</h6>
+                <div class="row mb-2">
+                    <div class="col-md-6"><strong>Uniform Provided:</strong> {{ student?.uniform ? 'Yes' : 'No' }}</div>
+                    <div class="col-md-6"><strong>Course Provieded:</strong> {{ student?.course ? 'Yes' : 'No' }}</div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <hr>
+                <h6>Documents Submission</h6>
+                <div class="row mb-2">
+                    <div class="col-md-6"><strong>TC:</strong> {{ student?.docTC }}</div>
+                    <div class="col-md-6"><strong>Marksheet:</strong> {{ student?.docMarksheet }}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-6"><strong>Aadhar:</strong> {{ student?.docAadhar }}</div>
+                    <div class="col-md-6"><strong>Parents' Aadhar:</strong> {{ student?.docParentAadhar }}</div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-6"><strong>Photograph:</strong> {{ student?.docPhotograph }}</div>
+                    <div class="col-md-6"><strong>DOB Certificate:</strong> {{ student?.docDobCertificate }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

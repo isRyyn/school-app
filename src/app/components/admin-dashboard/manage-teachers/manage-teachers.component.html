@@ -1,0 +1,67 @@
+<ng-container *ngIf="isDataLoaded">
+    <div class="box-container">
+        <h4 class="mb-3">
+            <i class="fa-solid fa-circle-right"></i>
+            Add New Teacher
+        </h4>
+        <form [formGroup]="teachersForm">
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
+                    <label>First Name</label>
+                    <input class="form-control" placeholder="Enter first name" formControlName="firstName" type="text" [ngClass]="{ 'invalid-field': isFieldInvalid('firstName') }"/>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
+                    <label>Last Name</label>
+                    <input class="form-control" placeholder="Enter last name" formControlName="lastName" type="text"/>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
+                    <label>Mobile</label>
+                    <input type="text" class="form-control" placeholder="Enter mobile number" formControlName="mobile"/>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
+                    <label>Gender</label>
+                    <ng-select [items]="gendersList" bindLabel="name" bindValue="value"
+                    formControlName="gender" placeholder="Select gender">
+                </ng-select>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="d-flex justify-content-center detail-btn">
+                    <button class="btn btn-success m-right-5" (click)="onSave()">Save</button>
+                    <button class="btn btn-danger m-left-5" (click)="onReset()">Reset</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="box-container">
+        <h4 class="mb-3">
+            <i class="fa-solid fa-circle-right"></i>
+            Teachers
+        </h4>
+        <div class="app-table-container">
+            <table class="app-table">
+                <thead>
+                    <tr>
+                        <th>S. No.</th>
+                        <th>Name</th>
+                        <th>Mobile</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let teacher of teachersList; let i=index">
+                        <td>{{i+1}}</td>
+                        <td>{{teacher?.firstName}} {{teacher?.lastName}}</td>
+                        <td>{{ teacher?.mobile }}</td>
+                        <td>
+                            <a appScrollPageToSection class="link-primary" (click)="editTeacher(i)">Edit</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</ng-container>

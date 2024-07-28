@@ -1,3 +1,23 @@
+.container {
+    background: #ae4dea;
+    border-radius: 75px;
+    box-shadow: 0px 7px 10px 1px !important;
+    position: relative; 
+    top: 50px;
+}
+
+
+.app-logo-container {
+    display: flex;
+    justify-content: center;
+
+    .app-logo {
+        width: 150px;
+        margin-left: 45px;
+    }
+}
+
+
 h2 {
     text-align: center;
     margin-bottom: 30px;
@@ -7,18 +27,17 @@ h2 {
     display: flex;
     justify-content: center; 
     align-items: center; 
-    height: 50vh;
 }
 
-input, select {
+input, select, ng-select {
     min-width: 250px;
     width: 250px;
-    height: 30px;
+    height: 35px;
     font-size: 0.9em;
 }
 
-select {
-    padding: 0px 10px;
+input {
+    z-index: 1;
 }
 
 .form-row {
@@ -33,8 +52,14 @@ select {
 
 .form-button {
     min-width: 140px;
-    height: 35px;
+    height: 45px;
     padding: 4px;
     background: black;
     margin-left: 95px;
+}
+
+.student-img {
+    width: 225px;
+    top: 210px;
+    position: absolute;
 }

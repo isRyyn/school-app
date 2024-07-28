@@ -1,34 +1,68 @@
-<nav class="col-xl-2 col-lg-3 col-md-3 col-sm-4 col-xs-5 col-6 side-nav-container" [ngClass]="{ 'collapsed': !isExpanded }" [ngStyle]="{'top': navbarPosition}">
-    <div (click)="goToPath('home')">
-        <i class="fa-solid fa-house"></i>
-        <span *ngIf="isExpanded">Dashboard</span>
+<nav class="side-nav-container">
+    <div class="header-nav">
+        <span *ngIf="isExpanded">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>School</span>
+        </span>
+        <span (click)="updateSideNav()">
+            <i *ngIf="isExpanded" class="fa-solid fa-angles-left"></i>
+            <i *ngIf="!isExpanded" class="fa-solid fa-angles-right"></i>
+        </span>
     </div>
-    <div (click)="goToPath('students')">
-        <i class="fa-solid fa-user-graduate"></i>
-        <span *ngIf="isExpanded">Students</span>
-    </div>
-    <div (click)="goToPath('teachers')">
-        <i class="fa-solid fa-person-chalkboard"></i>
-        <span *ngIf="isExpanded">Teachers</span>
-    </div>
-    <div (click)="goToPath('classes')">
-        <i class="fa-solid fa-pen-ruler"></i>
-        <span *ngIf="isExpanded">Classes</span>
-    </div>
-    <div (click)="goToPath('subjects')">
-        <i class="fa-solid fa-book"></i>
-        <span *ngIf="isExpanded">Subjects</span>
-    </div>
-    <div (click)="goToPath('exams')">
-        <i class="fa-solid fa-marker"></i>
-        <span *ngIf="isExpanded">Exams</span>
-    </div>
-    <div (click)="goToPath('fees')">
-        <i class="fa-solid fa-comments-dollar"></i>
-        <span *ngIf="isExpanded">Fees</span>
-    </div>
-    <div (click)="goToPath('expenses')">
-        <i class="fa-solid fa-money-check-dollar"></i>
-        <span *ngIf="isExpanded">Expenses</span>
-    </div>
+    <section>
+        <div (click)="goToPath('')" [ngClass]="{ 'selected': isPathSelected('') }">
+            <i class="fa-solid fa-house"></i>
+            <span *ngIf="isExpanded">Dashboard</span>
+        </div>
+        <div (click)="goToPath('students')" [ngClass]="{ 'selected': isPathSelected('students') }">
+            <i class="fa-solid fa-user-graduate"></i>
+            <span *ngIf="isExpanded">Students</span>
+        </div>
+        <div (click)="goToPath('teachers')" [ngClass]="{ 'selected': isPathSelected('teachers') }">
+            <i class="fa-solid fa-person-chalkboard"></i>
+            <span *ngIf="isExpanded">Teachers</span>
+        </div>
+        <div (click)="goToPath('classes')" [ngClass]="{ 'selected': isPathSelected('classes') }">
+            <i class="fa-solid fa-pen-ruler"></i>
+            <span *ngIf="isExpanded">Classes</span>
+        </div>
+        <div (click)="goToPath('subjects')" [ngClass]="{ 'selected': isPathSelected('subjects') }">
+            <i class="fa-solid fa-book"></i>
+            <span *ngIf="isExpanded">Subjects</span>
+        </div>
+        <div (click)="goToPath('marks')" [ngClass]="{ 'selected': isPathSelected('marks') }">
+            <i class="fa-solid fa-marker"></i>
+            <span *ngIf="isExpanded">Marks</span>
+        </div>
+        <div (click)="goToPath('fees')" [ngClass]="{ 'selected': isPathSelected('fees') }">
+            <i class="fa-solid fa-comments-dollar"></i>
+            <span *ngIf="isExpanded">Fees</span>
+        </div>
+        <div (click)="goToPath('expenses')" [ngClass]="{ 'selected': isPathSelected('expenses') }">
+            <i class="fa-solid fa-money-check-dollar"></i>
+            <span *ngIf="isExpanded">Expenses</span>
+        </div>
+        <div (click)="goToPath('sessions')" [ngClass]="{ 'selected': isPathSelected('sessions') }">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span *ngIf="isExpanded">Sessions</span>
+        </div>
+        <div (click)="goToPath('users')" [ngClass]="{ 'selected': isPathSelected('users') }">
+            <i class="fa-solid fa-user"></i>
+            <span *ngIf="isExpanded">Users</span>
+        </div>
+        <div (click)="goToPath('vehicles')" [ngClass]="{ 'selected': isPathSelected('vehicles') }">
+            <i class="fa-solid fa-van-shuttle"></i>
+            <span *ngIf="isExpanded">Vehicles</span>
+        </div>
+        <ng-container *ngIf="pagesLoaded">
+            <div  *ngFor="let page of pageList" (click)="goToSection(page.id)" [ngClass]="{ 'selected': isPathSelected('section', page.id) }">
+                <i class="fa-regular fa-file"></i>
+                <span *ngIf="isExpanded">{{ page.title }}</span>
+            </div>
+        </ng-container>
+        <div (click)="goToPath('pages')" [ngClass]="{ 'selected': isPathSelected('pages') }">
+            <i class="fa-solid fa-plus-minus"></i>
+            <span *ngIf="isExpanded">Pages</span>
+        </div>
+    </section>
 </nav>
