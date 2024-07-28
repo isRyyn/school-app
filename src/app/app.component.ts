@@ -19,6 +19,7 @@ import { FooterComponent } from "./components/footer/footer.component";
 export class AppComponent implements OnInit {
     title = 'school-app';
     isLoggedIn: boolean = false;
+    showLoader: boolean = true;
 
     constructor(
         private readonly authService: AuthService,
@@ -29,6 +30,7 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.hideLoader();
         this.isLoggedIn = this.authService.isLoggedIn();
         this.sharedService.updateLogStatus$.subscribe(() => {
             this.isLoggedIn = this.authService.isLoggedIn();
@@ -43,5 +45,9 @@ export class AppComponent implements OnInit {
                 }
             }
         });
+    }
+
+    hideLoader(): void {
+        setTimeout(() => this.showLoader = false, 3000);
     }
 }

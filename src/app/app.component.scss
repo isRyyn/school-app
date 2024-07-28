@@ -7,5 +7,10 @@
 
 .app-container {
     padding: 0px 20px;
-    //height: 100vh;
+}
+
+.fixed-footer {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
 }

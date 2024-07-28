@@ -4,9 +4,14 @@
         <app-header></app-header>
     </div>
     <div class="app-container">
-        <router-outlet></router-outlet>
+        <ng-container *ngIf="showLoader; else showContent">
+            <app-loader></app-loader>
+        </ng-container>
+        <ng-template #showContent>
+            <router-outlet></router-outlet>
+        </ng-template>
     </div>
     <ng-container *ngIf="isLoggedIn">
-        <app-footer></app-footer>
+        <app-footer [ngClass]="{ 'fixed-footer': showLoader }"></app-footer>
     </ng-container>
 </div>

@@ -42,9 +42,9 @@ export class LoginComponent implements OnInit {
 
     get loadloginForm(): FormGroup {
         return new FormGroup({
-            role: new FormControl('STUDENT', Validators.required),
-            username: new FormControl('bradley', Validators.required),
-            password: new FormControl('1234', Validators.required),
+            role: new FormControl('ADMIN', Validators.required),
+            username: new FormControl('', Validators.required),
+            password: new FormControl('', Validators.required),
             sessionId: new FormControl(1, Validators.required)
         });
     }

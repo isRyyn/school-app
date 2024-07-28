@@ -121,15 +121,15 @@ export class StudentDetailsComponent implements OnInit {
         });
     }
 
-    loadSubParentForm(): FormGroup {
+    loadSubParentForm(parent?: ParentModel): FormGroup {
         return new FormGroup({
-            firstName: new FormControl(),
-            middleName: new FormControl(),
-            lastName: new FormControl(),
-            mobile: new FormControl(),
-            gender: new FormControl(),
-            relation: new FormControl(),
-            childIds: new FormControl()
+            firstName: new FormControl(parent?.firstName),
+            middleName: new FormControl(parent?.middleName),
+            lastName: new FormControl(parent?.lastName),
+            mobile: new FormControl(parent?.mobile),
+            gender: new FormControl(parent?.gender),
+            relation: new FormControl(parent?.relation),
+            childIds: new FormControl(parent?.childIds)
         });
     }
 
@@ -137,15 +137,17 @@ export class StudentDetailsComponent implements OnInit {
         return this.parentForm.get('items') as FormArray;
     }
 
-    addParent(): void {
+    addParent(parent?: ParentModel): void {
         this.parentFormCounter++;
         if (this.parentFormCounter <= 3) {
             this.showParentForm = true;
-            window.scrollBy({
-                top: 300,
-                behavior: 'smooth'
-            });
-            this.items.push(this.loadSubParentForm());
+            if(!parent) {
+                window.scrollBy({
+                    top: 300,
+                    behavior: 'smooth'
+                });
+            }
+            this.items.push(this.loadSubParentForm(parent));
         }
     }
 
@@ -201,20 +203,20 @@ export class StudentDetailsComponent implements OnInit {
 
     onCancel(): void {
         this.studentForm.reset();
+        this.parentForm.reset();
         this.isExpanded = false;
     }
 
     onEdit(student: StudentModel): void {
         this.studentForm.reset();
+        this.parentForm.reset();
         this.isExpanded = true;
         this.studentForm.patchValue(student);
         
         if(student.parentsIds.length) {
-            this.showParentForm = true;
             student.parentsIds.forEach((id, index) => {
-                this.parentFormCounter++;
                 this.apiService.getParentById(id).subscribe(r => {
-                    this.parentForm.get('items')?.get(index.toString())?.patchValue(r);
+                    this.addParent(r);
                 });
             });
         }
