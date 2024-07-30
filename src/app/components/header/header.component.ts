@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { FullscreenButtonComponent } from '../common/fullscreen-button/fullscreen-button.component';
 
 @Component({
     selector: 'app-header',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, FullscreenButtonComponent],
     templateUrl: './header.component.html',
     styleUrl: './header.component.scss'
 })

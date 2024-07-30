@@ -1,30 +1,25 @@
 .header-container {
     font-size: 1.2em;
-    background-color: #cd9cf7;
+    background-color: white;
     text-align: right;
     padding: 15px 30px 15px 0px;
 }
 
 .header-user-type {
+    color: var(--secondary-light);
     font-size: 0.7em;
     vertical-align: 2px;
-    animation: colorChange 1s infinite;
-}
-
-@keyframes colorChange {
-    0% { color: red; }
-    100% { color: gray; }
 }
 
 .logout-btn {
     cursor: pointer;
     margin-left: 10px;
-    color: rgb(250, 122, 122);
-    background: black;
+    color: var(--secondary);
+    background: var(--secondary-lighter);
     padding: 0px 2px;
     border-radius: 15px;
 
     &:hover {
-        color: red;
+        color: var(--primary);
     }
 }

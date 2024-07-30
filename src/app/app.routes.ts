@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
-import { StudentDashboardComponent } from './components/student-dashboard/student-dashboard.component';
 import { AdminGuard } from './guards/admin.guard';
 import { StudentGuard } from './guards/student.guard';
 import { TeacherDashboardComponent } from './components/teacher-dashboard/teacher-dashboard.component';

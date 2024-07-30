@@ -1,0 +1,6 @@
+<select (change)="onActionChange($event)">
+    <option class="text-muted" value="">Select</option>
+    <option *ngIf="showEdit" value="edit">Edit</option>
+    <option *ngIf="showView" value="view">View</option>
+    <option *ngIf="showDelete" value="delete">Delete</option>
+</select>

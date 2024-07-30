@@ -105,13 +105,20 @@ export class StudentDetailsComponent implements OnInit {
             previousSchool: new FormControl(),
             mobile: new FormControl(),
             email: new FormControl(),
+            landline: new FormControl(),
             address: new FormControl(),
             city: new FormControl(),
             state: new FormControl(),
             pincode: new FormControl(),
             uniform: new FormControl(),
             course: new FormControl(),
-            vehicleId: new FormControl()
+            vehicleId: new FormControl(), 
+            docTC: new FormControl(),
+            docMarksheet: new FormControl(),
+            docAadhar: new FormControl(),
+            docParentAadhar: new FormControl,
+            docPhotograph: new FormControl(),
+            docDobCertificate: new FormControl()
         });
     }
 
@@ -141,12 +148,12 @@ export class StudentDetailsComponent implements OnInit {
         this.parentFormCounter++;
         if (this.parentFormCounter <= 3) {
             this.showParentForm = true;
-            if(!parent) {
-                window.scrollBy({
-                    top: 300,
-                    behavior: 'smooth'
-                });
-            }
+            // if(!parent) {
+            //      window.scrollBy({
+            //          top: 400,
+            //          behavior: 'smooth'
+            //      });
+            // }
             this.items.push(this.loadSubParentForm(parent));
         }
     }

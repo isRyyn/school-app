@@ -1,8 +1,4 @@
 <div *ngIf="isDataLoaded">
-    <h4 class="mb-3">
-        <i class="fa-solid fa-circle-right"></i>
-        Students
-    </h4>
     <div class="mb-3 col-xl-3 col-lg-4 col-md-5 col-sm-6 col-xs-12">
         <label>Select Class</label>
         <ng-select [items]="standardsList" bindLabel="name" bindValue="id" [(ngModel)]="classValue"
@@ -27,11 +23,7 @@
                     <td>{{ student?.rollNo }}</td>
                     <td>{{ student?.mobile }}</td>
                     <td>
-                        <a appScrollPageToSection class="link-primary" (click)="onSelect(student, true)">Edit</a>
-                        <span class="separator-icon">|</span>
-                        <a appScrollPageToSection class="link-success" (click)="onSelect(student, false)">View</a>
-                        <span appScrollPageToSection class="separator-icon">|</span>
-                        <a appScrollToS class="link-danger">Delete</a>
+                        <app-action-select [showEdit]="true" [showDelete]="true" [showView]="true" (action)="handleAction($event, student)"></app-action-select>
                     </td>
                 </tr>
             </tbody>

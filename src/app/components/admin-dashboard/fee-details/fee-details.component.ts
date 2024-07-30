@@ -10,11 +10,12 @@ import { Month } from '../../../services/enums';
 import { DatePickerComponent } from "../../common/date-picker/date-picker.component";
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AuthService } from '../../../services/auth.service';
+import { ActionSelectComponent } from "../../common/action-select/action-select.component";
 
 @Component({
   selector: 'app-fee-details',
   standalone: true,
-  imports: [CommonModule, NgSelectModule, ReactiveFormsModule, StudentSelectComponent, DatePickerComponent],
+  imports: [CommonModule, NgSelectModule, ReactiveFormsModule, StudentSelectComponent, DatePickerComponent, ActionSelectComponent],
   providers: [ApiService],
   templateUrl: './fee-details.component.html',
   styleUrl: './fee-details.component.scss'
@@ -88,6 +89,19 @@ export class FeeDetailsComponent implements OnInit {
     onEdit(fee: FeeModel): void {
         this.feeForm.reset();
         this.feeForm.patchValue(fee);
+    }
+
+    onAction(action: string, fee: FeeModel): void {
+        if(action == 'edit') {
+            this.feeForm.reset();
+            this.feeForm.patchValue(fee);
+        } else if(action == 'delete') {
+            this.apiService.deleteFee(fee.id).subscribe(() => {
+                this.feeForm.reset();
+                this.studentSelectForm.reset();
+                this.isDataFiltered = false;
+            });
+        }
     }
 
     onStudentChange(studentId?: number): void {

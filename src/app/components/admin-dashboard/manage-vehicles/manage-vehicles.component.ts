@@ -5,11 +5,12 @@ import { ApiService } from '../../../services/api.service';
 import { VehicleModel } from '../../../services/models';
 import { UtilService } from '../../../services/util.service';
 import { DirectiveModule } from '../../../directives/directive.module';
+import { ActionSelectComponent } from "../../common/action-select/action-select.component";
 
 @Component({
   selector: 'app-manage-vehicles',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DirectiveModule],
+  imports: [CommonModule, ReactiveFormsModule, DirectiveModule, ActionSelectComponent],
   providers: [ApiService],
   templateUrl: './manage-vehicles.component.html',
   styleUrl: './manage-vehicles.component.scss'
@@ -72,6 +73,14 @@ export class ManageVehiclesComponent implements OnInit {
         this.apiService.deleteVehicle(id).subscribe(() => {
             this.loadData();
         });
+    }
+
+    onAction(action: string, index: number, id: number): void {
+        if(action == 'edit') {
+            this.editVehicle(index);
+        } else if(action == 'delete') {
+            this.deleteVehicle(id);
+        }
     }
 
     isFieldInvalid(field: string): boolean {

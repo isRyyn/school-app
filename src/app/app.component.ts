@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router, RouterModule } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { HeaderComponent } from "./components/header/header.component";
-import { LoaderComponent } from "./components/loader/loader.component";
+import { LoaderComponent } from "./components/common/loader/loader.component";
 import { CommonModule } from '@angular/common';
 import { AuthService } from './services/auth.service';
 import { SharedService } from './services/shared.service';

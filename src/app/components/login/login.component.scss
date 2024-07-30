@@ -1,7 +1,7 @@
 .container {
     background: #ae4dea;
-    border-radius: 75px;
-    box-shadow: 0px 7px 10px 1px !important;
+    border-radius:10px;
+    box-shadow: 1px 1px 5px 2px !important;
     position: relative; 
     top: 50px;
 }
@@ -27,13 +27,6 @@ h2 {
     display: flex;
     justify-content: center; 
     align-items: center; 
-}
-
-input, select, ng-select {
-    min-width: 250px;
-    width: 250px;
-    height: 35px;
-    font-size: 0.9em;
 }
 
 input {
@@ -62,4 +55,24 @@ input {
     width: 225px;
     top: 210px;
     position: absolute;
+}
+
+::ng-deep .ng-select {
+    width: 250px !important;
+    min-height: 35px;
+    font-size: 0.9em;
+    border-radius: 3px !important;
+    .ng-select-container {
+        border-radius: 3px;
+    }    
+}
+
+.form-control {
+    border: none;
+    border-radius: 3px;
+    font-size: 0.9em;
+    min-height: 35px;
+
+    min-width: 250px !important;
+    width: 250px !important;
 }

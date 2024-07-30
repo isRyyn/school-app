@@ -2,7 +2,7 @@
     <div class="header-nav">
         <span *ngIf="isExpanded">
             <i class="fa-solid fa-graduation-cap"></i>
-            <span>School</span>
+            <span>{{ schoolName }}</span>
         </span>
         <span (click)="updateSideNav()">
             <i *ngIf="isExpanded" class="fa-solid fa-angles-left"></i>

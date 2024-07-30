@@ -1,8 +1,8 @@
+<h4 class="mt-3">
+    <i class="fa-solid fa-circle-right"></i>
+    Add New Page
+</h4>
 <div class="box-container">
-    <h4 class="mb-1">
-        <i class="fa-solid fa-circle-right"></i>
-        Add New Page
-    </h4>
     <form [formGroup]="pageForm">
         <div class="row">
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 pt-2">
@@ -20,7 +20,7 @@
                 <ngx-editor [editor]="editor" formControlName="content" [placeholder]="'Type here...'" [ngClass]="{ 'invalid-field': isFieldInvalid('content') }"></ngx-editor>
             </div>
         </div>
-        <div class="row mt-5">
+        <div class="row mt-3">
             <div class="d-flex justify-content-center detail-btn">
                 <button class="btn btn-success m-right-5" (click)="onSave()">Save</button>
                 <button class="btn btn-danger m-left-5" (click)="onReset()">Reset</button>
@@ -29,12 +29,12 @@
     </form>
 </div>
 
-<div class="box-container" *ngIf="isDataLoaded">
-    <h4 class="mb-3">
-        <i class="fa-solid fa-circle-right"></i>
-        Pages
-    </h4>
-    <div class="app-table-container">
+<h4 class="mt-5">
+    <i class="fa-solid fa-circle-right"></i>
+    Pages
+</h4>
+<div class="box-container">
+    <div class="app-table-container" *ngIf="isDataLoaded">
         <table class="app-table">
             <thead>
                 <tr>
@@ -50,9 +50,7 @@
                     <td>{{page?.author}}</td>
                     <td>{{ page?.title }}</td>
                     <td>
-                        <a appScrollPageToSection class="link-primary" (click)="editPage(i)">Edit</a>
-                        <span class="separator-icon">|</span>
-                        <a class="link-danger" (click)="deletePage(page.id)">Delete</a>
+                        <app-action-select [showDelete]="true" [showEdit]="true" (action)="onAction($event, i, page.id)"></app-action-select>
                     </td>
                 </tr>
             </tbody>

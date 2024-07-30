@@ -7,11 +7,12 @@ import { ApiService } from '../../../services/api.service';
 import { DatePickerComponent } from "../../common/date-picker/date-picker.component";
 import { UtilService } from '../../../services/util.service';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { ActionSelectComponent } from "../../common/action-select/action-select.component";
 
 @Component({
     selector: 'app-manage-expenses',
     standalone: true,
-    imports: [ReactiveFormsModule, CommonModule, DatePickerComponent, NgSelectModule],
+    imports: [ReactiveFormsModule, CommonModule, DatePickerComponent, NgSelectModule, ActionSelectComponent],
     providers: [ApiService],
     templateUrl: './manage-expenses.component.html',
     styleUrl: './manage-expenses.component.scss'
@@ -107,5 +108,16 @@ export class ManageExpensesComponent implements OnInit {
 
     isFieldInvalid(field: string): boolean {
         return this.utilService.isFieldInvalid(this.expenseForm, field);
+    }
+
+    onAction(action: string, transaction: TransactionModel): void {
+        if(action == 'edit') {
+            this.expenseForm.reset();
+            this.expenseForm.patchValue(transaction);
+        } else if(action == 'delete') {
+            this.apiService.deleteTransaction(transaction.id).subscribe(() => {
+                this.loadData();
+            });
+        }
     }
 }

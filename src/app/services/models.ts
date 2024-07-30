@@ -42,6 +42,7 @@ export interface StudentModel {
     previousSchool: string;
     mobile: string;
     email: string;
+    landline: string;
     address: string;
     city: string;
     state: string;

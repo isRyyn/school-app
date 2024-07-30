@@ -1,8 +1,8 @@
+<h4 class="mt-3">
+    <i class="fa-solid fa-circle-right"></i>
+    Marks
+</h4>
 <form class="box-container" *ngIf="isDataLoaded" [formGroup]="marksForm">
-    <h4 class="mb-1">
-        <i class="fa-solid fa-circle-right"></i>
-        Marks
-    </h4>
     <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12 pt-2">
             <label>Select Class</label>
@@ -18,13 +18,13 @@
     </div>
     <div class="d-flex mt-3">
         <div class="col-xl-2 col-lg-2 col-md-3 col-sm-4 col-xs-4 col-4">
-            <button class="btn btn-primary" (click)="onShow()" *ngIf="showBtn" [disabled]="saveBtnDisabled">Show Marks</button>
-            <button class="btn btn-danger" (click)="onEdit()" *ngIf="editBtn">Edit</button>
-            <button class="btn btn-success" (click)="onSubmit()" *ngIf="saveBtn">Save</button>
+            <button class="btn btn-primary app-btn app-primary" (click)="onShow()" *ngIf="showBtn" [disabled]="saveBtnDisabled">Show Marks</button>
+            <button class="btn btn-danger app-btn app-danger" (click)="onEdit()" *ngIf="editBtn">Edit</button>
+            <button class="btn btn-success app-btn app-success" (click)="onSubmit()" *ngIf="saveBtn">Save</button>
         </div>
         <div class="col-xl-10 col-lg-10 col-md-9 col-sm-8 col-xs-8 col-8 text-end" *ngIf="editBtn || saveBtn">
-            <button class="btn btn-primary mx-3" title="Print" (click)="print()"><i class="fa-solid fa-print"></i></button>
-            <button class="btn btn-success" title="Download" (click)="download()"><i class="fa-solid fa-file-arrow-down"></i></button>
+            <button class="btn btn-primary app-btn app-primary mx-3" title="Print" (click)="print()"><i class="fa-solid fa-print"></i></button>
+            <button class="btn btn-danger app-btn app-danger" title="Download" (click)="download()"><i class="fa-solid fa-file-arrow-down"></i></button>
         </div>
     </div>
     <div class="app-table-container mt-3" *ngIf="isDataFiltered">

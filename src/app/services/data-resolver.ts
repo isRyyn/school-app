@@ -11,7 +11,7 @@ export class DataResolver implements Resolve<Observable<any>> {
 
   resolve(): Observable<any> {
     return forkJoin({
-      subjects: this.apiService.getAllSubjects()
+      students: this.apiService.getAllStudents()
     });
   }
 }

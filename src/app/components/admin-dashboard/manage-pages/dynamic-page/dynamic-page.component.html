@@ -1,9 +1,7 @@
+<h4 class="mt-3">
+    <i class="fa-solid fa-circle-right"></i>
+    {{ pageTitle }}
+</h4>
 <div class="box-container" *ngIf="isDataLoaded">
-    <h4 class="mb-3">
-        <i class="fa-solid fa-circle-right"></i>
-        {{ pageTitle }}
-    </h4>
-    <div class="mt-3">
-        <iframe [srcdoc]="pageContent"></iframe>
-    </div>
+    <iframe [srcdoc]="pageContent"></iframe>
 </div>

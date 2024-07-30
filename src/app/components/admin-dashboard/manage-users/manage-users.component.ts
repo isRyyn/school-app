@@ -9,11 +9,12 @@ import { BannerType, Role } from '../../../services/enums';
 import { ArrayObject, TeacherModel, UserModel } from '../../../services/models';
 import { StudentSelectComponent } from "../../common/student-select/student-select.component";
 import { SharedService } from '../../../services/shared.service';
+import { ActionSelectComponent } from "../../common/action-select/action-select.component";
 
 @Component({
   selector: 'app-manage-users',
   standalone: true,
-  imports: [CommonModule, NgSelectModule, DirectiveModule, ReactiveFormsModule, StudentSelectComponent],
+  imports: [CommonModule, NgSelectModule, DirectiveModule, ReactiveFormsModule, StudentSelectComponent, ActionSelectComponent],
   templateUrl: './manage-users.component.html',
   styleUrl: './manage-users.component.scss'
 })
@@ -127,6 +128,14 @@ export class ManageUsersComponent {
             this.isDataLoaded = false;
             this.loadData();
         });
+    }
+
+    onAction(action: string, index: number, id: number): void {
+        if(action == 'edit') {
+            this.editUser(index);
+        } else if(action == 'delete') {
+            this.deleteUser(id);
+        }
     }
 
     isFieldInvalid(field: string): boolean {

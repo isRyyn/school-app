@@ -6,11 +6,12 @@ import { PageModel } from '../../../services/models';
 import { UtilService } from '../../../services/util.service';
 import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
 import { DirectiveModule } from '../../../directives/directive.module';
+import { ActionSelectComponent } from "../../common/action-select/action-select.component";
 
 @Component({
   selector: 'app-manage-pages',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NgxEditorModule, DirectiveModule],
+  imports: [CommonModule, ReactiveFormsModule, NgxEditorModule, DirectiveModule, ActionSelectComponent],
   providers: [ApiService],
   templateUrl: './manage-pages.component.html',
   styleUrl: './manage-pages.component.scss'
@@ -92,6 +93,14 @@ export class ManagePagesComponent implements OnInit, OnDestroy {
 
     isFieldInvalid(field: string): boolean {
         return this.utilService.isFieldInvalid(this.pageForm, field);
+    }
+
+    onAction(action: string, index: number, id: number): void {
+        if(action == 'edit') {
+            this.editPage(index);
+        } else if(action == 'delete') {
+            this.deletePage(id);
+        }
     }
 
     ngOnDestroy(): void {

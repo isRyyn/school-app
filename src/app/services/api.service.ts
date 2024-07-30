@@ -92,6 +92,10 @@ export class ApiService {
         return this.httpClient.post<TransactionModel>(`${this.baseUrl}/transactions`, payload);
     }
 
+    deleteTransaction(id: number): Observable<void> {
+        return this.httpClient.delete<void>(`${this.baseUrl}/transactions/${id}`);
+    }
+
     /**
      * Fees api
      */
@@ -106,6 +110,10 @@ export class ApiService {
 
     saveFee(payload: FeeModel): Observable<FeeModel> {
         return this.httpClient.post<FeeModel>(`${this.baseUrl}/fee`, payload);
+    }
+
+    deleteFee(id: number): Observable<void> {
+        return this.httpClient.delete<void>(`${this.baseUrl}/fee/${id}`);
     }
 
     /**
@@ -158,6 +166,10 @@ export class ApiService {
 
     saveTeacher(payload: TeacherModel): Observable<TeacherModel> {
         return this.httpClient.post<TeacherModel>(`${this.baseUrl}/teachers`, payload);
+    }
+
+    deleteTeacher(id: number): Observable<void> {
+        return this.httpClient.delete<void>(`${this.baseUrl}/teachers/${id}`);
     }
 
     /**

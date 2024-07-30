@@ -7,11 +7,12 @@ import { Router } from '@angular/router';
 import { DirectiveModule } from '../../../../directives/directive.module';
 import { ScrollPageToSectionDirective } from '../../../../directives/scroll-page-to-section.directive';
 import { FormsModule } from '@angular/forms';
+import { ActionSelectComponent } from "../../../common/action-select/action-select.component";
 
 @Component({
   selector: 'app-show-student-details',
   standalone: true,
-  imports: [CommonModule, NgSelectModule, DirectiveModule, FormsModule],
+  imports: [CommonModule, NgSelectModule, DirectiveModule, FormsModule, ActionSelectComponent],
   providers: [ApiService],
   templateUrl: './show-student-details.component.html',
   styleUrl: './show-student-details.component.scss'
@@ -53,7 +54,11 @@ export class ShowStudentDetailsComponent implements OnInit {
         }
     }
 
-    onSelect(student: StudentModel, isEdit: boolean): void {
-        isEdit ? this.emitStudentForEdit.emit(student) : this.emitStudentForView.emit(student);
+    handleAction(action: string, student: StudentModel): void {
+        if(action == 'edit') {
+            this.emitStudentForEdit.emit(student);
+        } else if(action == 'view') {
+            this.emitStudentForView.emit(student);
+        }
     }
 }

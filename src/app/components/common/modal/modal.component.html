@@ -1,0 +1,8 @@
+<div class="modal" *ngIf="isVisible">
+    <div class="modal-content">
+      <p>{{ message }}</p>
+      <button (click)="onConfirm()">Confirm</button>
+      <button (click)="onCancel()">Cancel</button>
+    </div>
+  </div>
+  

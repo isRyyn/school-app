@@ -8,11 +8,12 @@ import { ApiService } from '../../../services/api.service';
 import { forkJoin } from 'rxjs';
 import { Gender } from '../../../services/enums';
 import { DirectiveModule } from '../../../directives/directive.module';
+import { ActionSelectComponent } from "../../common/action-select/action-select.component";
 
 @Component({
   selector: 'app-manage-teachers',
   standalone: true,
-  imports: [CommonModule, NgSelectModule, ReactiveFormsModule, DirectiveModule],
+  imports: [CommonModule, NgSelectModule, ReactiveFormsModule, DirectiveModule, ActionSelectComponent],
   providers: [ApiService],
   templateUrl: './manage-teachers.component.html',
   styleUrl: './manage-teachers.component.scss'
@@ -82,9 +83,24 @@ export class ManageTeachersComponent implements OnInit {
         this.teachersForm.reset();
     }
 
-    editTeacher(index: number): void {
+    onAction(event: string, index: number) {
         const teacher = this.teachersList[index];
-        this.teachersForm.patchValue(teacher);
+        if(event == 'edit') {
+            this.teachersForm.reset();
+            this.teachersForm.patchValue(teacher);
+        } else if (event == 'delete') {
+            this.deleteTeacher(teacher.id);
+        }
+    }
+
+    deleteTeacher(id: number): void {
+        this.apiService.deleteTeacher(id).subscribe(() => {
+            this.isDataLoaded = false;
+            this.apiService.getAllTeachers().subscribe(r => {
+                this.teachersList = r;
+                setTimeout(() => this.isDataLoaded = true, 200); 
+            });
+        });
     }
 
     isFieldInvalid(field: string): boolean {

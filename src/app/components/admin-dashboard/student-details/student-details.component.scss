@@ -11,39 +11,19 @@
 
 h4 {
     .fa-circle-plus {
-        color: green;
+        color: #ffa701;
     }
     .fa-circle-minus {
-        color: red !important;
+        color: #042954 !important;
     }
 }
 
 .parent-form {
-    box-shadow: 0px 7px 10px 1px;
+    box-shadow: 0px 0px 2px 0px;
     padding: 0px 11px 10px;
+    border-radius: 5px;
 }
 
-label {
-    margin-left: 13px;
-    margin-bottom: 5px;
-    font-style: italic;
-    font-size: 0.9em;
-    white-space: nowrap;
-}
-
-.checkbox-label {
-    font-size: 0.95em;
-    font-style: normal;
-    white-space: wrap;
-}
-
-input, select, textarea {
-    font-size: 0.9em;
-}
-
-.form-select option:first-child {
-    color: grey;
-}
 
 .add-parent {
     color: cornflowerblue;

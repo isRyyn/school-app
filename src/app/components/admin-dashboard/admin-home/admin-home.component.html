@@ -1,85 +1,83 @@
-<div class="box-container">
-    <h4 class="mb-3">
-        <i class="fa-solid fa-circle-right"></i>
-        Stats
-    </h4>
-    <div class="d-flex row">
-        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mt-3 mx-auto admin-card">
+<h4 class="mt-3">
+    <i class="fa-solid fa-circle-right"></i>
+    Stats
+</h4>
+<div class="mt-1">
+    <div class="admin-card-container row">
+        <div class=" admin-card">
             <div class="row">
                 <div class="col-5">
-                    <i class="fa-solid fa-graduation-cap stats-icon" style="color: #cd9cf7;"></i>
+                    <i class="fa-solid fa-user-graduate stats-icon"></i>
                 </div>
-                <div class="col-7">
-                    <div>Students</div>
+                <div class="col-7 admin-card-data-col">
+                    <div class="stats-heading">Students</div>
                     <div>
-                        <strong>800</strong>
+                        <div class="stats-data">{{ statsMap.get('Students') }}</div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mt-3 mx-auto admin-card">
+        <div class=" admin-card">
             <div class="row">
                 <div class="col-5">
-                    <i class="fa-solid fa-person-chalkboard stats-icon" style="color: #cd9cf7;"></i>
+                    <i class="fa-solid fa-person-chalkboard stats-icon"></i>
                 </div>
-                <div class="col-7">
-                    <div>Teachers</div>
+                <div class="col-7 admin-card-data-col">
+                    <div class="stats-heading">Teachers</div>
                     <div>
-                        <strong>28</strong>
+                        <div class="stats-data">{{ statsMap.get('Teachers') }}</div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mt-3 mx-auto admin-card">
+        <div class=" admin-card">
             <div class="row">
                 <div class="col-5">
-                    <i class="fa-solid fa-money-bill stats-icon" style="color: #cd9cf7;"></i>
+                    <i class="fa-solid fa-pen-ruler stats-icon"></i>
                 </div>
-                <div class="col-7">
-                    <div>Balance</div>
+                <div class="col-7 admin-card-data-col">
+                    <div class="stats-heading">Classes</div>
                     <div>
-                        <strong>120,000/-</strong>
+                        <div class="stats-data">{{ statsMap.get('Classes') }}</div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="d-flex row mt-5">
-        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mt-3 mx-auto admin-card">
+        <div class=" admin-card">
             <div class="row">
                 <div class="col-5">
-                    <i class="fa-solid fa-pen-ruler stats-icon" style="color: #cd9cf7;"></i>
+                    <i class="fa-solid fa-book stats-icon"></i>
                 </div>
-                <div class="col-7">
-                    <div>Classes</div>
+                <div class="col-7 admin-card-data-col">
+                    <div class="stats-heading">Subjects</div>
                     <div>
-                        <strong>10</strong>
+                        <div class="stats-data">{{ statsMap.get('Subjects') }}</div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mt-3 mx-auto admin-card">
+        <div class=" admin-card">
             <div class="row">
                 <div class="col-5">
-                    <i class="fa-solid fa-book stats-icon" style="color: #cd9cf7;"></i>
+                    <i class="fa-solid fa-van-shuttle stats-icon"></i>
                 </div>
-                <div class="col-7">
-                    <div>Subjects</div>
+                <div class="col-7 admin-card-data-col">
+                    <div class="stats-heading">Vehicles</div>
                     <div>
-                        <strong>12</strong>
+                        <div class="stats-data">{{ statsMap.get('Vehicles') }}</div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-xs-12 col-12 mt-3 mx-auto admin-card">
+        <div class=" admin-card">
             <div class="row">
                 <div class="col-5">
-                    <i class="fa-solid fa-van-shuttle stats-icon" style="color: #cd9cf7;"></i>
+                    <i class="fa-solid fa-money-check-dollar stats-icon"></i>
                 </div>
-                <div class="col-7">
-                    <div>Vehicles</div>
+                <div class="col-7 admin-card-data-col">
+                    <div class="stats-heading">Balance</div>
                     <div>
-                        <strong>8</strong>
+                        <div class="stats-data">{{ statsMap.get('Balance') }}</div>
                     </div>
                 </div>
             </div>
