@@ -15,7 +15,7 @@
                 <ng-container *ngIf="roleSelected == 'STUDENT'">
                     <app-student-select controlName="userId" [showLabel]="false"></app-student-select>
                 </ng-container>
-                <ng-container *ngIf="roleSelected == 'TEACHER'">
+                <ng-container *ngIf="roleSelected == 'TEACHER'" && areTeachersLoaded>
                     <ng-select [items]="teacherList" bindValue="id" bindLabel="firstName" formControlName="userId"
                         placeholder="Select teacher"
                         [ngClass]="{ 'invalid-field': isFieldInvalid('userId') }"></ng-select>

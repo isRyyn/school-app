@@ -1,6 +1,6 @@
-<select (change)="onActionChange($event)">
+<select (change)="onActionChange($event)" [disabled]="isDisabled">
     <option class="text-muted" value="">Select</option>
-    <option *ngIf="showEdit" value="edit">Edit</option>
+    <option *ngIf="showEdit" value="edit" (click)="onActionChange({}, 'edit')">Edit</option>
     <option *ngIf="showView" value="view">View</option>
     <option *ngIf="showDelete" value="delete">Delete</option>
 </select>

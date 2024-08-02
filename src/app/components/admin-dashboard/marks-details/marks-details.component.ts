@@ -32,6 +32,8 @@ export class MarksDetailsComponent implements OnInit {
 
     marksForm!: FormGroup;
 
+    sessionId!: number;
+
     isDataLoaded: boolean = false;
     isDataFiltered: boolean = false;
 
@@ -56,6 +58,7 @@ export class MarksDetailsComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        this.sessionId = Number(this.authService.getSessionId());
         this.loadData();
         this.examsList = this.utilService.intializeArrayWithEnums(this.examType);
         this.loadForm();
@@ -129,7 +132,7 @@ export class MarksDetailsComponent implements OnInit {
         const payload = this.marksForm.value.marksArray.map((x: MarksModel) => {
             return {
                 ...x,
-                sessionId: this.authService.getSessionId()
+                sessionId: this.sessionId
             }
         });
 
@@ -153,12 +156,15 @@ export class MarksDetailsComponent implements OnInit {
         const exam = this.marksForm.get('exam')?.value;
         const totalMarks = exam == 'FA_1' || exam == 'FA_2' ? MaxMarks.TEST : MaxMarks.EXAM;
         if (standardId && exam) {
-            this.studentsList = this.studentsList.filter(x => x.standardId == standardId);
-            this.subjectsList = this.subjectsList.filter(x => x.standardIds.includes(standardId));
-            this.apiService.getMarksForStandardAndExamName(standardId, exam).subscribe(r => {
-                this.marksList = r;
-                this.setTotalAndPercentageMaps(totalMarks)
-                this.updateMarksArray(totalMarks);
+            this.apiService.getSpecific(standardId).subscribe(r => {
+                const filteredList = r.filter(x => x.sessionId == this.sessionId && x.standardId == standardId).map(y => y.studentId);
+                this.studentsList = this.studentsList.filter(x => filteredList.includes(x.id));
+                this.subjectsList = this.subjectsList.filter(x => x.standardIds.includes(standardId));
+                this.apiService.getMarksForStandardAndExamName(standardId, exam).subscribe(r => {
+                    this.marksList = r;
+                    this.setTotalAndPercentageMaps(totalMarks)
+                    this.updateMarksArray(totalMarks);
+                });
             });
         }
     }

@@ -1,3 +1,13 @@
+.expand-link {
+    cursor: pointer;
+    margin-right: 5px;
+}
 
-
-  
+h4 {
+    .fa-circle-plus {
+        color: #ffa701;
+    }
+    .fa-circle-minus {
+        color: #042954 !important;
+    }
+}

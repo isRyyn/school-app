@@ -43,8 +43,8 @@ export class LoginComponent implements OnInit {
     get loadloginForm(): FormGroup {
         return new FormGroup({
             role: new FormControl('ADMIN', Validators.required),
-            username: new FormControl('', Validators.required),
-            password: new FormControl('', Validators.required),
+            username: new FormControl('admin', Validators.required),
+            password: new FormControl('1234', Validators.required),
             sessionId: new FormControl(1, Validators.required)
         });
     }
@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit {
                 username: formVal.username,
                 password: formVal.password,
                 role: formVal.role
-            } as UserModel).subscribe(responseId => {
+            } as UserModel, formVal.sessionId).subscribe(responseId => {
                 const selectedRole = formVal.role;
                 const sessionId = formVal.sessionId;
                 this.showData = false;

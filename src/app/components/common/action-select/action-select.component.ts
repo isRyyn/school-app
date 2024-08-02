@@ -13,14 +13,14 @@ export class ActionSelectComponent {
     @Input() showEdit!: boolean;
     @Input() showDelete!: boolean;
     @Input() showView!: boolean;
+    @Input() isDisabled!: boolean;
     @Output() action: EventEmitter<string> = new EventEmitter();
 
-    onActionChange(action: any): void {
-        this.action.emit(action?.target?.value);
+    onActionChange(action: any, click?: string): void {
+        this.action.emit(click ? click : action?.target?.value);
         
         if(action?.target?.value) {
             window.scrollTo({ 'top': 0, behavior: 'smooth' });
         }
     }
-
 }

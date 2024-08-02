@@ -24,6 +24,7 @@ export class ManageUsersComponent {
     showUserSelect: boolean = false;
     roleSelected: string = '';
     isEdit: boolean = false;
+    areTeachersLoaded: boolean = false;
 
     userList: UserModel[] = [];
     teacherList: TeacherModel[] = [];
@@ -59,11 +60,14 @@ export class ManageUsersComponent {
         });
     }
 
-    onRoleChange(roleObj?: ArrayObject): void {
-        const role = roleObj?.value;
+    onRoleChange(roleObj?: ArrayObject, roleEdited?: string): void {
+        const role = roleEdited ? roleEdited : roleObj?.value;
         if(role == 'TEACHER' || role == 'STUDENT') {
             if(role == 'TEACHER') {
-                this.apiService.getAllTeachers().subscribe(r => this.teacherList = r);   
+                this.apiService.getAllTeachers().subscribe(r => {
+                    this.teacherList = r;
+                    this.areTeachersLoaded = true;
+            });   
             }
             this.showUserSelect = true;
             this.roleSelected = role;
@@ -109,18 +113,21 @@ export class ManageUsersComponent {
     }
 
     editUser(index: number): void {
+        this.isDataLoaded = false;
         this.userForm.reset();
         const user = this.userList[index];
 
         if(user.userId) {
-            this.showUserSelect = true;
             this.roleSelected = user.role;
+            this.onRoleChange({} as ArrayObject, user.role);
+            this.showUserSelect = true;
         }
         this.userForm.patchValue({
             ...user,
             password: ''
         });
         this.isEdit = true;
+        setTimeout(() => this.isDataLoaded = true, 200);
     }
 
     deleteUser(id: number): void {

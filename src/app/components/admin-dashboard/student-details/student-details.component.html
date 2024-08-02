@@ -69,6 +69,29 @@
                     </div>
                 </div>
             </section>
+            <section class="mt-5">
+                <div class="mb-2">
+                    <i class="fa-solid fa-gear"></i>
+                    <h4 class="student-section-heading mx-3">Login Details</h4>
+                </div>
+                <button class="btn btn-primary app-btn app-primary" *ngIf="!showLoginForm" (click)="showLoginForm = true">Update credentials</button>
+                <form class="row" [formGroup]="loginDetailsForm" *ngIf="showLoginForm">
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">
+                        <label>Username</label>
+                        <input type="text" class="form-control" formControlName="username"
+                        (input)="loginDetailChanged($event, 'password')"
+                        [ngClass]="{ 'invalid-field': isFieldInvalid('username', loginDetailsForm) }"
+                            placeholder="Enter username for login (Mobile/Email)" />
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">
+                        <label>Password</label>
+                        <input type="text" class="form-control" formControlName="password" 
+                        (input)="loginDetailChanged($event, 'username')"
+                        [ngClass]="{ 'invalid-field': isFieldInvalid('password', loginDetailsForm) }"
+                        placeholder="Enter password" />
+                    </div>
+                </form>
+            </section>
 
             <section class="mt-5">
                 <div class="mb-2">

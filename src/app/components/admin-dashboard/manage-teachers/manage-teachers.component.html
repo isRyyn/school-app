@@ -27,6 +27,21 @@
                 </ng-select>
                 </div>
             </div>
+            <button class="btn btn-primary app-btn app-primary mt-3" *ngIf="!showLoginForm" (click)="showLoginForm = true">Update credentials</button>
+            <form *ngIf="showLoginForm" class="row mt-3" [formGroup]="loginForm">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
+                    <label>Username</label>
+                    <input class="form-control" 
+                    (input)="loginDetailChanged($event, 'password')"
+                    placeholder="Enter username for login (Mobile/Email)" formControlName="username" type="text" [ngClass]="{ 'invalid-field': isFieldInvalid('username', loginForm) }"/>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 col-12">
+                    <label>Password</label>
+                    <input class="form-control" 
+                    (input)="loginDetailChanged($event, 'username')"
+                    placeholder="Enter password" formControlName="password" type="text" [ngClass]="{ 'invalid-field': isFieldInvalid('username', loginForm) }"/>
+                </div>
+            </form>
             <div class="row mt-3">
                 <div class="d-flex justify-content-center detail-btn">
                     <button class="btn btn-success m-right-5" (click)="onSave()">Save</button>

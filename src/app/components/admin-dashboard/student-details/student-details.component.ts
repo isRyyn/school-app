@@ -2,16 +2,17 @@ import { ApiService } from './../../../services/api.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ArrayObject, ParentModel, StandardModel, StudentModel, VehicleModel } from '../../../services/models';
-import { Action, Relation } from "../../../services/enums";
+import { Action, BannerType, Relation } from "../../../services/enums";
 import { CommonModule, DatePipe } from '@angular/common';
 import { Gender } from '../../../services/enums';
 import { UtilService } from '../../../services/util.service';
 import { DatePickerComponent } from "../../common/date-picker/date-picker.component";
 import { ShowStudentDetailsComponent } from "./show-student-details/show-student-details.component";
 import { NgSelectModule } from '@ng-select/ng-select';
-import { elementAt, forkJoin } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { ViewStudentComponent } from "./view-student/view-student.component";
 import { DirectiveModule } from '../../../directives/directive.module';
+import { SharedService } from '../../../services/shared.service';
 
 @Component({
     selector: 'app-student-details',
@@ -36,9 +37,12 @@ export class StudentDetailsComponent implements OnInit {
     studentForm!: FormGroup;
     parentForm!: FormGroup;
     vehicleForm!: FormGroup;
+    loginDetailsForm!: FormGroup;
+
     isLoaded: boolean = false;
     isExpanded: boolean = false;
     showParentForm: boolean = false;
+    showLoginForm: boolean = true;
     parentFormCounter: number = 0;
     isViewMode: boolean = false;
     selectedStudent!: StudentModel;
@@ -55,7 +59,8 @@ export class StudentDetailsComponent implements OnInit {
     constructor(
         private readonly apiService: ApiService,
         private readonly utilService: UtilService,
-        private readonly datePipe: DatePipe
+        private readonly datePipe: DatePipe,
+        private readonly sharedService: SharedService
     ) { }
 
     ngOnInit() {
@@ -101,6 +106,7 @@ export class StudentDetailsComponent implements OnInit {
             standardId: new FormControl(null, Validators.required),
             rollNo: new FormControl(),
             picture: new FormControl(),
+            userId: new FormControl(),
             uDiasCode: new FormControl(''),
             previousSchool: new FormControl(),
             mobile: new FormControl(),
@@ -120,11 +126,22 @@ export class StudentDetailsComponent implements OnInit {
             docPhotograph: new FormControl(),
             docDobCertificate: new FormControl()
         });
+
+        this.loadLoginDetailsForm();
     }
 
     loadParentForm(): void {
         this.parentForm = new FormGroup({
             items: new FormArray([])
+        });
+    }
+
+    loadLoginDetailsForm(): void {
+        this.loginDetailsForm = new FormGroup({
+            id: new FormControl(''),
+            username: new FormControl(''),
+            password: new FormControl(''),
+            userId: new FormControl()
         });
     }
 
@@ -139,6 +156,7 @@ export class StudentDetailsComponent implements OnInit {
             childIds: new FormControl(parent?.childIds)
         });
     }
+
 
     get items(): FormArray {
         return this.parentForm.get('items') as FormArray;
@@ -158,8 +176,19 @@ export class StudentDetailsComponent implements OnInit {
         }
     }
 
+
+    loginDetailChanged(event: any, control: string): void {
+        if(event.target.value) {
+            this.loginDetailsForm.get(control)?.setValidators([Validators.required]);
+        } else {
+            this.loginDetailsForm.get(control)?.removeValidators([Validators.required]);
+        }
+        this.loginDetailsForm.get(control)?.updateValueAndValidity();
+    }
+
+
     onSave(): void {
-        if(this.studentForm.valid) {
+        if(this.studentForm.valid && this.loginDetailsForm.valid) {
             const formData = new FormData();
             
             const studentData = { 
@@ -178,6 +207,8 @@ export class StudentDetailsComponent implements OnInit {
             }
     
             this.apiService.saveStudent(formData).subscribe(response => {
+                this.registerStudent(response.id);
+               
                 if(this.parentFormCounter) {
                     this.saveParent(response?.id);
                 } else {
@@ -188,6 +219,29 @@ export class StudentDetailsComponent implements OnInit {
             });
         } else {
             this.studentForm.markAllAsTouched();
+            this.loginDetailsForm.markAllAsTouched();
+        }
+    }
+
+    registerStudent(studentId: number): void {
+        if(this.showLoginForm && this.loginDetailsForm.value.username) {
+            
+            const payload = {
+                ...this.loginDetailsForm.value,
+                role: 'STUDENT',
+                userId: studentId
+            }
+
+            if(this.loginDetailsForm.value.id) {
+                this.apiService.updateCredentials(payload).subscribe();
+            } else {
+                this.apiService.register(payload).subscribe((r) => {}, (error) => {
+                    if(error.status == 417) {
+                        const error = 'Email or mobile number is already in use. Please edit student';
+                        this.sharedService.showBanner(BannerType.ERROR, error);
+                    }  
+                });
+            }    
         }
     }
 
@@ -211,13 +265,16 @@ export class StudentDetailsComponent implements OnInit {
     onCancel(): void {
         this.studentForm.reset();
         this.parentForm.reset();
+        this.loginDetailsForm.reset();
         this.isExpanded = false;
     }
 
     onEdit(student: StudentModel): void {
         this.studentForm.reset();
         this.parentForm.reset();
+        this.loginDetailsForm.reset();
         this.isExpanded = true;
+        this.showLoginForm = true;
         this.studentForm.patchValue(student);
         
         if(student.parentsIds.length) {
@@ -227,11 +284,18 @@ export class StudentDetailsComponent implements OnInit {
                 });
             });
         }
+        if(student.userId) {
+            this.showLoginForm = false;
+            this.apiService.getUserById(student.userId).subscribe(r => {
+                this.loginDetailsForm.get('id')?.patchValue(r.id);
+                this.loginDetailsForm.get('username')?.patchValue(r.username);
+            });
+        }
     }
 
     
-    isFieldInvalid(field: string): boolean {
-        return this.utilService.isFieldInvalid(this.studentForm, field);
+    isFieldInvalid(field: string, form = this.studentForm): boolean {
+        return this.utilService.isFieldInvalid(form, field);
     }
 
     onFileChange(event: any) {

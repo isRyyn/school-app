@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FeeModel, MarksModel, PageModel, ParentModel, SessionModel, StandardModel, StudentModel, SubjectModel, TeacherModel, TransactionModel, UserModel, VehicleModel } from './models';
+import { FeeModel, MarksModel, PageModel, ParentModel, SessionModel, SessionStandardMapping, StandardModel, StudentModel, SubjectModel, TeacherModel, TransactionModel, UserModel, VehicleModel } from './models';
 import { ExamType, Role } from './enums';
 import { AuthService } from './auth.service';
 
@@ -27,11 +27,11 @@ export class ApiService {
     }
 
     getUserById(id: number): Observable<UserModel> {
-        return this.httpClient.get<UserModel>(`${this.baseHost}/${id}`);
+        return this.httpClient.get<UserModel>(`${this.baseHost}/auth/${id}`);
     }
 
-    login(payload: UserModel): Observable<string> {
-        return this.httpClient.post<string>(`${this.baseHost}/auth/login`, payload);
+    login(payload: UserModel, sessionId: number): Observable<string> {
+        return this.httpClient.post<string>(`${this.baseHost}/auth/login/${sessionId}`, payload);
     }
 
     register(payload: UserModel): Observable<string> {
@@ -64,6 +64,18 @@ export class ApiService {
 
     saveStudent(payload: FormData): Observable<StudentModel> {
         return this.httpClient.post<StudentModel>(`${this.baseUrl}/students`, payload);
+    }
+
+    promoteStudents(studentIds: number[], standardIds: number[], sessionId: number): Observable<void> {
+        let params = new HttpParams();
+        studentIds.forEach(id => {
+            params = params.append('studentIds', id.toString());
+        });
+        standardIds.forEach(id => {
+            params = params.append('standardIds', id.toString());
+        });
+        params = params.append('sessionId', sessionId);
+        return this.httpClient.post<void>(`${this.baseUrl}/students/promote`, params);
     }
 
     /** 
@@ -217,4 +229,14 @@ export class ApiService {
     deletePage(id: number): Observable<void> {
         return this.httpClient.delete<void>(`${this.baseUrl}/pages/${id}`);
     }
+
+    /**
+     * Session Standard Mapping api
+    */
+    getSpecific(standardId: number): Observable<SessionStandardMapping[]> {
+        const sessionId = this.authService.getSessionId();
+        return this.httpClient.get<SessionStandardMapping[]>(`${this.baseUrl}/session-standard-mapping/${sessionId}/${standardId}`);
+    }
+
 }
+

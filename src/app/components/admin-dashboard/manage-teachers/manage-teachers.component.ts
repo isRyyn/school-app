@@ -6,9 +6,10 @@ import { ArrayObject, StandardModel, SubjectModel, TeacherModel } from '../../..
 import { UtilService } from '../../../services/util.service';
 import { ApiService } from '../../../services/api.service';
 import { forkJoin } from 'rxjs';
-import { Gender } from '../../../services/enums';
+import { BannerType, Gender } from '../../../services/enums';
 import { DirectiveModule } from '../../../directives/directive.module';
 import { ActionSelectComponent } from "../../common/action-select/action-select.component";
+import { SharedService } from '../../../services/shared.service';
 
 @Component({
   selector: 'app-manage-teachers',
@@ -20,7 +21,10 @@ import { ActionSelectComponent } from "../../common/action-select/action-select.
 })
 export class ManageTeachersComponent implements OnInit {
     teachersForm!: FormGroup;
+    loginForm!: FormGroup;
+
     isDataLoaded: boolean = false;
+    showLoginForm: boolean = true;
 
     gendersList: Array<ArrayObject> = [];
     teachersList: TeacherModel[] = [];
@@ -29,7 +33,8 @@ export class ManageTeachersComponent implements OnInit {
 
     constructor(
         private readonly utilService: UtilService,
-        private readonly apiService: ApiService
+        private readonly apiService: ApiService,
+        private readonly sharedService: SharedService
     ) {}
 
     ngOnInit(): void {
@@ -58,8 +63,20 @@ export class ManageTeachersComponent implements OnInit {
             lastName: new FormControl(),
             mobile: new FormControl(),
             gender: new FormControl(),
+            userId: new FormControl(),
             subjectIds: new FormControl(),
             standardIds: new FormControl()
+        });
+
+        this.loadLoginDetailsForm();
+    }
+
+    loadLoginDetailsForm(): void {
+        this.loginForm = new FormGroup({
+            id: new FormControl(''),
+            username: new FormControl(''),
+            password: new FormControl(''),
+            userId: new FormControl()
         });
     }
 
@@ -67,7 +84,8 @@ export class ManageTeachersComponent implements OnInit {
         if(this.teachersForm.valid) {
             this.isDataLoaded = false;
 
-            this.apiService.saveTeacher(this.teachersForm.value).subscribe(() => {
+            this.apiService.saveTeacher(this.teachersForm.value).subscribe((response) => {
+                this.registerTeacher(response.id);
                 this.apiService.getAllTeachers().subscribe(r => {
                     this.teachersList = r;
                     this.teachersForm.reset();
@@ -79,6 +97,31 @@ export class ManageTeachersComponent implements OnInit {
         }
     }
 
+    registerTeacher(teacherId: number): void {
+        if(this.showLoginForm && this.loginForm.value.username) {
+            
+            const payload = {
+                ...this.loginForm.value,
+                role: 'TEACHER',
+                userId: teacherId
+            }
+
+            if(this.loginForm.value.id) {
+                this.apiService.updateCredentials(payload).subscribe();
+                this.loginForm.reset();
+            } else {
+                this.apiService.register(payload).subscribe((r) => {
+                    this.loginForm.reset();
+                }, (error) => {
+                    if(error.status == 417) {
+                        const error = 'Email or mobile number is already in use. Please edit student';
+                        this.sharedService.showBanner(BannerType.ERROR, error);
+                    }  
+                });
+            }    
+        }
+    }
+
     onReset(): void {
         this.teachersForm.reset();
     }
@@ -86,10 +129,23 @@ export class ManageTeachersComponent implements OnInit {
     onAction(event: string, index: number) {
         const teacher = this.teachersList[index];
         if(event == 'edit') {
+            this.loginForm.reset();
             this.teachersForm.reset();
+            this.showLoginForm = true;
             this.teachersForm.patchValue(teacher);
+            this.getUserDetails(teacher.userId);
         } else if (event == 'delete') {
             this.deleteTeacher(teacher.id);
+        }
+    }
+
+    getUserDetails(userId: number): void {
+        if(userId) {
+            this.showLoginForm = false;
+            this.apiService.getUserById(userId).subscribe(r => {
+                this.loginForm.get('id')?.patchValue(r.id);
+                this.loginForm.get('username')?.patchValue(r.username);
+            });
         }
     }
 
@@ -103,7 +159,16 @@ export class ManageTeachersComponent implements OnInit {
         });
     }
 
-    isFieldInvalid(field: string): boolean {
-        return this.utilService.isFieldInvalid(this.teachersForm, field);
+    loginDetailChanged(event: any, control: string): void {
+        if(event.target.value) {
+            this.loginForm.get(control)?.setValidators([Validators.required]);
+        } else {
+            this.loginForm.get(control)?.removeValidators([Validators.required]);
+        }
+        this.loginForm.get(control)?.updateValueAndValidity();
+    }
+
+    isFieldInvalid(field: string, form: FormGroup = this.teachersForm): boolean {
+        return this.utilService.isFieldInvalid(form, field);
     }
 }

@@ -1,9 +1,20 @@
 <div *ngIf="isDataLoaded">
-    <div class="mb-3 col-xl-3 col-lg-4 col-md-5 col-sm-6 col-xs-12">
+    <div class="mb-5 col-xl-3 col-lg-4 col-md-6 col-sm-12 col-xs-12">
         <label>Select Class</label>
-        <ng-select [items]="standardsList" bindLabel="name" bindValue="id" [(ngModel)]="classValue"
-             placeholder="Select class" (change)="onStandardChange($event)">
+        <ng-select [items]="standardsList" bindLabel="name" bindValue="id"
+        [(ngModel)]="classValue" placeholder="Select class" (change)="onStandardChange($event)">
         </ng-select>
+    </div>
+    <div class="row" *ngIf="isDataFiltered">
+        <div class="mb-3 col-xl-2 col-lg-2 col-md-3 col-sm-6 col-xs-12">
+            <button class="btn btn-primary app-btn app-primary" (click)="promoteAll()">{{ promoteBtnText }}</button>
+        </div>
+        <div class="mb-3 col-xl-3 col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            <ng-select [required]="promoteBtnText == 'Submit'" [items]="sessionsList" 
+            [ngClass]="{ 'invalid-field': promoteBtnText == 'Submit' && !promotedSession }"
+            bindLabel="name" bindValue="id" [(ngModel)]="promotedSession" placeholder="Select session"></ng-select>
+
+        </div>
     </div>
     <div class="app-table-container" *ngIf="isDataFiltered">
         <table class="app-table">
@@ -13,6 +24,7 @@
                     <th>Name</th>
                     <th>Roll No</th>
                     <th>Mobile</th>
+                    <th>Promote</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -22,6 +34,10 @@
                     <td>{{ student?.firstName }} {{ student?.lastName }}</td>
                     <td>{{ student?.rollNo }}</td>
                     <td>{{ student?.mobile }}</td>
+                    <td>
+                        <ng-select dropdownPosition="bottom" [items]="standardsList" bindLabel="name" bindValue="id" placeholder="Class" (change)="promotionSelectChanged($event, i)" [(ngModel)]="promotions[i]">
+                        </ng-select>
+                    </td>
                     <td>
                         <app-action-select [showEdit]="true" [showDelete]="true" [showView]="true" (action)="handleAction($event, student)"></app-action-select>
                     </td>

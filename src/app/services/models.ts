@@ -40,6 +40,7 @@ export interface StudentModel {
     picture: File;
     uDiasCode: string;
     previousSchool: string;
+    userId: number;
     mobile: string;
     email: string;
     landline: string;
@@ -74,10 +75,22 @@ export interface TransactionModel {
 
 export interface FeeModel {
     id: number;
-    amount: number;
+    monthly: number;
+    deposited: number;
+    total: number;
+    registration: number;
+    course: number;
+    copies: number;
+    dress: number;
+    shoes: number;
+    tieBelt: number;
+    socks: number;
+    van: number;
+    diary: number;
     month: Month;
     date: string;
     studentId: number;
+    standardId: number;
     sessionId: number;
 }
 
@@ -123,6 +136,7 @@ export interface TeacherModel {
     lastName: string;
     mobile: string;
     gender: Gender;
+    userId: number;
     subjectIds: number[];
     standardIds: number[];
 }
@@ -145,4 +159,11 @@ export interface PageModel {
     content: string;
     title: string;
     author: string;
+}
+
+export interface SessionStandardMapping {
+    id: number;
+    sessionId: number;
+    standardId: number;
+    studentId: number;
 }
