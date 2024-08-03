@@ -1,9 +1,19 @@
 <ng-container *ngIf="isLoaded && !isViewMode">
-    <h4 class="mt-3" (click)="expandSection()">
-        <i class="fa-solid fa-circle-plus expand-link" *ngIf="!isExpanded"></i>
-        <i class="fa-solid fa-circle-minus expand-link" *ngIf="isExpanded"></i>
-        Add New Student
-    </h4>
+    <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12 col-12">
+            <h4 class="mt-3" (click)="expandSection()">
+                <i class="fa-solid fa-circle-plus expand-link" *ngIf="!isExpanded"></i>
+                <i class="fa-solid fa-circle-minus expand-link" *ngIf="isExpanded"></i>
+                Add New Student
+            </h4>        
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12 col-12 text-end mt-3 import-btn">
+            <input *ngIf="importClicked" type="file" class="import-input" (change)="onImportFileChange($event)">
+            <button *ngIf="!importClicked" class="btn btn-primary app-btn app-primary" (click)="importData()" [disabled]="isExpanded">Import</button>
+            <button *ngIf="importClicked" class="btn btn-primary app-btn app-primary" (click)="importFile()">Save</button>
+        </div>
+    </div>
+    
     <div class="box-container" *ngIf="isExpanded">
         <form [formGroup]="studentForm">
             <section>
@@ -65,7 +75,7 @@
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">
                         <label>Profile Picture</label>
                         <input type="file" (change)="onFileChange($event)" class="form-control"
-                            formControlName="picture" />
+                             />
                     </div>
                 </div>
             </section>
@@ -264,6 +274,7 @@
             (emitStudentForEdit)="onEdit($event)"></app-show-student-details>
     </div>
 </ng-container>
+
 <ng-container *ngIf="isViewMode">
     <app-view-student [student]="selectedStudent" (goBackEvent)="this.isViewMode = false"></app-view-student>
 </ng-container>

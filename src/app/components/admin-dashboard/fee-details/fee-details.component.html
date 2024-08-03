@@ -96,13 +96,13 @@
 </h4>
 <div class="row mt-1" *ngIf="!studentId">
     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 col-6 pt-1">
-        <input class="form-control" placeholder="Search by student" (input)="searchBy($event, 'student')"/>
+        <input [(ngModel)]="nameSearch" class="form-control" placeholder="Search by student" (input)="searchBy($event, 'student')"/>
     </div>
     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 col-6 pt-1">
-        <input class="form-control" placeholder="Search by month" (input)="searchBy($event, 'month')"/>
+        <input  [(ngModel)]="monthSearch" class="form-control" placeholder="Search by month" (input)="searchBy($event, 'month')"/>
     </div>
     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 col-6 pt-1">
-        <input class="form-control" placeholder="Search by class" (input)="searchBy($event, 'class')"/>
+        <input  [(ngModel)]="standardSearch" class="form-control" placeholder="Search by class" (input)="searchBy($event, 'class')"/>
     </div>
 </div>
 <div class="box-container">

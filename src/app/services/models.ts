@@ -37,7 +37,7 @@ export interface StudentModel {
     dob: string;
     gender: Gender;
     rollNo: number
-    picture: File;
+    picture: string;
     uDiasCode: string;
     previousSchool: string;
     userId: number;

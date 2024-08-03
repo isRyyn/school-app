@@ -16,7 +16,7 @@ import { forkJoin } from 'rxjs';
 @Component({
     selector: 'app-fee-details',
     standalone: true,
-    imports: [CommonModule, NgSelectModule, ReactiveFormsModule, StudentSelectComponent, DatePickerComponent, ActionSelectComponent],
+    imports: [CommonModule, NgSelectModule, FormsModule, ReactiveFormsModule, StudentSelectComponent, DatePickerComponent, ActionSelectComponent],
     providers: [ApiService],
     templateUrl: './fee-details.component.html',
     styleUrl: './fee-details.component.scss'
@@ -36,6 +36,10 @@ export class FeeDetailsComponent implements OnInit {
     filteredFeesList: FeeModel[] = [];
     studentsList: StudentModel[] = [];
     standardsList: StandardModel[] = [];
+
+    nameSearch: string = '';
+    monthSearch: string = '';
+    standardSearch: string = '';
 
     constructor(
         private readonly apiService: ApiService,
@@ -189,15 +193,18 @@ export class FeeDetailsComponent implements OnInit {
             return;
         }
         if(property == 'student') {
+            this.monthSearch = this.standardSearch = '';
             const ids = this.studentsList.filter(x => x?.firstName?.toLowerCase()?.includes(value.toLowerCase()) || x?.lastName?.toLowerCase()?.includes(value))?.map(y => y.id);
             this.filteredFeesList = this.fullFeeList.filter(x => ids.includes(x.studentId));
             this.isDataFiltered = true;
 
         } else if(property == 'month') {
+            this.nameSearch = this.standardSearch = '';
             this.filteredFeesList = this.fullFeeList.filter(x => x.month.toLowerCase().includes(value.toLowerCase()));
             this.isDataFiltered = true;
 
         } else if(property == 'class') {
+            this.nameSearch = this.monthSearch = '';
             const ids = this.standardsList.filter(x => x.name?.toLowerCase()?.includes(value.toLowerCase()))?.map(y => y.id);
             this.filteredFeesList = this.fullFeeList.filter(x => ids.includes(x.standardId));
             this.isDataFiltered = true;

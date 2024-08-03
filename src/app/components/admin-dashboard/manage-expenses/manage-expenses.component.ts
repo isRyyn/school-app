@@ -1,6 +1,6 @@
 import { TransactionType } from './../../../services/enums';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ArrayObject, TransactionModel } from '../../../services/models';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../../services/api.service';
@@ -12,17 +12,22 @@ import { ActionSelectComponent } from "../../common/action-select/action-select.
 @Component({
     selector: 'app-manage-expenses',
     standalone: true,
-    imports: [ReactiveFormsModule, CommonModule, DatePickerComponent, NgSelectModule, ActionSelectComponent],
+    imports: [ReactiveFormsModule, CommonModule, FormsModule, DatePickerComponent, NgSelectModule, ActionSelectComponent],
     providers: [ApiService],
     templateUrl: './manage-expenses.component.html',
     styleUrl: './manage-expenses.component.scss'
 })
 export class ManageExpensesComponent implements OnInit {
     transactions: TransactionModel[] = [];
+    originalTransactions: TransactionModel[] = [];
     transactionTypeList: Array<ArrayObject> = [];
     expenseForm!: FormGroup;
     isLoaded: boolean = false;
     availableAmount: number = 0;
+
+    dateSearch = '';
+    monthSearch = '';
+    yearSearch = '';
 
     sortMap = new Map<string, boolean>([
         ['amount', false],
@@ -47,6 +52,7 @@ export class ManageExpensesComponent implements OnInit {
         this.apiService.getAllTransactions().subscribe(response => {
             this.transactions = response;
             this.transactions.sort((a, b) => b.id - a.id);
+            this.originalTransactions = this.transactions;
             this.availableAmount = this.getAmount('INCOME') - this.getAmount('EXPENSE');
             setTimeout(() => this.isLoaded = true, 100);
         });
@@ -118,6 +124,28 @@ export class ManageExpensesComponent implements OnInit {
             this.apiService.deleteTransaction(transaction.id).subscribe(() => {
                 this.loadData();
             });
+        }
+    }
+
+    searchBy(event: any, property: string): void {
+        this.isLoaded = false;
+        const value = event.target.value;
+
+        if(value == '') {
+            this.transactions = this.originalTransactions;
+            this.isLoaded = true;
+            return;
+        }
+
+        if(property == 'date') {            
+            this.transactions = this.originalTransactions.filter(x => new Date(x.date).getDate() == value);
+            this.isLoaded = true;
+        } else if(property == 'month') {
+            this.transactions = this.originalTransactions.filter(x => (new Date(x.date).getMonth() + 1) == value);
+            this.isLoaded = true;
+        } else if(property == 'year') {
+            this.transactions = this.originalTransactions.filter(x => new Date(x.date).getFullYear() == value);
+            this.isLoaded = true;
         }
     }
 }

@@ -53,6 +53,17 @@
     <i class="fa-solid fa-circle-right"></i>
     Passbook
 </h4>
+<div class="row mt-1">
+    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 col-6 pt-1">
+        <input [(ngModel)]="dateSearch" class="form-control" placeholder="Search by date" (input)="searchBy($event, 'date')"/>
+    </div>
+    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 col-6 pt-1">
+        <input  [(ngModel)]="monthSearch" class="form-control" placeholder="Search by month" (input)="searchBy($event, 'month')"/>
+    </div>
+    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 col-6 pt-1">
+        <input  [(ngModel)]="yearSearch" class="form-control" placeholder="Search by year" (input)="searchBy($event, 'year')"/>
+    </div>
+</div>
 <div class="box-container">
     <div class="app-table-container"  *ngIf="isLoaded">
         <table class="app-table">

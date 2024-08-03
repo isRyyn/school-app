@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { DirectiveModule } from '../../../directives/directive.module';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-action-select',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './action-select.component.html',
   styleUrl: './action-select.component.scss'
 })
@@ -15,6 +16,7 @@ export class ActionSelectComponent {
     @Input() showView!: boolean;
     @Input() isDisabled!: boolean;
     @Output() action: EventEmitter<string> = new EventEmitter();
+    actionValue: string = '';
 
     onActionChange(action: any, click?: string): void {
         this.action.emit(click ? click : action?.target?.value);

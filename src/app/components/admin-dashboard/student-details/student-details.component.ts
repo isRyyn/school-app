@@ -43,9 +43,13 @@ export class StudentDetailsComponent implements OnInit {
     isExpanded: boolean = false;
     showParentForm: boolean = false;
     showLoginForm: boolean = true;
+    importClicked: boolean = false;
+
     parentFormCounter: number = 0;
     isViewMode: boolean = false;
+
     selectedStudent!: StudentModel;
+    fileToImport!: File;
 
     actions = Action;
     gender = Gender;
@@ -64,24 +68,12 @@ export class StudentDetailsComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        this.fetchStudentsData();
         this.initializeArrays();
         this.loadForm();
         this.loadParentForm();
     }
 
-    fetchStudentsData(): void {
-        // this.apiService.getStudentById(1).subscribe(data => {
-        //     this.student = data;
-        //     this.pictureUrl = `data:image/jpeg;base64,${btoa(
-        //       new Uint8Array(this.student.picture).reduce((data, byte) => data + String.fromCharCode(byte), '')
-        //     )}`;
-        //   });
-
-        // For HTML
-        //<img *ngIf="pictureUrl" [src]="pictureUrl" alt="Student Picture" />
-    }
-
+   
     initializeArrays(): void {
         forkJoin({
             standards: this.apiService.getAllStandards(),
@@ -164,14 +156,8 @@ export class StudentDetailsComponent implements OnInit {
 
     addParent(parent?: ParentModel): void {
         this.parentFormCounter++;
-        if (this.parentFormCounter <= 3) {
+        if (this.parentFormCounter <= 1) {
             this.showParentForm = true;
-            // if(!parent) {
-            //      window.scrollBy({
-            //          top: 400,
-            //          behavior: 'smooth'
-            //      });
-            // }
             this.items.push(this.loadSubParentForm(parent));
         }
     }
@@ -202,7 +188,6 @@ export class StudentDetailsComponent implements OnInit {
     
             formData.append('student', JSON.stringify(studentData));
             if(this.studentForm.value?.picture) {
-                 //this.utilService.convertToBase64(this.studentForm.value.picture[0])
                 formData.append('picture', this.studentForm.get('picture')?.value);
             }
     
@@ -255,10 +240,13 @@ export class StudentDetailsComponent implements OnInit {
                 childIds: childIds
             }
         });
-        this.apiService.saveMultipleParents(parentForms).subscribe(r => {
-            this.onCancel();
-            this.showStudentDetailsComponent.classValue = undefined;
-            this.showStudentDetailsComponent.isDataFiltered = false;
+
+        parentForms.forEach((form: ParentModel) => {
+            this.apiService.saveParent(form).subscribe(r => {
+                this.onCancel();
+                this.showStudentDetailsComponent.classValue = undefined;
+                this.showStudentDetailsComponent.isDataFiltered = false;
+            });
         });
     }
 
@@ -313,6 +301,33 @@ export class StudentDetailsComponent implements OnInit {
 
     showStudent(student: StudentModel): void {
         this.isViewMode = true;
+
+        let pictureUrl: string;
+        if(student.picture) {
+            pictureUrl = this.apiService.getStudentPicture(student.picture.split('/').pop());
+            student.picture = pictureUrl;
+        }
         this.selectedStudent = student;
+    }
+
+    onImportFileChange(event: any): void {
+        if (event.target.files.length > 0) {
+            const file = event.target.files[0];
+            this.fileToImport = file;
+        }
+    }
+
+    importData(): void {
+        this.importClicked = true;
+    }
+
+    importFile(): void {
+        if(this.fileToImport) {
+            const formData = new FormData();
+            formData.append('file', this.fileToImport);
+            this.apiService.importData(formData).subscribe(() => {
+                this.importClicked = false;
+            });
+        }
     }
 }

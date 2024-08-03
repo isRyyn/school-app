@@ -53,6 +53,12 @@ h4 {
     }    
 }
 
+.import-input {
+    width: 200px;
+    margin-right: 10px;
+    vertical-align: -2px;
+}
+
 // media-queries
 @media (max-width: 440px) {
     .container{
@@ -61,5 +67,11 @@ h4 {
     
     .student-details-btn button {
         min-width: 100px;
+    }
+}
+
+@media (max-width: 995px) {
+    .import-btn {
+        text-align: left !important;
     }
 }

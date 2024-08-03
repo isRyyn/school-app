@@ -58,8 +58,16 @@ export class ApiService {
         return this.httpClient.get<StudentModel>(`${this.baseUrl}/students/${id}`);
     }
 
+    getStudentPicture(filename?: string): string {
+        return `${this.baseUrl}/students/uploads/${filename}`;
+    }
+
     getStudentsByStandard(standardId: number): Observable<StudentModel[]> {
         return this.httpClient.get<StudentModel[]>(`${this.baseUrl}/students/standard/${standardId}`);
+    }
+
+    deleteStudent(studentId: number): Observable<void> {
+        return this.httpClient.delete<void>(`${this.baseUrl}/students/${studentId}`);
     }
 
     saveStudent(payload: FormData): Observable<StudentModel> {
@@ -76,6 +84,14 @@ export class ApiService {
         });
         params = params.append('sessionId', sessionId);
         return this.httpClient.post<void>(`${this.baseUrl}/students/promote`, params);
+    }
+
+
+    /**
+     * Import api
+    */
+    importData(file: FormData): Observable<void> {
+        return this.httpClient.post<void>(`${this.baseUrl}/import`, file);
     }
 
     /** 
@@ -187,6 +203,10 @@ export class ApiService {
     /**
      * Vehicles api
      */
+    getVehicleById(id: number): Observable<VehicleModel> {
+        return this.httpClient.get<VehicleModel>(`${this.baseUrl}/vehicles/${id}`);
+    }
+
     getAllVehicles(): Observable<VehicleModel[]> {
         return this.httpClient.get<VehicleModel[]>(`${this.baseUrl}/vehicles`);
     }
