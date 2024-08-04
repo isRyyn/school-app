@@ -18,9 +18,10 @@ export class ActionSelectComponent {
     @Output() action: EventEmitter<string> = new EventEmitter();
     actionValue: string = '';
 
-    onActionChange(action: any, click?: string): void {
-        this.action.emit(click ? click : action?.target?.value);
+    onActionChange(action: any): void {
+        this.action.emit(action?.target?.value);
         
+        setTimeout(() => this.actionValue = '', 100);
         if(action?.target?.value) {
             window.scrollTo({ 'top': 0, behavior: 'smooth' });
         }

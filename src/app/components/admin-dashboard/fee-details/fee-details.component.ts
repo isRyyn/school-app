@@ -140,12 +140,14 @@ export class FeeDetailsComponent implements OnInit {
     onAction(action: string, fee: FeeModel): void {
         if (action == 'edit') {
             this.feeForm.reset();
+            this.isExpanded = true;
             this.feeForm.patchValue(fee);
         } else if (action == 'delete') {
             this.apiService.deleteFee(fee.id).subscribe(() => {
                 this.feeForm.reset();
                 this.studentSelectForm.reset();
-                this.isDataFiltered = false;
+                this.fullFeeList = this.fullFeeList.filter(x => x.id != fee.id);
+                this.filteredFeesList = this.fullFeeList;
             });
         }
     }
