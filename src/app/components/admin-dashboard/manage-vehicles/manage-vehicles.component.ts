@@ -42,10 +42,10 @@ export class ManageVehiclesComponent implements OnInit {
     loadForm(): void {
         this.vehicleForm = new FormGroup({
             id: new FormControl(),
-            name: new FormControl(''),
-            number: new FormControl(''),
-            driver: new FormControl('', Validators.required),
-            route: new FormControl('', Validators.required)
+            name: new FormControl('', Validators.required),
+            number: new FormControl('', Validators.required),
+            driver: new FormControl(''),
+            route: new FormControl('')
         });
     }
 
