@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { UtilService } from '../../../services/util.service';
 import { ApiService } from '../../../services/api.service';
-import { Router } from '@angular/router';
 import { FormControl, FormGroup, FormGroupDirective, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { StudentSelectComponent } from "../../common/student-select/student-select.component";
@@ -12,11 +11,12 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { AuthService } from '../../../services/auth.service';
 import { ActionSelectComponent } from "../../common/action-select/action-select.component";
 import { forkJoin } from 'rxjs';
+import { LoaderLineComponent } from "../../common/loader-line/loader-line.component";
 
 @Component({
     selector: 'app-fee-details',
     standalone: true,
-    imports: [CommonModule, NgSelectModule, FormsModule, ReactiveFormsModule, StudentSelectComponent, DatePickerComponent, ActionSelectComponent],
+    imports: [CommonModule, NgSelectModule, FormsModule, ReactiveFormsModule, StudentSelectComponent, DatePickerComponent, ActionSelectComponent, LoaderLineComponent],
     providers: [ApiService],
     templateUrl: './fee-details.component.html',
     styleUrl: './fee-details.component.scss'
@@ -28,6 +28,7 @@ export class FeeDetailsComponent implements OnInit {
     studentSelectForm!: FormGroup
     month = Month;
     monthsList: Array<ArrayObject> = [];
+    monthSearchList: Array<ArrayObject> = [];
 
     isDataFiltered: boolean = false;
     isExpanded: boolean = false;
@@ -37,9 +38,11 @@ export class FeeDetailsComponent implements OnInit {
     studentsList: StudentModel[] = [];
     standardsList: StandardModel[] = [];
 
-    nameSearch: string = '';
-    monthSearch: string = '';
-    standardSearch: string = '';
+    nameSearch = null;
+    monthSearch = null;
+    standardSearch = null;
+
+    filteredTotal: string = '';
 
     constructor(
         private readonly apiService: ApiService,
@@ -63,7 +66,7 @@ export class FeeDetailsComponent implements OnInit {
             studentId: new FormControl(null, Validators.required),
             standardId: new FormControl(),
             monthly: new FormControl(),
-            deposited: new FormControl(null, Validators.required),
+            deposited: new FormControl({ value: null, disabled: true }, Validators.required),
             total: new FormControl(null, Validators.required),
             registration: new FormControl(),
             course: new FormControl(),
@@ -82,6 +85,17 @@ export class FeeDetailsComponent implements OnInit {
         this.studentSelectForm = new FormGroup({
             studentId: new FormControl()
         });
+
+        this.calculateDeposited();
+    }
+
+    calculateDeposited(): void {
+        this.feeForm.valueChanges.subscribe(values => {
+            const total = values.monthly + values.registration + values.course + values.copies
+             + values.dress + values.shoes + values.diary + values.tieBelt + values.van 
+             + values.socks;
+            this.feeForm.get('deposited')?.setValue(total, { emitEvent: false });
+        });
     }
 
     loadData(): void {
@@ -91,6 +105,7 @@ export class FeeDetailsComponent implements OnInit {
             standard: this.apiService.getAllStandards()
         }).subscribe(r => {
             this.fullFeeList = this.filteredFeesList = r.fee;
+            this.calculateTotal();
             this.studentsList = r.students;
             this.standardsList = r.standard;
             this.isDataFiltered = true;
@@ -104,7 +119,7 @@ export class FeeDetailsComponent implements OnInit {
     onSave(): void {
         if(this.feeForm.valid) {
             const payload = {
-                ...this.feeForm.value,
+                ...this.feeForm.getRawValue(),
                 sessionId: this.authService.getSessionId()
             };
             this.apiService.saveFee(payload).subscribe(r => {
@@ -132,19 +147,19 @@ export class FeeDetailsComponent implements OnInit {
         this.isExpanded = false;
     }
 
-    onEdit(fee: FeeModel): void {
-        this.feeForm.reset();
-        this.feeForm.patchValue(fee);
-    }
-
     onAction(action: string, fee: FeeModel): void {
         if (action == 'edit') {
             this.feeForm.reset();
             this.isExpanded = true;
-            this.feeForm.patchValue(fee);
+            this.feeForm.patchValue({
+                ...fee,
+                date: new Date(fee.date)
+            });
         } else if (action == 'delete') {
             this.apiService.deleteFee(fee.id).subscribe(() => {
-                this.feeForm.reset();
+                this.feeForm.reset({
+                    date: new Date()
+                });
                 this.studentSelectForm.reset();
                 this.fullFeeList = this.fullFeeList.filter(x => x.id != fee.id);
                 this.filteredFeesList = this.fullFeeList;
@@ -160,11 +175,6 @@ export class FeeDetailsComponent implements OnInit {
                 this.isDataFiltered = true;
             });
         }
-    }
-
-    setStandardId(event: any): void {
-        const standardId = event.standardId;
-        this.feeForm.get('standardId')?.patchValue(standardId);
     }
 
     goBack(): void {
@@ -186,8 +196,9 @@ export class FeeDetailsComponent implements OnInit {
     }
 
     searchBy(event: any, property: string): void {
+        this.filteredTotal = '';
         this.isDataFiltered = false;
-        const value = event.target.value;
+        const value = event?.value ?? '';
 
         if(value == '') {
             this.filteredFeesList = this.fullFeeList;
@@ -195,21 +206,37 @@ export class FeeDetailsComponent implements OnInit {
             return;
         }
         if(property == 'student') {
-            this.monthSearch = this.standardSearch = '';
-            const ids = this.studentsList.filter(x => x?.firstName?.toLowerCase()?.includes(value.toLowerCase()) || x?.lastName?.toLowerCase()?.includes(value))?.map(y => y.id);
+            this.monthSearch = this.standardSearch = null;
+            const ids = this.studentsList.filter(x => x.id == value)?.map(y => y.id);
             this.filteredFeesList = this.fullFeeList.filter(x => ids.includes(x.studentId));
             this.isDataFiltered = true;
 
         } else if(property == 'month') {
-            this.nameSearch = this.standardSearch = '';
+            this.nameSearch = this.standardSearch = null;
             this.filteredFeesList = this.fullFeeList.filter(x => x.month.toLowerCase().includes(value.toLowerCase()));
             this.isDataFiltered = true;
 
         } else if(property == 'class') {
-            this.nameSearch = this.monthSearch = '';
-            const ids = this.standardsList.filter(x => x.name?.toLowerCase()?.includes(value.toLowerCase()))?.map(y => y.id);
+            this.nameSearch = this.monthSearch = null;
+            const ids = this.standardsList.filter(x => x.id == value)?.map(y => y.id);
             this.filteredFeesList = this.fullFeeList.filter(x => ids.includes(x.standardId));
             this.isDataFiltered = true;
         }
+        this.calculateTotal();
+    }
+
+    calculateTotal(): void {
+        const total = this.filteredFeesList.reduce((x ,y) => {
+           return x + y.total
+        }, 0);
+        
+        const deposit = this.filteredFeesList.reduce((x,y) => {
+            return x + y.deposited
+        }, 0);
+
+        let final = `Total = ${total},`;
+        final += `Deposited = ${deposit},`;
+        final += `Remaining = ${total - deposit}`;
+        this.filteredTotal = final;
     }
 }

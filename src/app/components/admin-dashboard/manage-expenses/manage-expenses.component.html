@@ -55,17 +55,26 @@
 </h4>
 <div class="row mt-1">
     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 col-6 pt-1">
-        <input [(ngModel)]="dateSearch" class="form-control" placeholder="Search by date" (input)="searchBy($event, 'date')"/>
+        <input [(ngModel)]="dateSearch" class="form-control" placeholder="Search by date" (input)="searchBy($event.target, 'date')"/>
     </div>
     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 col-6 pt-1">
-        <input  [(ngModel)]="monthSearch" class="form-control" placeholder="Search by month" (input)="searchBy($event, 'month')"/>
+        <ng-select
+            [items]="monthsList"
+            bindLabel="value"
+            placeholder="Search by month"
+            [(ngModel)]="monthSearch"
+            (change)="searchBy({ value: $event?.name }, 'month')"
+        ></ng-select>
     </div>
     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 col-6 pt-1">
-        <input  [(ngModel)]="yearSearch" class="form-control" placeholder="Search by year" (input)="searchBy($event, 'year')"/>
+        <input  [(ngModel)]="yearSearch" class="form-control" placeholder="Search by year" (input)="searchBy($event.target, 'year')"/>
     </div>
 </div>
+<div class="mt-2 filtered-total" *ngIf="filteredTotal">
+    <span><span class="text-muted">Total: </span>{{ filteredTotal }}</span>
+</div>
 <div class="box-container">
-    <div class="app-table-container"  *ngIf="isLoaded">
+    <div class="app-table-container"  *ngIf="isLoaded; else showLoader">
         <table class="app-table">
             <thead>
                 <tr>
@@ -109,5 +118,8 @@
             </tbody>
         </table>
     </div>
-    
 </div>
+
+<ng-template #showLoader>
+    <app-loader-line></app-loader-line>
+</ng-template>

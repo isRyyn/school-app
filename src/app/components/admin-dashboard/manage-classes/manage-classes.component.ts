@@ -7,11 +7,12 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { UtilService } from '../../../services/util.service';
 import { forkJoin } from 'rxjs';
 import { DirectiveModule } from '../../../directives/directive.module';
+import { LoaderLineComponent } from "../../common/loader-line/loader-line.component";
 
 @Component({
   selector: 'app-manage-classes',
   standalone: true,
-  imports: [CommonModule, NgSelectModule, ReactiveFormsModule, DirectiveModule],
+  imports: [CommonModule, NgSelectModule, ReactiveFormsModule, DirectiveModule, LoaderLineComponent],
   providers: [ApiService],
   templateUrl: './manage-classes.component.html',
   styleUrl: './manage-classes.component.scss'

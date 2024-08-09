@@ -1,4 +1,4 @@
-import { TransactionType } from './../../../services/enums';
+import { MonthSearch, TransactionType } from './../../../services/enums';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ArrayObject, TransactionModel } from '../../../services/models';
@@ -8,11 +8,12 @@ import { DatePickerComponent } from "../../common/date-picker/date-picker.compon
 import { UtilService } from '../../../services/util.service';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ActionSelectComponent } from "../../common/action-select/action-select.component";
+import { LoaderLineComponent } from "../../common/loader-line/loader-line.component";
 
 @Component({
     selector: 'app-manage-expenses',
     standalone: true,
-    imports: [ReactiveFormsModule, CommonModule, FormsModule, DatePickerComponent, NgSelectModule, ActionSelectComponent],
+    imports: [ReactiveFormsModule, CommonModule, FormsModule, DatePickerComponent, NgSelectModule, ActionSelectComponent, LoaderLineComponent],
     providers: [ApiService],
     templateUrl: './manage-expenses.component.html',
     styleUrl: './manage-expenses.component.scss'
@@ -21,12 +22,15 @@ export class ManageExpensesComponent implements OnInit {
     transactions: TransactionModel[] = [];
     originalTransactions: TransactionModel[] = [];
     transactionTypeList: Array<ArrayObject> = [];
+    monthsList: Array<ArrayObject> = [];
     expenseForm!: FormGroup;
     isLoaded: boolean = false;
     availableAmount: number = 0;
 
+    filteredTotal: string = '';
+
     dateSearch = '';
-    monthSearch = '';
+    monthSearch = null;
     yearSearch = '';
 
     sortMap = new Map<string, boolean>([
@@ -44,6 +48,7 @@ export class ManageExpensesComponent implements OnInit {
     ngOnInit(): void {
         this.loadForm();
         this.transactionTypeList = this.utilService.intializeArrayWithEnums(TransactionType);
+        this.monthsList = this.utilService.intializeArrayWithEnums(MonthSearch);
         this.loadData();
     }
 
@@ -67,6 +72,7 @@ export class ManageExpensesComponent implements OnInit {
 
     loadForm(): void {
         this.expenseForm = new FormGroup({
+            id: new FormControl(),
             amount: new FormControl(null, Validators.required),
             category: new FormControl(),
             date: new FormControl(new Date()),
@@ -119,7 +125,10 @@ export class ManageExpensesComponent implements OnInit {
     onAction(action: string, transaction: TransactionModel): void {
         if(action == 'edit') {
             this.expenseForm.reset();
-            this.expenseForm.patchValue(transaction);
+            this.expenseForm.patchValue({
+                ...transaction,
+                date: new Date(transaction.date)
+            });
         } else if(action == 'delete') {
             this.apiService.deleteTransaction(transaction.id).subscribe(() => {
                 this.loadData();
@@ -127,25 +136,41 @@ export class ManageExpensesComponent implements OnInit {
         }
     }
 
-    searchBy(event: any, property: string): void {
+    searchBy(event: any, property: string): void {        
         this.isLoaded = false;
-        const value = event.target.value;
+        this.filteredTotal = '';
+        const value = event?.value ?? '';
 
         if(value == '') {
             this.transactions = this.originalTransactions;
             this.isLoaded = true;
             return;
         }
+        if(property == 'date') { 
+            this.monthSearch = null;
+            this.yearSearch = '';  
 
-        if(property == 'date') {            
             this.transactions = this.originalTransactions.filter(x => new Date(x.date).getDate() == value);
             this.isLoaded = true;
         } else if(property == 'month') {
+            this.dateSearch = this.yearSearch = '';
+
             this.transactions = this.originalTransactions.filter(x => (new Date(x.date).getMonth() + 1) == value);
             this.isLoaded = true;
         } else if(property == 'year') {
+            this.monthSearch = null;
+            this.dateSearch = '';
+            
             this.transactions = this.originalTransactions.filter(x => new Date(x.date).getFullYear() == value);
             this.isLoaded = true;
         }
+        this.calculateTotal();
+    }
+
+    calculateTotal(): void {
+        const income = this.getAmount('INCOME');
+        const expense = this.getAmount('EXPENSE');
+
+        this.filteredTotal = `Income (${income}) - Expense (${expense}) = Rs. ${income-expense}`;
     }
 }

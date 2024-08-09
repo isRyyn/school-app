@@ -8,7 +8,7 @@
         <form [formGroup]="feeForm">
             <div class="row">
                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-2">
-                    <app-student-select (emitStudent)="setStandardId($event)"></app-student-select>
+                    <app-student-select></app-student-select>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-2">
                     <label>Month</label>
@@ -25,53 +25,53 @@
             <div class="row mt-3">
                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">
                     <label>Registration</label>
-                    <input class="form-control" formControlName="registration" placeholder="Registration fee"/>
+                    <input type="number" class="form-control" formControlName="registration" placeholder="Registration fee"/>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">
                     <label>Monthly</label>
-                    <input class="form-control" formControlName="monthly" placeholder="Monthly fee"/>
+                    <input type="number" class="form-control" formControlName="monthly" placeholder="Monthly fee"/>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">
                     <label>Van</label>
-                    <input class="form-control" formControlName="van" placeholder="Van charges"/>
+                    <input type="number" class="form-control" formControlName="van" placeholder="Van charges"/>
                 </div>
             </div>
             <div class="row mt-3">
                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">
                     <label>Course</label>
-                    <input class="form-control" formControlName="course" placeholder="Course charges"/>
+                    <input type="number" class="form-control" formControlName="course" placeholder="Course charges"/>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">
                     <label>Copies (x20)</label>
-                    <input class="form-control" formControlName="copies" placeholder="Copies charges"/>
+                    <input type="number" class="form-control" formControlName="copies" placeholder="Copies charges"/>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">
                     <label>Diary</label>
-                    <input class="form-control" formControlName="diary" placeholder="Diary charges"/>
+                    <input type="number" class="form-control" formControlName="diary" placeholder="Diary charges"/>
                 </div>
             </div>
             <div class="row mt-3">
                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">
                     <label>Shoes</label>
-                    <input class="form-control" formControlName="shoes" placeholder="Shoes charges"/>
+                    <input type="number" class="form-control" formControlName="shoes" placeholder="Shoes charges"/>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">
                     <label>Socks</label>
-                    <input class="form-control" formControlName="socks" placeholder="Socks charges"/>
+                    <input type="number" class="form-control" formControlName="socks" placeholder="Socks charges"/>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">
                     <label>Tie & Belt</label>
-                    <input class="form-control" formControlName="tieBelt" placeholder="Tie & Belt charges"/>
+                    <input type="number" class="form-control" formControlName="tieBelt" placeholder="Tie & Belt charges"/>
                 </div>
             </div>
             <div class="row mt-3">
                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">
                     <label>Deposited</label>
-                    <input class="form-control" formControlName="deposited"  [ngClass]="{ 'invalid-field': isFieldInvalid('deposited') }" placeholder="Deposited fee"/>
+                    <input type="number" class="form-control" formControlName="deposited"  [ngClass]="{ 'invalid-field': isFieldInvalid('deposited') }" placeholder="Deposited fee"/>
                 </div>
                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">
                     <label>Total</label>
-                    <input class="form-control" formControlName="total" [ngClass]="{ 'invalid-field': isFieldInvalid('total') }" placeholder="Total fee"/>
+                    <input type="number" class="form-control" formControlName="total" [ngClass]="{ 'invalid-field': isFieldInvalid('total') }" placeholder="Total fee"/>
                 </div>
             </div>
             <div class="row mt-3">
@@ -96,17 +96,43 @@
 </h4>
 <div class="row mt-1" *ngIf="!studentId">
     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 col-6 pt-1">
-        <input [(ngModel)]="nameSearch" class="form-control" placeholder="Search by student" (input)="searchBy($event, 'student')"/>
+        <ng-select
+            [items]="studentsList"
+            bindLabel="firstName"
+            placeholder="Search by student"
+            [(ngModel)]="nameSearch"
+            (change)="searchBy({ value: $event?.id }, 'student')"
+        >
+            <ng-template ng-option-tmp let-item="item">
+                {{ item.firstName + ' ' + item.lastName + ' (' + item.uDiasCode + ')' }}
+            </ng-template>
+        </ng-select>
     </div>
     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 col-6 pt-1">
-        <input  [(ngModel)]="monthSearch" class="form-control" placeholder="Search by month" (input)="searchBy($event, 'month')"/>
+        <ng-select
+            [items]="monthsList"
+            bindLabel="name"
+            placeholder="Search by month"
+            [(ngModel)]="monthSearch"
+            (change)="searchBy({ value: $event?.name }, 'month')"
+        ></ng-select>
     </div>
     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 col-6 pt-1">
-        <input  [(ngModel)]="standardSearch" class="form-control" placeholder="Search by class" (input)="searchBy($event, 'class')"/>
+        <ng-select
+            [items]="standardsList"
+            bindLabel="name"
+            bindValue="id"
+            placeholder="Search by class"
+            [(ngModel)]="standardSearch"
+            (change)="searchBy({ value: $event?.id }, 'class')"
+        ></ng-select>
     </div>
 </div>
+<div class="mt-2 filtered-total">
+    <div>{{ filteredTotal }}</div>
+</div>
 <div class="box-container">
-    <div class="app-table-container" *ngIf="isDataFiltered">
+    <div class="app-table-container" *ngIf="isDataFiltered; else showLoader">
         <table class="app-table">
             <thead>
                 <tr>
@@ -140,3 +166,7 @@
         </table>
     </div>
 </div>
+
+<ng-template #showLoader>
+    <app-loader-line></app-loader-line>
+</ng-template>
