@@ -46,6 +46,13 @@ export class ApiService {
         return this.httpClient.delete<string>(`${this.baseHost}/auth/${id}`);
     }
 
+    /**
+     * Shared api
+    */
+    getCount(): Observable<Map<string, number>> {
+        return this.httpClient.get<Map<string, number>>(`${this.baseUrl}/shared/count`);
+    }
+    
 
     /**
      * Students api
