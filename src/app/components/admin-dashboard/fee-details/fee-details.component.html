@@ -128,7 +128,7 @@
         ></ng-select>
     </div>
 </div>
-<div class="mt-2 filtered-total">
+<div *ngIf="!studentId" class="mt-2 filtered-total">
     <div>{{ filteredTotal }}</div>
 </div>
 <div class="box-container">
@@ -137,7 +137,7 @@
             <thead>
                 <tr>
                     <th>S. No</th>
-                    <th>Student</th>
+                    <th *ngIf="!studentId">Student</th>
                     <th>Month</th>
                     <th>Total Fee</th>
                     <th>Deposited</th>
@@ -150,7 +150,7 @@
             <tbody>
                 <tr *ngFor="let fee of filteredFeesList; let i = index">
                     <td>{{i+1}}</td>
-                    <td>{{ getStudent(fee.studentId) }}</td>
+                    <td *ngIf="!studentId">{{ getStudent(fee.studentId) }}</td>
                     <td>{{ fee?.month | titlecase }}</td>
                     <td>{{ fee?.total }}</td>
                     <td>{{ fee?.deposited }}</td>

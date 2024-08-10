@@ -20,7 +20,7 @@ export const routes: Routes = [
     },
     {
         path: 'private/teacher-dashboard',
-        component: TeacherDashboardComponent,
+        loadChildren: () => import('./components/teacher-dashboard/teacher-dashboard.module').then(m => m.TeacherDashboardModule),
         canActivate: [TeacherGuard]
     }
 ];
