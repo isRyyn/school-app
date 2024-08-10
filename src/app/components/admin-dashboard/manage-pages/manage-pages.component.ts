@@ -7,11 +7,12 @@ import { UtilService } from '../../../services/util.service';
 import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
 import { DirectiveModule } from '../../../directives/directive.module';
 import { ActionSelectComponent } from "../../common/action-select/action-select.component";
+import { LoaderLineComponent } from "../../common/loader-line/loader-line.component";
 
 @Component({
   selector: 'app-manage-pages',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NgxEditorModule, DirectiveModule, ActionSelectComponent],
+  imports: [CommonModule, ReactiveFormsModule, NgxEditorModule, DirectiveModule, ActionSelectComponent, LoaderLineComponent],
   providers: [ApiService],
   templateUrl: './manage-pages.component.html',
   styleUrl: './manage-pages.component.scss'

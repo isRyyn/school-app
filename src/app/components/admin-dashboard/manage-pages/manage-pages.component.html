@@ -34,7 +34,7 @@
     Pages
 </h4>
 <div class="box-container">
-    <div class="app-table-container" *ngIf="isDataLoaded">
+    <div class="app-table-container" *ngIf="isDataLoaded; else showLoader">
         <table class="app-table">
             <thead>
                 <tr>
@@ -57,3 +57,7 @@
         </table>
     </div>
 </div>
+
+<ng-template #showLoader>
+    <app-loader-line></app-loader-line>
+</ng-template>

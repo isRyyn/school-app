@@ -7,11 +7,12 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { StandardModel, SubjectModel } from '../../../services/models';
 import { UtilService } from '../../../services/util.service';
 import { DirectiveModule } from '../../../directives/directive.module';
+import { LoaderLineComponent } from "../../common/loader-line/loader-line.component";
 
 @Component({
   selector: 'app-manage-subjects',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NgSelectModule, DirectiveModule],
+  imports: [CommonModule, ReactiveFormsModule, NgSelectModule, DirectiveModule, LoaderLineComponent],
   providers: [ApiService],
   templateUrl: './manage-subjects.component.html',
   styleUrl: './manage-subjects.component.scss'

@@ -2,7 +2,7 @@
     <i class="fa-solid fa-circle-right"></i>
     Stats
 </h4>
-<div class="mt-1">
+<div class="mt-1" *ngIf="isDataLoaded; else showLoader">
     <div class="admin-card-container row">
         <div class=" admin-card">
             <div class="row">
@@ -72,15 +72,19 @@
         <div class=" admin-card">
             <div class="row">
                 <div class="col-5">
-                    <i class="fa-solid fa-money-check-dollar stats-icon"></i>
+                    <i class="fa-regular fa-file stats-icon"></i>
                 </div>
                 <div class="col-7 admin-card-data-col">
-                    <div class="stats-heading">Balance</div>
+                    <div class="stats-heading">Pages</div>
                     <div>
-                        <div class="stats-data">{{ statsMap.get('Balance') }}</div>
+                        <div class="stats-data">{{ statsMap.get('Pages') }}</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<ng-template #showLoader>
+    <app-loader-line></app-loader-line>
+</ng-template>

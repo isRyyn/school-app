@@ -10,11 +10,12 @@ import { ArrayObject, TeacherModel, UserModel } from '../../../services/models';
 import { StudentSelectComponent } from "../../common/student-select/student-select.component";
 import { SharedService } from '../../../services/shared.service';
 import { ActionSelectComponent } from "../../common/action-select/action-select.component";
+import { LoaderLineComponent } from "../../common/loader-line/loader-line.component";
 
 @Component({
   selector: 'app-manage-users',
   standalone: true,
-  imports: [CommonModule, NgSelectModule, DirectiveModule, ReactiveFormsModule, StudentSelectComponent, ActionSelectComponent],
+  imports: [CommonModule, NgSelectModule, DirectiveModule, ReactiveFormsModule, StudentSelectComponent, ActionSelectComponent, LoaderLineComponent],
   templateUrl: './manage-users.component.html',
   styleUrl: './manage-users.component.scss'
 })

@@ -278,3 +278,8 @@
 <ng-container *ngIf="isViewMode">
     <app-view-student [student]="selectedStudent" (goBackEvent)="this.isViewMode = false"></app-view-student>
 </ng-container>
+
+
+<ng-container *ngIf="!isLoaded">
+    <app-loader-line></app-loader-line>
+</ng-container>

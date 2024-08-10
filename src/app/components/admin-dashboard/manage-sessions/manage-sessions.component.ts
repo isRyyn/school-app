@@ -5,11 +5,12 @@ import { ApiService } from '../../../services/api.service';
 import { SessionModel, VehicleModel } from '../../../services/models';
 import { UtilService } from '../../../services/util.service';
 import { DirectiveModule } from '../../../directives/directive.module';
+import { LoaderLineComponent } from "../../common/loader-line/loader-line.component";
 
 @Component({
   selector: 'app-manage-sessions',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DirectiveModule],
+  imports: [CommonModule, ReactiveFormsModule, DirectiveModule, LoaderLineComponent],
   providers: [ApiService],
   templateUrl: './manage-sessions.component.html',
   styleUrl: './manage-sessions.component.scss'

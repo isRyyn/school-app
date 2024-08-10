@@ -58,3 +58,7 @@
         </table>
     </div>
 </form>
+
+<ng-container *ngIf="!isDataLoaded || (!isDataFiltered && editBtn)">
+    <app-loader-line></app-loader-line>
+</ng-container>

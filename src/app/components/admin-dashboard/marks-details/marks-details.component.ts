@@ -11,11 +11,12 @@ import { ExamType } from '../../../services/enums';
 import { StudentSelectComponent } from "../../common/student-select/student-select.component";
 import { forkJoin } from 'rxjs';
 import { AuthService } from '../../../services/auth.service';
+import { LoaderLineComponent } from "../../common/loader-line/loader-line.component";
 
 @Component({
     selector: 'app-marks-details',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, NgSelectModule, StudentSelectComponent],
+    imports: [CommonModule, ReactiveFormsModule, NgSelectModule, StudentSelectComponent, LoaderLineComponent],
     providers: [ApiService],
     templateUrl: './marks-details.component.html',
     styleUrl: './marks-details.component.scss',

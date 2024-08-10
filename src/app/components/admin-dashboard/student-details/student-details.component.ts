@@ -13,6 +13,7 @@ import { forkJoin } from 'rxjs';
 import { ViewStudentComponent } from "./view-student/view-student.component";
 import { DirectiveModule } from '../../../directives/directive.module';
 import { SharedService } from '../../../services/shared.service';
+import { LoaderLineComponent } from "../../common/loader-line/loader-line.component";
 
 @Component({
     selector: 'app-student-details',
@@ -25,8 +26,9 @@ import { SharedService } from '../../../services/shared.service';
     ShowStudentDetailsComponent,
     ViewStudentComponent,
     ViewStudentComponent,
-    DirectiveModule
-    ],
+    DirectiveModule,
+    LoaderLineComponent
+],
     providers: [ApiService, DatePipe],
     templateUrl: './student-details.component.html',
     styleUrl: './student-details.component.scss'

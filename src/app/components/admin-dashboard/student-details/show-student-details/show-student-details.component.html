@@ -46,3 +46,7 @@
         </table>
     </div>
 </div>
+
+<ng-container *ngIf="!isDataLoaded || (!isDataFiltered && classValue)">
+    <app-loader-line></app-loader-line>
+</ng-container>

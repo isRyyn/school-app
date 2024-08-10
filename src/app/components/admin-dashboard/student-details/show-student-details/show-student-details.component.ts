@@ -7,11 +7,12 @@ import { DirectiveModule } from '../../../../directives/directive.module';
 import { FormsModule } from '@angular/forms';
 import { ActionSelectComponent } from "../../../common/action-select/action-select.component";
 import { AuthService } from '../../../../services/auth.service';
+import { LoaderLineComponent } from "../../../common/loader-line/loader-line.component";
 
 @Component({
   selector: 'app-show-student-details',
   standalone: true,
-  imports: [CommonModule, NgSelectModule, DirectiveModule, FormsModule, ActionSelectComponent],
+  imports: [CommonModule, NgSelectModule, DirectiveModule, FormsModule, ActionSelectComponent, LoaderLineComponent],
   providers: [ApiService],
   templateUrl: './show-student-details.component.html',
   styleUrl: './show-student-details.component.scss'

@@ -10,11 +10,12 @@ import { BannerType, Gender } from '../../../services/enums';
 import { DirectiveModule } from '../../../directives/directive.module';
 import { ActionSelectComponent } from "../../common/action-select/action-select.component";
 import { SharedService } from '../../../services/shared.service';
+import { LoaderLineComponent } from "../../common/loader-line/loader-line.component";
 
 @Component({
   selector: 'app-manage-teachers',
   standalone: true,
-  imports: [CommonModule, NgSelectModule, ReactiveFormsModule, DirectiveModule, ActionSelectComponent],
+  imports: [CommonModule, NgSelectModule, ReactiveFormsModule, DirectiveModule, ActionSelectComponent, LoaderLineComponent],
   providers: [ApiService],
   templateUrl: './manage-teachers.component.html',
   styleUrl: './manage-teachers.component.scss'

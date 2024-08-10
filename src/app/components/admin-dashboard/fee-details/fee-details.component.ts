@@ -234,8 +234,8 @@ export class FeeDetailsComponent implements OnInit {
             return x + y.deposited
         }, 0);
 
-        let final = `Total = ${total},`;
-        final += `Deposited = ${deposit},`;
+        let final = `Total = ${total}, `;
+        final += `Deposited = ${deposit}, `;
         final += `Remaining = ${total - deposit}`;
         this.filteredTotal = final;
     }

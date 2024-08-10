@@ -6,11 +6,12 @@ import { VehicleModel } from '../../../services/models';
 import { UtilService } from '../../../services/util.service';
 import { DirectiveModule } from '../../../directives/directive.module';
 import { ActionSelectComponent } from "../../common/action-select/action-select.component";
+import { LoaderLineComponent } from "../../common/loader-line/loader-line.component";
 
 @Component({
   selector: 'app-manage-vehicles',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, DirectiveModule, ActionSelectComponent],
+  imports: [CommonModule, ReactiveFormsModule, DirectiveModule, ActionSelectComponent, LoaderLineComponent],
   providers: [ApiService],
   templateUrl: './manage-vehicles.component.html',
   styleUrl: './manage-vehicles.component.scss'
