@@ -320,6 +320,12 @@ export class StudentDetailsComponent implements OnInit {
     }
 
     importData(): void {
+        const fileUrl = '../../../../assets/files/sample_students.xlsx'; 
+        const anchor = document.createElement('a');
+        anchor.href = fileUrl;
+        anchor.download = 'sample-students.xlsx';
+        anchor.click();
+        this.sharedService.showBanner(BannerType.INFO, 'Add data in the downloaded file and upload it', 8000);
         this.importClicked = true;
     }
 

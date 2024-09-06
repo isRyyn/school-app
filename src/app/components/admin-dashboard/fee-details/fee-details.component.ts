@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { UtilService } from '../../../services/util.service';
 import { ApiService } from '../../../services/api.service';
 import { FormControl, FormGroup, FormGroupDirective, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -24,6 +24,8 @@ import { LoaderLineComponent } from "../../common/loader-line/loader-line.compon
 export class FeeDetailsComponent implements OnInit {
     @Input() studentId?: number;
     @Output() goBackEvent: EventEmitter<void> = new EventEmitter();
+    @ViewChild('download', { static: false }) contentToDownload!: ElementRef;
+
     feeForm!: FormGroup;
     studentSelectForm!: FormGroup
     month = Month;
@@ -66,10 +68,12 @@ export class FeeDetailsComponent implements OnInit {
             studentId: new FormControl(null, Validators.required),
             standardId: new FormControl(),
             monthly: new FormControl(),
-            deposited: new FormControl({ value: null, disabled: true }, Validators.required),
-            total: new FormControl(null, Validators.required),
+            deposited: new FormControl(null, Validators.required),
+            remaining: new FormControl({ value: null, disabled: true}),
+            total: new FormControl({ value: null, disabled: true }, Validators.required),
             registration: new FormControl(),
             course: new FormControl(),
+            other: new FormControl(),
             copies: new FormControl(),
             dress: new FormControl(),
             shoes: new FormControl(),
@@ -93,8 +97,11 @@ export class FeeDetailsComponent implements OnInit {
         this.feeForm.valueChanges.subscribe(values => {
             const total = values.monthly + values.registration + values.course + values.copies
              + values.dress + values.shoes + values.diary + values.tieBelt + values.van 
-             + values.socks;
-            this.feeForm.get('deposited')?.setValue(total, { emitEvent: false });
+             + values.socks + values.other;
+            this.feeForm.get('total')?.setValue(total, { emitEvent: false });
+
+            const deposited = this.feeForm.value.deposited;
+            this.feeForm.get('remaining')?.setValue(total - deposited);
         });
     }
 
@@ -238,5 +245,9 @@ export class FeeDetailsComponent implements OnInit {
         final += `Deposited = ${deposit}, `;
         final += `Remaining = ${total - deposit}`;
         this.filteredTotal = final;
+    }
+
+    download(): void {
+        this.utilService.download(this.contentToDownload, 'fees');
     }
 }

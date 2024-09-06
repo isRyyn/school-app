@@ -1,6 +1,6 @@
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
@@ -12,6 +12,8 @@ import { StudentSelectComponent } from "../../common/student-select/student-sele
 import { forkJoin } from 'rxjs';
 import { AuthService } from '../../../services/auth.service';
 import { LoaderLineComponent } from "../../common/loader-line/loader-line.component";
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 @Component({
     selector: 'app-marks-details',
@@ -22,12 +24,14 @@ import { LoaderLineComponent } from "../../common/loader-line/loader-line.compon
     styleUrl: './marks-details.component.scss',
 })
 export class MarksDetailsComponent implements OnInit {
+    @ViewChild('download', { static: false }) contentToDownload!: ElementRef;
     action = Action;
     examType = ExamType;
 
     studentsList: StudentModel[] = [];
     subjectsList: SubjectModel[] = [];
     standardsList: StandardModel[] = [];
+    filteredStudentsList: StudentModel[] = [];
     examsList: ArrayObject[] = [];
     marksList: MarksModel[] = [];
 
@@ -86,11 +90,11 @@ export class MarksDetailsComponent implements OnInit {
         });
     }
 
-    private updateMarksArray(totalMarks: number) {
+    private updateMarksArray(filteredStudentsList: StudentModel[], totalMarks: number) {
         const marksArray = this.marksForm.get('marksArray') as FormArray;
         marksArray.clear();
-
-        this.studentsList.forEach((student, i) => {
+        
+        filteredStudentsList.forEach((student, i) => {
             this.subjectsList.forEach((subject, j) => {
                 
                 const group = this.groupName(i, j);
@@ -103,6 +107,7 @@ export class MarksDetailsComponent implements OnInit {
                     subjectId: [subject?.id],
                     studentId: [student?.id]
                 });
+                formGroup.disable();
                 marksArray.push(formGroup);
             });
         });
@@ -151,6 +156,13 @@ export class MarksDetailsComponent implements OnInit {
         this.saveBtn = true;
     }
 
+    onCancel(): void {
+        this.isDataFiltered = false;
+        this.saveBtn = false;
+        this.showBtn = true;
+        this.marksForm.reset();
+    }
+
     onShow(): void { 
         this.isDataFiltered = false;
         const standardId = this.marksForm.get('id')?.value;
@@ -159,12 +171,12 @@ export class MarksDetailsComponent implements OnInit {
         if (standardId && exam) {
             this.apiService.getSpecific(standardId).subscribe(r => {
                 const filteredList = r.filter(x => x.sessionId == this.sessionId && x.standardId == standardId).map(y => y.studentId);
-                this.studentsList = this.studentsList.filter(x => filteredList.includes(x.id));
+                this.filteredStudentsList = this.studentsList.filter(x => filteredList.includes(x.id));
                 this.subjectsList = this.subjectsList.filter(x => x.standardIds.includes(standardId));
                 this.apiService.getMarksForStandardAndExamName(standardId, exam).subscribe(r => {
                     this.marksList = r;
                     this.setTotalAndPercentageMaps(totalMarks)
-                    this.updateMarksArray(totalMarks);
+                    this.updateMarksArray(this.filteredStudentsList, totalMarks);
                 });
             });
         }
@@ -212,6 +224,6 @@ export class MarksDetailsComponent implements OnInit {
     }
 
     download(): void {
-        
+        this.utilService.download(this.contentToDownload, 'marks');
     }
 }

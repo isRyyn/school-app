@@ -1,0 +1,31 @@
+<h4 class="mt-5">
+    <i class="fa-solid fa-circle-right"></i>
+    Generate TC
+</h4>
+<div class="box-container" *ngIf="isDataLoaded; else showLoader">
+    <div class="row">
+        <div class="col-md-4 col-sm-12">
+            <ng-select
+            [items]="studentsList"
+            bindLabel="firstName"
+            placeholder="Search by student"
+            [(ngModel)]="student"/>
+        </div>
+        <button class="btn btn-primary app-primary" (click)="generate()">Generate</button>
+    </div>
+
+    <div class="row mt-5">
+        <div class="tc-container">
+            <h3 class="mb-3">School Name</h3> 
+            <div class="label">
+                <span>Student's Name: </span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<ng-template #showLoader>
+    <app-loader-line></app-loader-line>
+</ng-template>

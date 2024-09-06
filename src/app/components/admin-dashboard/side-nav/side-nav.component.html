@@ -54,6 +54,10 @@
             <i class="fa-solid fa-van-shuttle"></i>
             <span *ngIf="isExpanded">Vehicles</span>
         </div>
+        <div (click)="goToPath('generate-tc')" [ngClass]="{ 'selected': isPathSelected('generate-tc') }">
+            <i class="fa-solid fa-building"></i>
+            <span *ngIf="isExpanded">Generate TC</span>
+        </div>
         <ng-container *ngIf="pagesLoaded">
             <div  *ngFor="let page of pageList" (click)="goToSection(page.id)" [ngClass]="{ 'selected': isPathSelected('section', page.id) }">
                 <i class="fa-regular fa-file"></i>

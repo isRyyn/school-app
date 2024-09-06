@@ -15,6 +15,7 @@ import { ManagePagesComponent } from './manage-pages/manage-pages.component';
 import { DynamicPageComponent } from './manage-pages/dynamic-page/dynamic-page.component';
 import { ManageVehiclesComponent } from './manage-vehicles/manage-vehicles.component';
 import { ManageUsersComponent } from './manage-users/manage-users.component';
+import { GenerateTcComponent } from './generate-tc/generate-tc.component';
 
 const adminRoutes: Routes = [
     {
@@ -32,6 +33,7 @@ const adminRoutes: Routes = [
             { path: 'users', component: ManageUsersComponent },
             { path: 'sessions', component: ManageSessionsComponent },
             { path: 'vehicles', component: ManageVehiclesComponent },
+            { path: 'generate-tc', component: GenerateTcComponent },
             { path: 'pages', component: ManagePagesComponent },
             { path: 'section', component: DynamicPageComponent }
         ]

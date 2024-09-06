@@ -21,6 +21,7 @@
             <button class="btn btn-primary app-btn app-primary" (click)="onShow()" *ngIf="showBtn" [disabled]="saveBtnDisabled">Show Marks</button>
             <button class="btn btn-danger app-btn app-danger" (click)="onEdit()" *ngIf="editBtn">Edit</button>
             <button class="btn btn-success app-btn app-success" (click)="onSubmit()" *ngIf="saveBtn">Save</button>
+            <button class="btn btn-success app-btn app-danger m-left-5" (click)="onCancel()" *ngIf="saveBtn">Cancel</button>
         </div>
         <div class="col-xl-10 col-lg-10 col-md-9 col-sm-8 col-xs-8 col-8 text-end" *ngIf="editBtn || saveBtn">
             <button *ngIf="false" class="btn btn-primary app-btn app-primary mx-3" title="Print" (click)="print()"><i class="fa-solid fa-print"></i></button>
@@ -28,7 +29,7 @@
         </div>
     </div>
     <div class="app-table-container mt-3" *ngIf="isDataFiltered">
-        <table class="app-table">
+        <table class="app-table" #download>
             <thead>
                 <tr>
                     <th class="student-name">Student</th>
@@ -46,7 +47,7 @@
                 </tr>
             </thead>
             <tbody formArrayName="marksArray">
-                <tr *ngFor="let student of studentsList; let i = index">
+                <tr *ngFor="let student of filteredStudentsList; let i = index">
                     <td>{{ studentsList[i].firstName }}</td>
                     <td *ngFor="let subject of subjectsList; let j = index" [formGroupName]="groupName(i, j)">
                         <input type="number" formControlName="marks" />
