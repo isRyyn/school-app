@@ -87,6 +87,7 @@ export interface FeeModel {
     socks: number;
     van: number;
     diary: number;
+    other: number;
     month: Month;
     date: string;
     studentId: number;

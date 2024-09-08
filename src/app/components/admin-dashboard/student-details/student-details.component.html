@@ -10,7 +10,7 @@
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12 col-12 text-end mt-3 import-btn">
             <input *ngIf="importClicked" type="file" class="import-input" (change)="onImportFileChange($event)">
             <button *ngIf="!importClicked" class="btn btn-primary app-btn app-primary" (click)="importData()" [disabled]="isExpanded">Import</button>
-            <button *ngIf="importClicked" class="btn btn-primary app-btn app-primary" (click)="importFile()">Save</button>
+            <button *ngIf="importClicked" class="btn btn-primary app-btn app-primary" (click)="importFile()">{{ isImporting ? 'Saving...' : 'Save' }}</button>
         </div>
     </div>
     
@@ -62,7 +62,7 @@
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">
                         <label>U-Dias Code</label>
-                        <input type="text" formControlName="uDiasCode" class="form-control"
+                        <input type="text" [ngClass]="{ 'invalid-field': isFieldInvalid('uDiasCode') }" formControlName="uDiasCode" class="form-control"
                             placeholder="Enter U-Dias Code" />
                     </div>
                     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">

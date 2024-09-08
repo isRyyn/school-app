@@ -19,5 +19,12 @@ h4 {
 }
 
 .download-btn {
-    float: right;
+    margin-right: 5px;
+}
+
+@media (max-width: 995px) {
+    .import-btn {
+        text-align: left !important;
+        float: left !important;
+    }
 }

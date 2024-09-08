@@ -5,13 +5,14 @@ import { FormControl, FormGroup, FormGroupDirective, FormsModule, ReactiveFormsM
 import { CommonModule } from '@angular/common';
 import { StudentSelectComponent } from "../../common/student-select/student-select.component";
 import { ArrayObject, FeeModel, StandardModel, StudentModel } from '../../../services/models';
-import { Month } from '../../../services/enums';
+import { BannerType, Month } from '../../../services/enums';
 import { DatePickerComponent } from "../../common/date-picker/date-picker.component";
 import { NgSelectModule } from '@ng-select/ng-select';
 import { AuthService } from '../../../services/auth.service';
 import { ActionSelectComponent } from "../../common/action-select/action-select.component";
 import { forkJoin } from 'rxjs';
 import { LoaderLineComponent } from "../../common/loader-line/loader-line.component";
+import { SharedService } from '../../../services/shared.service';
 
 @Component({
     selector: 'app-fee-details',
@@ -34,6 +35,10 @@ export class FeeDetailsComponent implements OnInit {
 
     isDataFiltered: boolean = false;
     isExpanded: boolean = false;
+    importClicked!: boolean;
+    isImporting!: boolean;
+
+    fileToImport!: File;
 
     fullFeeList: FeeModel[]= [];
     filteredFeesList: FeeModel[] = [];
@@ -49,7 +54,8 @@ export class FeeDetailsComponent implements OnInit {
     constructor(
         private readonly apiService: ApiService,
         private readonly utilService: UtilService,
-        private readonly authService: AuthService
+        private readonly authService: AuthService,
+        private readonly sharedService: SharedService
     ) { }
 
     ngOnInit(): void {
@@ -249,5 +255,34 @@ export class FeeDetailsComponent implements OnInit {
 
     download(): void {
         this.utilService.download(this.contentToDownload, 'fees');
+    }
+
+    onImportFileChange(event: any): void {
+        if (event.target.files.length > 0) {
+            const file = event.target.files[0];
+            this.fileToImport = file;
+        }
+    }
+
+    importData(): void {
+        const fileUrl = '../../../../assets/files/sample_fees.xlsx'; 
+        const anchor = document.createElement('a');
+        anchor.href = fileUrl;
+        anchor.download = 'sample-fees.xlsx';
+        anchor.click();
+        this.sharedService.showBanner(BannerType.INFO, 'Add data in the downloaded file and upload it', 8000);
+        this.importClicked = true;
+    }
+
+    importFile(): void {
+        if(this.fileToImport) {
+            this.isImporting = true;
+            const formData = new FormData();
+            formData.append('file', this.fileToImport);
+            this.apiService.importFeesData(formData).subscribe(() => {
+                this.isImporting = false;
+                this.importClicked = false;
+            });
+        }
     }
 }

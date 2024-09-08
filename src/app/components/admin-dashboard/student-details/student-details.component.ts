@@ -46,6 +46,7 @@ export class StudentDetailsComponent implements OnInit {
     showParentForm: boolean = false;
     showLoginForm: boolean = true;
     importClicked: boolean = false;
+    isImporting: boolean = false;
 
     parentFormCounter: number = 0;
     isViewMode: boolean = false;
@@ -101,7 +102,7 @@ export class StudentDetailsComponent implements OnInit {
             rollNo: new FormControl(),
             picture: new FormControl(),
             userId: new FormControl(),
-            uDiasCode: new FormControl(''),
+            uDiasCode: new FormControl('', Validators.required),
             previousSchool: new FormControl(),
             mobile: new FormControl(),
             email: new FormControl(),
@@ -331,9 +332,11 @@ export class StudentDetailsComponent implements OnInit {
 
     importFile(): void {
         if(this.fileToImport) {
+            this.isImporting = true;
             const formData = new FormData();
             formData.append('file', this.fileToImport);
-            this.apiService.importData(formData).subscribe(() => {
+            this.apiService.importStudentData(formData).subscribe(() => {
+                this.isImporting = false;
                 this.importClicked = false;
             });
         }

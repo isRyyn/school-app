@@ -100,11 +100,20 @@
                 class="fa-solid fa-backward"></i></button>
     </div>
 </ng-container>
-<h4 class="mt-5">
-    <i class="fa-solid fa-circle-right"></i>
-    Fee Details
-    <button class="btn btn-danger app-btn app-danger download-btn" title="Download" (click)="download()"><i class="fa-solid fa-file-arrow-down"></i></button>
-</h4>
+<div class="row align-items-end">
+    <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 col-xs-12 col-12">
+        <h4 class="mt-5">
+            <i class="fa-solid fa-circle-right"></i>
+            Fee Details
+        </h4>      
+    </div>
+    <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 col-xs-12 col-12 text-end mt-3 import-btn">
+        <button class="btn btn-danger app-btn app-danger download-btn" title="Download" (click)="download()"><i class="fa-solid fa-file-arrow-down"></i></button>
+        <input *ngIf="importClicked" type="file" class="import-input" (change)="onImportFileChange($event)">
+        <button *ngIf="!importClicked" class="btn btn-primary app-btn app-primary" (click)="importData()" [disabled]="isExpanded">Import</button>
+        <button *ngIf="importClicked" class="btn btn-primary app-btn app-primary" (click)="importFile()">{{ isImporting ? 'Saving...' : 'Save' }}</button>
+    </div>
+</div>
 <div class="row mt-1" *ngIf="!studentId">
     <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 col-6 pt-1">
         <ng-select
