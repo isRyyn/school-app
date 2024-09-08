@@ -10,8 +10,8 @@ import { AuthService } from './auth.service';
 })
 export class ApiService {
 
-    private baseHost = 'http://localhost:8080';
-    private baseUrl = 'http://localhost:8080/api';
+    private baseHost = 'https://artistic-strictly-mullet.ngrok-free.app';
+    private baseUrl = `${this.baseHost}/api`;
 
     constructor(
         private httpClient: HttpClient,
@@ -78,7 +78,8 @@ export class ApiService {
     }
 
     saveStudent(payload: FormData): Observable<StudentModel> {
-        return this.httpClient.post<StudentModel>(`${this.baseUrl}/students`, payload);
+        const sessionId = this.authService.getSessionId();
+        return this.httpClient.post<StudentModel>(`${this.baseUrl}/students/${sessionId}`, payload);
     }
 
     promoteStudents(studentIds: number[], standardIds: number[], sessionId: number): Observable<void> {
@@ -97,8 +98,16 @@ export class ApiService {
     /**
      * Import api
     */
-    importData(file: FormData): Observable<void> {
-        return this.httpClient.post<void>(`${this.baseUrl}/import`, file);
+    importStudentData(file: FormData): Observable<void> {
+        return this.httpClient.post<void>(`${this.baseUrl}/import/student`, file);
+    }
+
+    importFeesData(file: FormData): Observable<void> {
+        return this.httpClient.post<void>(`${this.baseUrl}/import/fees`, file);
+    }
+
+    importMarksData(file: FormData): Observable<void> {
+        return this.httpClient.post<void>(`${this.baseUrl}/import/marks`, file);
     }
 
     /** 
@@ -135,7 +144,8 @@ export class ApiService {
      * Fees api
      */
     getAllFee(): Observable<FeeModel[]> {
-        return this.httpClient.get<FeeModel[]>(`${this.baseUrl}/fee`);
+        const sessionId = this.authService.getSessionId();
+        return this.httpClient.get<FeeModel[]>(`${this.baseUrl}/fee/${sessionId}`);
     }
 
     getAllFeesByStudentId(studentId: number): Observable<FeeModel[]> {
