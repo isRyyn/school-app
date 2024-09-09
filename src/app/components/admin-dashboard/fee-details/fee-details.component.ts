@@ -282,6 +282,7 @@ export class FeeDetailsComponent implements OnInit {
             this.apiService.importFeesData(formData).subscribe(() => {
                 this.isImporting = false;
                 this.importClicked = false;
+                location.reload();
             });
         }
     }

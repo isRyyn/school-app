@@ -338,6 +338,7 @@ export class StudentDetailsComponent implements OnInit {
             this.apiService.importStudentData(formData).subscribe(() => {
                 this.isImporting = false;
                 this.importClicked = false;
+                location.reload();
             });
         }
     }
