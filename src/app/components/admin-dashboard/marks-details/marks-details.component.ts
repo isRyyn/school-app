@@ -1,6 +1,6 @@
 import { NgSelectModule } from '@ng-select/ng-select';
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../../services/api.service';
@@ -24,12 +24,14 @@ import jsPDF from 'jspdf';
     styleUrl: './marks-details.component.scss',
 })
 export class MarksDetailsComponent implements OnInit {
+    @Input() isTeacher?: boolean;
     @ViewChild('download', { static: false }) contentToDownload!: ElementRef;
     action = Action;
     examType = ExamType;
 
     studentsList: StudentModel[] = [];
     subjectsList: SubjectModel[] = [];
+    filteredSubjectsList: SubjectModel[] = [];
     standardsList: StandardModel[] = [];
     filteredStudentsList: StudentModel[] = [];
     examsList: ArrayObject[] = [];
@@ -95,7 +97,7 @@ export class MarksDetailsComponent implements OnInit {
         marksArray.clear();
         
         filteredStudentsList.forEach((student, i) => {
-            this.subjectsList.forEach((subject, j) => {
+            this.filteredSubjectsList.forEach((subject, j) => {
                 
                 const group = this.groupName(i, j);
                 const formGroup = this.fb.group({
@@ -118,7 +120,7 @@ export class MarksDetailsComponent implements OnInit {
     }
 
     groupName(row: number, col: number): number {
-        return (row * this.subjectsList.length) + col;
+        return (row * this.filteredSubjectsList.length) + col;
     }
 
     onInputChange(): void {
@@ -152,6 +154,12 @@ export class MarksDetailsComponent implements OnInit {
 
     onEdit(): void {
         this.marksForm.get('marksArray')?.enable();
+        (this.marksForm.get('marksArray') as FormArray).controls.forEach((control: any) => {
+            const markControl = control?.['controls']?.['marks'];
+            if(markControl.value != null && this.isTeacher) {
+                control?.['controls']?.['marks']?.disable();
+            }
+        });
         this.editBtn = false;
         this.saveBtn = true;
     }
@@ -171,14 +179,23 @@ export class MarksDetailsComponent implements OnInit {
         if (standardId && exam) {
             this.apiService.getSpecific(standardId).subscribe(r => {
                 const filteredList = r.filter(x => x.sessionId == this.sessionId && x.standardId == standardId).map(y => y.studentId);
-                this.filteredStudentsList = this.studentsList.filter(x => filteredList.includes(x.id));
-                this.subjectsList = this.subjectsList.filter(x => x.standardIds.includes(standardId));
+                this.filteredStudentsList = this.studentsList.filter(x => filteredList.includes(x.id));                
+                this.filteredSubjectsList = this.subjectsList.filter(x => x.standardIds.includes(standardId));
+                
                 this.apiService.getMarksForStandardAndExamName(standardId, exam).subscribe(r => {
                     this.marksList = r;
                     this.setTotalAndPercentageMaps(totalMarks)
                     this.updateMarksArray(this.filteredStudentsList, totalMarks);
                 });
             });
+        }
+    }
+
+    get maxMarks(): number { 
+        if(this.marksForm.value.exam == 'ANNUAL' || this.marksForm.value.exam == 'HALF_YEARLY') {
+            return MaxMarks.EXAM;
+        } else {
+            return MaxMarks.TEST;
         }
     }
 
@@ -190,7 +207,7 @@ export class MarksDetailsComponent implements OnInit {
             });
             this.totalMarksMap.set(student.id, sum);
 
-            const percent = (sum / (this.subjectsList.length * maxMarks)) * 100;
+            const percent = (sum / (this.filteredSubjectsList.length * maxMarks)) * 100;
             this.percentageMap.set(student.id, percent);
         });
     }
@@ -208,6 +225,19 @@ export class MarksDetailsComponent implements OnInit {
         const order = this.sortMap.get(key);
         // apply sorting logic
         this.sortMap.set(key, !order);
+        if(!order) {
+            this.filteredStudentsList = this.filteredStudentsList.sort((a, b) => {
+                const percentageA = this.totalMarksMap.get(a.id)!;
+                const percentageB = this.totalMarksMap.get(b.id)!;
+                return percentageA - percentageB;
+              });
+        } else {
+            this.filteredStudentsList = this.filteredStudentsList.sort((a, b) => {
+                const percentageA = this.totalMarksMap.get(a.id)!;
+                const percentageB = this.totalMarksMap.get(b.id)!;
+                return percentageB - percentageA;
+              });
+        }  
     }
 
 

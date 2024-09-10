@@ -23,6 +23,11 @@
 
     input {
         //min-width: 70px ;
-        width: 100%;
+        width: 60px;
+        display: inline-block;
+    }
+
+    .text-muted {
+        font-size: 0.8em;
     }
 }

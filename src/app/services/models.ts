@@ -168,3 +168,42 @@ export interface SessionStandardMapping {
     standardId: number;
     studentId: number;
 }
+
+export interface TransferCertificateModel {
+    id: number;
+    studentId: number;
+    number: string;
+    district: string;
+    name: string;
+    aadhar: string;
+    dob: string;
+    ageYears: string;
+    ageMonths: string;
+    mother: string;
+    father: string;
+    religion: string;
+    place: string;
+    tehsil: string;
+    studentDistrict: string;
+    livingInStateSince: string;
+    dateOfAdmission: string;
+    numberOfEntryRegister: string;
+    lastDateOfSchool: string;
+    dateOfLeaving: string;
+    reason: string;
+    conduct: string;
+    lastClassPassed: string;
+    dateOfPassing: string;
+    lastClassAttended: string;
+    language: string;
+    freeOfCost: string;
+    freeOfCostClass: string;
+    daysSchoolOpened: string;
+    daysAttended: string;
+    absentDays: string;
+    fatherBusiness: string;
+    day: string;
+    month: string;
+    year: string;
+    principal: string;
+}

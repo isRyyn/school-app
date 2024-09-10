@@ -1,29 +1,240 @@
-<h4 class="mt-5">
+<h4 class="mt-3">
     <i class="fa-solid fa-circle-right"></i>
     Generate TC
 </h4>
 <div class="box-container" *ngIf="isDataLoaded; else showLoader">
     <div class="row">
         <div class="col-md-4 col-sm-12">
-            <ng-select
-            [items]="studentsList"
-            bindLabel="firstName"
-            placeholder="Search by student"
-            [(ngModel)]="student"/>
+            <ng-select [items]="studentsList" bindLabel="firstName" placeholder="Search student"
+                [(ngModel)]="student" (change)="studentChanged($event)">
+                <ng-template ng-option-tmp let-item="item">
+                    {{ item.firstName + ' ' + item.lastName + ' (' + item.uDiasCode + ')' }}
+                </ng-template>
+            </ng-select>
         </div>
-        <button class="btn btn-primary app-primary" (click)="generate()">Generate</button>
     </div>
 
-    <div class="row mt-5">
-        <div class="tc-container">
-            <h3 class="mb-3">School Name</h3> 
-            <div class="label">
-                <span>Student's Name: </span>
-                <span></span>
+    <div class="row mt-5 tc-container" *ngIf="student || showForm" #download>
+        <h1 class="text-center">SCHOOL NAME</h1>
+        <form [formGroup]="studentForm">
+            <h4 class="text-center">Transfer Certificate</h4>
+            <div class="row mt-3">
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>School and Register No</label>
+                    <input formControlName="number" class="form-control"/>
+                </div>
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>District</label>
+                    <input formControlName="district" class="form-control"/>
+                </div>
             </div>
+
+            <div class="row mt-3">
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>Student's name</label>
+                    <input formControlName="name" class="form-control"/>
+                </div>
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>Reason for leaving</label>
+                    <input formControlName="reason" class="form-control"/>
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>Student's Aadhar</label>
+                    <input formControlName="aadhar" class="form-control"/>
+                </div>
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>Conduct</label>
+                    <input formControlName="conduct" class="form-control"/>
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>Date of Birth</label>
+                    <input formControlName="dob" class="form-control"/>
+                </div>
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>Last class passed</label>
+                    <input formControlName="lastClassPassed" class="form-control"/>
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>Age (at the time of leaving)</label>
+                    <div class="d-flex">
+                        <input formControlName="ageYears" class="form-control dual-input" placeholder="Years"/>
+                        <input formControlName="ageMonths" class="form-control dual-input mx-2" placeholder="Months"/>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>Date of passing</label>
+                    <input formControlName="dateOfPassing" class="form-control"/>
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>Mother's name</label>
+                    <input formControlName="mother" class="form-control"/>
+                </div>
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>(OR) Last class attended</label>
+                    <input formControlName="lastClassAttended" class="form-control"/>
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>Father's name</label>
+                    <input formControlName="father" class="form-control"/>
+                </div>
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>Student's Language</label>
+                    <input formControlName="language" class="form-control"/>
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>Religion</label>
+                    <input formControlName="religion" class="form-control"/>
+                </div>
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <h5 class="text-bold">Other Important Information</h5>
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>Place of living</label>
+                    <input formControlName="place" class="form-control"/>
+                </div>
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>Free of cost student?</label>
+                    <input formControlName="freeOfCost" class="form-control"/>
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>Place</label>
+                    <div class="d-flex">
+                        <input formControlName="tehsil" class="form-control dual-input" placeholder="Tehsil">
+                        <input formControlName="studentDistrict" class="form-control dual-input mx-2" placeholder="District"/>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>No of Days School Opened</label>
+                    <input formControlName="daysSchoolOpened" class="form-control"/>
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>Living in state since</label>
+                    <input formControlName="livingInStateSince" class="form-control"/>
+                </div>
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>No of Days Student Attended</label>
+                    <input formControlName="daysAttended" class="form-control"/>
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>Date of Admission</label>
+                    <input formControlName="dateOfAdmission" class="form-control"/>
+                </div>
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>No of Days of Absence</label>
+                    <input formControlName="absentDays" class="form-control"/>
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>Last day of School</label>
+                    <input formControlName="lastDateOfSchool" class="form-control"/>
+                </div>
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>Father's business</label>
+                    <input formControlName="fatherBusiness" class="form-control"/>
+                </div>
+            </div>
+            <div class="row mt-1">
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <label>Date of leaving school</label>
+                    <input formControlName="dateOfLeaving" class="form-control"/>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <hr>
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <div class="d-flex">
+                        <div clas="col-6">
+                            <label>Date</label>
+                            <input formControlName="day" class="form-control"/>
+                        </div>
+                        <div clas="col-6">
+                            <label>Month</label>
+                            <input formControlName="month" class="form-control mx-2"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12 pt-2">
+                    <div class="d-flex">
+                        <div clas="col-xs-6">
+                            <label>Year</label>
+                            <input formControlName="year" class="form-control"/>
+                        </div>
+                        <div clas="col-xs-6">
+                            <label>Head of Institution</label>
+                            <input formControlName="principal" class="form-control signature mx-2"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row mt-3" *ngIf="student || showForm">
+        <div class="d-flex justify-content-center detail-btn">
+            <button class="btn btn-success m-right-5" (click)="onSave()">Download & Save</button>
+            <button class="btn btn-danger m-left-5" (click)="onReset()">Reset</button>
         </div>
     </div>
-    
+</div>
+
+<ng-container *ngIf="false">
+    <h4 class="mt-5">
+        <i class="fa-solid fa-circle-right"></i>
+        Register Entry
+    </h4>
+    <div class="box-container" *ngIf="isDataLoaded; else showLoader"></div>
+</ng-container>
+
+
+<h4 class="mt-5">
+    <i class="fa-solid fa-circle-right"></i>
+    TC History
+</h4>
+<div class="box-container" *ngIf="isDataLoaded; else showLoader">
+    <div class="app-table-container">
+        <table class="app-table">
+            <thead>
+                <tr>
+                    <th>S. No.</th>
+                    <th>Student</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let tc of tcList; let i=index">
+                    <td>{{i+1}}</td>
+                    <td>{{ tc?.name }}</td>
+                    <td>{{ tc?.day }}-{{ tc.month }}-{{ tc.year }}</td>
+                    <td>
+                        <a appScrollPageToSection class="link-primary" (click)="onView(tc)">View</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <ng-template #showLoader>

@@ -33,7 +33,7 @@
             <thead>
                 <tr>
                     <th class="student-name">Student</th>
-                    <th class="subject-name" *ngFor="let subject of subjectsList">{{ subject.name }}</th>
+                    <th class="subject-name" *ngFor="let subject of filteredSubjectsList">{{ subject.name }}</th>
                     <th (click)="sortTable('total')" class="student-total">
                         Total
                         <i *ngIf="sortMap.get('total')" class="fa-solid fa-sort-down"></i>
@@ -48,11 +48,11 @@
             </thead>
             <tbody formArrayName="marksArray">
                 <tr *ngFor="let student of filteredStudentsList; let i = index">
-                    <td>{{ studentsList[i].firstName }}</td>
-                    <td *ngFor="let subject of subjectsList; let j = index" [formGroupName]="groupName(i, j)">
-                        <input type="number" formControlName="marks" />
+                    <td>{{ filteredStudentsList[i].firstName }}</td>
+                    <td *ngFor="let subject of filteredSubjectsList; let j = index" [formGroupName]="groupName(i, j)">
+                        <input type="number" formControlName="marks" /><span class="text-muted"> / {{ maxMarks }}</span>
                     </td>
-                    <td>{{ getTotalMarks(student.id) }}</td>
+                    <td>{{ getTotalMarks(student.id) }}<span class="text-muted"> / {{ maxMarks * filteredSubjectsList.length }}</span></td>
                     <td>{{ getPercentage(student.id) | number:'1.2-2' }}</td>
                 </tr>
             </tbody>

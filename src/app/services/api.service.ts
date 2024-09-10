@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FeeModel, MarksModel, PageModel, ParentModel, SessionModel, SessionStandardMapping, StandardModel, StudentModel, SubjectModel, TeacherModel, TransactionModel, UserModel, VehicleModel } from './models';
+import { FeeModel, MarksModel, PageModel, ParentModel, SessionModel, SessionStandardMapping, StandardModel, StudentModel, SubjectModel, TeacherModel, TransactionModel, TransferCertificateModel, UserModel, VehicleModel } from './models';
 import { ExamType, Role } from './enums';
 import { AuthService } from './auth.service';
 
@@ -99,7 +99,8 @@ export class ApiService {
      * Import api
     */
     importStudentData(file: FormData): Observable<void> {
-        return this.httpClient.post<void>(`${this.baseUrl}/import/student`, file);
+        const sessionId = this.authService.getSessionId();
+        return this.httpClient.post<void>(`${this.baseUrl}/import/student/${sessionId}`, file);
     }
 
     importFeesData(file: FormData): Observable<void> {
@@ -275,5 +276,19 @@ export class ApiService {
         return this.httpClient.get<SessionStandardMapping[]>(`${this.baseUrl}/session-standard-mapping/${sessionId}/${standardId}`);
     }
 
+    /**
+     * Transfer Certificate api
+     */
+    getAllTC(): Observable<TransferCertificateModel[]> {
+        return this.httpClient.get<TransferCertificateModel[]>(`${this.baseUrl}/tc`);
+    }
+
+    getTCById(id: number): Observable<TransferCertificateModel> {
+        return this.httpClient.get<TransferCertificateModel>(`${this.baseUrl}/tc/${id}`);
+    }
+
+    addTc(tc: TransferCertificateModel): Observable<void> {
+        return this.httpClient.post<void>(`${this.baseUrl}/tc`, tc);
+    }
 }
 

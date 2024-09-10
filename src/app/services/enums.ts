@@ -66,7 +66,7 @@ export enum BannerType {
 
 export enum MaxMarks {
     TEST = 20,
-    EXAM = 100
+    EXAM = 80
 }
 
 export enum MonthSearch {
