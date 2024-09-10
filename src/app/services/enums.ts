@@ -83,3 +83,21 @@ export enum MonthSearch {
     November = '11',
     December = '12'
 }
+
+export enum TCRegisterClasses {
+    NURSERY = 'Nursery',
+    LKG = 'LKG',
+    UKG = 'UKG',
+    FIRST = 'I',
+    SECOND = 'II',
+    THIRD = 'III',
+    FOURTH = 'IV',
+    FIFTH = 'V',
+    SIXTH = 'VI',
+    SEVENTH = 'VII',
+    EIGHTH = 'VIII',
+    NINTH = 'IX',
+    TENTH = 'X',
+    ELEVENTH = 'XI',
+    TWELFTH = 'XII' 
+}

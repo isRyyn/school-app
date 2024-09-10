@@ -207,3 +207,36 @@ export interface TransferCertificateModel {
     year: string;
     principal: string;
 }
+
+export interface TransferCertificateRegisterClassModel {
+    className: string;
+    dateOfAdmission: string;
+    dateOfPromotion: string;
+    dateOfRemoval: string;
+    causeOfRemoval: string;
+    year: string;
+    conduct: string;
+    work: string;
+    sign: string;
+}
+
+export interface TransferCertificateRegisterModel {
+    id: number;
+    studentId: number;
+    admissionFileNo: string;
+    withdrawlFileNo: string;
+    transferCertificateNo: string;
+    scholarNameAndAadhaar: string;
+    occupationAndAddress: string;
+    dob: string;
+    lastInstitution: string;
+    religion: string;
+    mother: string;
+    father: string;
+    lengthOfResidence: string;
+    bankName: string;
+    bankAccount: string;
+    classDetails: any; 
+    dated: string;
+    headOfInstitution: string;
+}

@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FeeModel, MarksModel, PageModel, ParentModel, SessionModel, SessionStandardMapping, StandardModel, StudentModel, SubjectModel, TeacherModel, TransactionModel, TransferCertificateModel, UserModel, VehicleModel } from './models';
+import { FeeModel, MarksModel, PageModel, ParentModel, SessionModel, SessionStandardMapping, StandardModel, StudentModel, SubjectModel, TeacherModel, TransactionModel, TransferCertificateModel, TransferCertificateRegisterModel, UserModel, VehicleModel } from './models';
 import { ExamType, Role } from './enums';
 import { AuthService } from './auth.service';
 
@@ -283,12 +283,20 @@ export class ApiService {
         return this.httpClient.get<TransferCertificateModel[]>(`${this.baseUrl}/tc`);
     }
 
+    getAllTcRegister(): Observable<TransferCertificateRegisterModel[]> {
+        return this.httpClient.get<TransferCertificateRegisterModel[]>(`${this.baseUrl}/tc/register`);
+    }
+
     getTCById(id: number): Observable<TransferCertificateModel> {
         return this.httpClient.get<TransferCertificateModel>(`${this.baseUrl}/tc/${id}`);
     }
 
     addTc(tc: TransferCertificateModel): Observable<void> {
         return this.httpClient.post<void>(`${this.baseUrl}/tc`, tc);
+    }
+
+    addTcRegiseter(payload: TransferCertificateRegisterModel): Observable<void> {
+        return this.httpClient.post<void>(`${this.baseUrl}/tc/register`, payload);
     }
 }
 

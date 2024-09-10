@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col-md-4 col-sm-12">
             <ng-select [items]="studentsList" bindLabel="firstName" placeholder="Search student"
-                [(ngModel)]="student" (change)="studentChanged($event)">
+                [(ngModel)]="student" (change)="studentChanged()">
                 <ng-template ng-option-tmp let-item="item">
                     {{ item.firstName + ' ' + item.lastName + ' (' + item.uDiasCode + ')' }}
                 </ng-template>
@@ -199,12 +199,147 @@
     </div>
 </div>
 
-<ng-container *ngIf="false">
+<ng-container>
     <h4 class="mt-5">
         <i class="fa-solid fa-circle-right"></i>
         Register Entry
     </h4>
-    <div class="box-container" *ngIf="isDataLoaded; else showLoader"></div>
+    <div class="box-container">
+        <div class="row">
+            <div class="col-md-4 col-sm-12">
+                <ng-select [items]="studentsList" bindLabel="firstName" placeholder="Search student"
+                    [(ngModel)]="student2" (change)="student2Changed()">
+                    <ng-template ng-option-tmp let-item="item">
+                        {{ item.firstName + ' ' + item.lastName + ' (' + item.uDiasCode + ')' }}
+                    </ng-template>
+                </ng-select>
+            </div>
+        </div>
+        <ng-container *ngIf="student2 || showForm2">
+            <div class="row mt-5">
+                <h3 class="text-center">Scholar's Register</h3>
+                <form [formGroup]="registerForm">
+                    <div class="row mt-3">
+                        <div class="col-md-4 col-sm-12 pt-2">
+                            <label>Admission File No</label>
+                            <input formControlName="admissionFileNo" class="form-control"/>
+                        </div>
+                        <div class="col-md-4 col-sm-12 pt-2">
+                            <label>Withdrawl File No</label>
+                            <input formControlName="withdrawlFileNo" class="form-control"/>
+                        </div>
+                        <div class="col-md-4 col-sm-12 pt-2">
+                            <label>Transfer Certificate No</label>
+                            <input formControlName="transferCertificateNo" class="form-control"/>
+                        </div>
+                    </div>
+    
+                    <div class="row mt-3">
+                        <div class="col-md-4 col-sm-12 pt-2">
+                            <label>Scholar's Name/Aadhar No</label>
+                            <input formControlName="scholarNameAndAadhaar" class="form-control"/>
+                        </div>
+                        <div class="col-md-4 col-sm-12 pt-2">
+                            <label>Name occupation and address</label>
+                            <input formControlName="occupationAndAddress" class="form-control"/>
+                        </div>
+                        <div class="col-md-4 col-sm-12 pt-2">
+                            <label>Date of Birth</label>
+                            <input formControlName="dob" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-4 col-sm-12 pt-2">
+                            <label>Caste or Religion</label>
+                            <input formControlName="religion" class="form-control"/>
+                        </div>
+                        <div class="col-md-4 col-sm-12 pt-2">
+                            <label>Mother's Name</label>
+                            <input formControlName="mother" class="form-control"/>
+                        </div>
+                        <div class="col-md-4 col-sm-12 pt-2">
+                            <label>Father's (Guardian) Name</label>
+                            <input formControlName="father" class="form-control"/>
+                        </div>
+                    </div>
+    
+                    <div class="row mt-3">
+                        <div class="col-md-6 col-sm-12 pt-2">
+                            <label>Last institution attended</label>
+                            <input formControlName="lastInstitution" class="form-control"/>
+                        </div>
+                        <div class="col-md-6 col-sm-12 pt-2">
+                            <label>Length of residence in this province</label>
+                            <input formControlName="lengthOfResidence" class="form-control"/>
+                        </div>
+                    </div>
+    
+                    <div class="row mt-3">
+                        <div class="col-md-6 col-sm-12 pt-2">
+                            <label>Bank Name</label>
+                            <input formControlName="bankName" class="form-control"/>
+                        </div>
+                        <div class="col-md-6 col-sm-12 pt-2">
+                            <label>Bank A/C No.</label>
+                            <input formControlName="bankAccount" class="form-control"/>
+                        </div>
+                    </div>
+                </form>
+            </div>        
+            <div class="app-table-container register-table mt-5">
+                <table class="app-table">
+                    <thead>
+                        <tr>
+                            <th>Class</th>
+                            <th>Date of Admission</th>
+                            <th>Date of Promotion</th>
+                            <th>Date of removal</th>
+                            <th>Cause of removal</th>
+                            <th>Year</th>
+                            <th>Conduct</th>
+                            <th>Work</th>
+                            <th>Sign</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of tcRegisterClassesArr" [formGroup]="classForm(item.value)">
+                            <td>{{ item.name }}</td>
+                                <td>
+                                    <input class="form-control" formControlName="dateOfAdmission"/>
+                                </td>
+                                <td>
+                                    <input class="form-control" formControlName="dateOfPromotion"/> 
+                                </td>
+                                <td>
+                                    <input class="form-control" formControlName="dateOfRemoval"/>
+                                </td>
+                                <td>
+                                    <input class="form-control" formControlName="causeOfRemoval"/>
+                                </td>
+                                <td>
+                                    <input class="form-control" formControlName="year"/> 
+                                </td>
+                                <td>
+                                    <input class="form-control" formControlName="conduct"/>
+                                </td>
+                                <td>
+                                    <input class="form-control" formControlName="work"/>
+                                </td>
+                                <td>
+                                    <input class="form-control" formControlName="sign"/> 
+                                </td>      
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </ng-container>
+    </div>
+    <div class="row mt-3" *ngIf="student2 || showForm2">
+        <div class="d-flex justify-content-center detail-btn">
+            <button class="btn btn-success m-right-5" (click)="onRegisterSave()">Save</button>
+            <button class="btn btn-danger m-left-5" (click)="onRegisterReset()">Reset</button>
+        </div>
+    </div>
 </ng-container>
 
 
