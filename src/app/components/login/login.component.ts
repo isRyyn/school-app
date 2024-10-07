@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -10,12 +10,16 @@ import { CommonModule } from '@angular/common';
 import { UtilService } from '../../services/util.service';
 import { AuthService } from '../../services/auth.service';
 import { ApiService } from '../../services/api.service';
+import { AuthInterceptor } from '../../services/auth.interceptor';
 
 @Component({
     selector: 'app-login',
     standalone: true,
     imports: [FormsModule, HttpClientModule, NgSelectModule, LoginComponent, NgSelectModule, CommonModule, ReactiveFormsModule],
-    providers: [ApiService],
+    providers: [
+        ApiService,
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    ],
     templateUrl: './login.component.html',
     styleUrl: './login.component.scss'
 })

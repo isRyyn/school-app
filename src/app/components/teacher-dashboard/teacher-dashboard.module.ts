@@ -6,6 +6,7 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { ApiService } from "../../services/api.service";
 import { MarksDetailsComponent } from "../admin-dashboard/marks-details/marks-details.component";
 import { CachingInterceptor } from "../../services/caching-interceptor";
+import { AuthInterceptor } from "../../services/auth.interceptor";
 
 const teacherRoutes: Route[] = [
     {
@@ -26,7 +27,8 @@ const teacherRoutes: Route[] = [
     ],
     providers: [
         ApiService,
-        { provide: HTTP_INTERCEPTORS, useClass: CachingInterceptor, multi: true }
+        { provide: HTTP_INTERCEPTORS, useClass: CachingInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
     ]
 })
 

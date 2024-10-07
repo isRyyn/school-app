@@ -17,6 +17,7 @@ import { ManageVehiclesComponent } from './manage-vehicles/manage-vehicles.compo
 import { ManageUsersComponent } from './manage-users/manage-users.component';
 import { GenerateTcComponent } from './generate-tc/generate-tc.component';
 import { CachingInterceptor } from '../../services/caching-interceptor';
+import { AuthInterceptor } from '../../services/auth.interceptor';
 
 const adminRoutes: Routes = [
     {
@@ -49,7 +50,8 @@ const adminRoutes: Routes = [
         HttpClientModule
     ],
     providers: [
-        { provide: HTTP_INTERCEPTORS, useClass: CachingInterceptor, multi: true }
+        { provide: HTTP_INTERCEPTORS, useClass: CachingInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
     ]
 })
 export class AdminDashboardModule { }

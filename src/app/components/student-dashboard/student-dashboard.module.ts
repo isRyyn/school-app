@@ -10,6 +10,7 @@ import { FeeDetailsComponent } from "../admin-dashboard/fee-details/fee-details.
 import { ViewStudentComponent } from "../admin-dashboard/student-details/view-student/view-student.component";
 import { ApiService } from '../../services/api.service';
 import { CachingInterceptor } from '../../services/caching-interceptor';
+import { AuthInterceptor } from '../../services/auth.interceptor';
 
 const studentRoutes: Route[] = [
     {
@@ -49,7 +50,8 @@ const studentRoutes: Route[] = [
     ],
     providers: [
         ApiService,
-        { provide: HTTP_INTERCEPTORS, useClass: CachingInterceptor, multi: true }
+        { provide: HTTP_INTERCEPTORS, useClass: CachingInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
     ]
 })
 export class StudentDashboardModule { }
