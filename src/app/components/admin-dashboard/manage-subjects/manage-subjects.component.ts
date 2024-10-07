@@ -79,6 +79,7 @@ export class ManageSubjectsComponent implements OnInit {
                 this.apiService.getAllSubjects().subscribe(r => {
                     this.subjectsList = r;
                     this.subjectForm.reset();
+                    location.reload();
                     setTimeout(() => this.isDataLoaded = true, 100);
                 });
             });

@@ -1,5 +1,5 @@
 import { ManageSessionsComponent } from './manage-sessions/manage-sessions.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminDashboardComponent } from './admin-dashboard.component';
@@ -16,6 +16,7 @@ import { DynamicPageComponent } from './manage-pages/dynamic-page/dynamic-page.c
 import { ManageVehiclesComponent } from './manage-vehicles/manage-vehicles.component';
 import { ManageUsersComponent } from './manage-users/manage-users.component';
 import { GenerateTcComponent } from './generate-tc/generate-tc.component';
+import { CachingInterceptor } from '../../services/caching-interceptor';
 
 const adminRoutes: Routes = [
     {
@@ -46,6 +47,9 @@ const adminRoutes: Routes = [
     imports: [
         RouterModule.forChild(adminRoutes),
         HttpClientModule
+    ],
+    providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: CachingInterceptor, multi: true }
     ]
 })
 export class AdminDashboardModule { }

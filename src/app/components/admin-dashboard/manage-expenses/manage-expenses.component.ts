@@ -103,6 +103,7 @@ export class ManageExpensesComponent implements OnInit {
         if (this.expenseForm.valid) {
             this.apiService.saveTransaction(this.expenseForm.value).subscribe(() => {
                 alert('Transaction completed!');
+                location.reload();
                 this.onReset();
                 this.loadData();
             });

@@ -89,10 +89,12 @@ export class ManageUsersComponent {
             if(this.isEdit) {
                 this.apiService.updateCredentials(this.userForm.value).subscribe(() => {
                     this.loadData();
+                    location.reload();
                 });
             } else {
                 this.apiService.register(this.userForm.value).subscribe(() => {
                     this.loadData();
+                    location.reload();
                 }, (error) => {
                     if(error.status == 417) {
                         const error = 'Email or mobile number is already in use';

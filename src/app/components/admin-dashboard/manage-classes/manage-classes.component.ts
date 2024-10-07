@@ -80,6 +80,7 @@ export class ManageClassesComponent implements OnInit {
 
             
             this.apiService.saveStandard(this.classForm.value).subscribe(() => {
+                location.reload();
                 this.apiService.getAllStandards().subscribe(r => {
                     this.standardsList = r;
                     this.classForm.reset();

@@ -147,6 +147,7 @@ export class MarksDetailsComponent implements OnInit {
         this.apiService.saveMarks(payload).subscribe(() => {
             this.isDataFiltered = false;
             this.saveBtn = false;
+            location.reload();
             this.showBtn = true;
             this.marksForm.reset();
         });

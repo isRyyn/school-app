@@ -2,9 +2,10 @@ import { NgModule } from "@angular/core";
 import { Route, RouterModule } from "@angular/router";
 import { TeacherDashboardComponent } from "./teacher-dashboard.component";
 import { CommonModule } from "@angular/common";
-import { HttpClientModule } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { ApiService } from "../../services/api.service";
 import { MarksDetailsComponent } from "../admin-dashboard/marks-details/marks-details.component";
+import { CachingInterceptor } from "../../services/caching-interceptor";
 
 const teacherRoutes: Route[] = [
     {
@@ -24,7 +25,8 @@ const teacherRoutes: Route[] = [
         MarksDetailsComponent
     ],
     providers: [
-        ApiService
+        ApiService,
+        { provide: HTTP_INTERCEPTORS, useClass: CachingInterceptor, multi: true }
     ]
 })
 

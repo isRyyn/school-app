@@ -134,6 +134,7 @@ export class GenerateTcComponent implements OnInit {
         if(!this.registerForm.disabled) {
             this.apiService.addTcRegiseter(payload).subscribe(() => {
                 this.sharedService.showBanner(BannerType.SUCCESS, 'Saved successfully!');
+                location.reload();
             });
         } 
         this.onRegisterReset();        

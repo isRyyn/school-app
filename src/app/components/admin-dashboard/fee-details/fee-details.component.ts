@@ -142,6 +142,7 @@ export class FeeDetailsComponent implements OnInit {
                 this.studentSelectForm.reset();
                 this.isDataFiltered = false;
                 this.isExpanded = false;
+                location.reload();
                 this.apiService.getAllFee().subscribe(x => {
                     this.fullFeeList = this.filteredFeesList = x;
                     this.isDataFiltered = true;

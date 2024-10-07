@@ -51,6 +51,7 @@ export class ManageSessionsComponent {
             this.apiService.addSession(this.sessionForm.value).subscribe(() => {
                 this.onReset();
                 this.loadData();
+                location.reload();
             });
         } else {
             this.sessionForm.markAllAsTouched();

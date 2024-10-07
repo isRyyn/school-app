@@ -90,6 +90,7 @@ export class ManageTeachersComponent implements OnInit {
                 this.apiService.getAllTeachers().subscribe(r => {
                     this.teachersList = r;
                     this.teachersForm.reset();
+                    location.reload();
                     setTimeout(() => this.isDataLoaded = true, 100);
                 });
             });

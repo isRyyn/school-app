@@ -54,6 +54,7 @@ export class ManageVehiclesComponent implements OnInit {
         if (this.vehicleForm.valid) {
             this.apiService.saveVehicle(this.vehicleForm.value).subscribe(() => {
                 this.onReset();
+                location.reload();
                 this.loadData();
             });
         } else {

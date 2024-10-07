@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StudentFeesComponent } from './student-fees/student-fees.component';
@@ -9,6 +9,7 @@ import { StudentDashboardComponent } from './student-dashboard.component';
 import { FeeDetailsComponent } from "../admin-dashboard/fee-details/fee-details.component";
 import { ViewStudentComponent } from "../admin-dashboard/student-details/view-student/view-student.component";
 import { ApiService } from '../../services/api.service';
+import { CachingInterceptor } from '../../services/caching-interceptor';
 
 const studentRoutes: Route[] = [
     {
@@ -47,7 +48,8 @@ const studentRoutes: Route[] = [
         ViewStudentComponent
     ],
     providers: [
-        ApiService
+        ApiService,
+        { provide: HTTP_INTERCEPTORS, useClass: CachingInterceptor, multi: true }
     ]
 })
 export class StudentDashboardModule { }
