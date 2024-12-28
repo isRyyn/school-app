@@ -66,8 +66,41 @@
             </div>
             <div class="row mt-3">
                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">
-                    <label>Other</label>
+                    <label>Other 1</label>
                     <input type="number" class="form-control" formControlName="other" placeholder="Other charges"/>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">
+                    <label>Other 2</label>
+                    <input type="number" class="form-control" formControlName="other2" placeholder="Other charges"/>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">
+                    <label>Other 3</label>
+                    <input type="number" class="form-control" formControlName="other3" placeholder="Other charges"/>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">
+                    <label>Unique ID</label>
+                    <input type="text" class="form-control" formControlName="uniqueId" placeholder="Unique ID"/>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">
+                    <label>Discount</label>
+                    <input type="number" class="form-control" formControlName="discount" placeholder="Discount (if any)"/>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12 col-12 pt-3">
+                    <label>Is student Free of Cost?</label>
+                    <div class="d-flex">
+                        <input type="radio" formControlName="foc" [value]="true" (change)="focChanged(true)"/> 
+                        <label class="radio-label">Yes</label>
+                        <input type="radio" formControlName="foc" [value]="false" (change)="focChanged(false)"/>
+                        <label class="radio-label">No</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12">
+                    <label>Notes/Remarks</label>
+                    <textarea class="form-control" formControlName="notes" placeholder="Add notes here..."></textarea>
                 </div>
             </div>
             <div class="row mt-3">
@@ -115,7 +148,7 @@
     </div>
 </div>
 <div class="row mt-1" *ngIf="!studentId">
-    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 col-6 pt-1">
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-6 col-6 pt-1">
         <ng-select
             [items]="studentsList"
             bindLabel="firstName"
@@ -128,7 +161,7 @@
             </ng-template>
         </ng-select>
     </div>
-    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 col-6 pt-1">
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-6 col-6 pt-1">
         <ng-select
             [items]="monthsList"
             bindLabel="name"
@@ -137,7 +170,7 @@
             (change)="searchBy({ value: $event?.name }, 'month')"
         ></ng-select>
     </div>
-    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-xs-6 col-6 pt-1">
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-6 col-6 pt-1">
         <ng-select
             [items]="standardsList"
             bindLabel="name"
@@ -147,17 +180,27 @@
             (change)="searchBy({ value: $event?.id }, 'class')"
         ></ng-select>
     </div>
+    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-xs-6 col-6 pt-1">
+        <input type="text" class="form-control unique-id-search" placeholder="Search by Unique ID" [(ngModel)]="uniqueIdSearch" (input)="searchBy({ value : uniqueIdSearch }, 'uniqueId')"/>
+    </div>
 </div>
-<div *ngIf="!studentId" class="mt-2 filtered-total">
-    <div>{{ filteredTotal }}</div>
-</div>
+<ng-container *ngIf="!studentId">
+    <div class="filtered-total">
+        <span *ngIf="showFilteredTotal" class="float-start">{{ filteredTotal }}</span>
+        <mat-slide-toggle class="float-end" (change)="totalToggle($event)">{{ showFilteredTotal ? 'Hide Total' : 'Show Total' }}</mat-slide-toggle>
+    </div>
+</ng-container>
+
 <div class="box-container">
     <div class="app-table-container" *ngIf="isDataFiltered; else showLoader">
         <table class="app-table" #download>
             <thead>
                 <tr>
                     <th>S. No</th>
-                    <th *ngIf="!studentId">Student</th>
+                    <ng-container *ngIf="!studentId">
+                        <th>Student</th>
+                        <th>Parent's name</th>
+                    </ng-container>
                     <th>Month</th>
                     <th>Total Fee</th>
                     <th>Deposited</th>
@@ -170,7 +213,10 @@
             <tbody>
                 <tr *ngFor="let fee of filteredFeesList; let i = index">
                     <td>{{i+1}}</td>
-                    <td *ngIf="!studentId">{{ getStudent(fee.studentId) }}</td>
+                    <ng-container *ngIf="!studentId">
+                        <td>{{ getStudent(fee.studentId) }}</td>
+                        <td>{{ getStudentParent(fee.studentId) }}</td>
+                    </ng-container>
                     <td>{{ fee?.month | titlecase }}</td>
                     <td>{{ fee?.total }}</td>
                     <td>{{ fee?.deposited }}</td>

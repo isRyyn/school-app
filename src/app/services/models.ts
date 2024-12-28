@@ -88,6 +88,12 @@ export interface FeeModel {
     van: number;
     diary: number;
     other: number;
+    other2: number;
+    other3: number;
+    discount: number;
+    foc: boolean;
+    uniqueId: string;
+    notes: string;
     month: Month;
     date: string;
     studentId: number;

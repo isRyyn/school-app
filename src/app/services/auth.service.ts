@@ -12,29 +12,37 @@ export class AuthService {
     constructor() { }
 
     setAuthToken(token: string, role: string, sessionId: string, userId?: string): void {
-        localStorage.setItem(this.authTokenKey, token);
-        localStorage.setItem(this.userRoleKey, role);
-        localStorage.setItem(this.sessionId, sessionId);
+        sessionStorage.setItem(this.authTokenKey, token);
+        sessionStorage.setItem(this.userRoleKey, role);
+        sessionStorage.setItem(this.sessionId, sessionId);
 
         if(userId) {
-            localStorage.setItem(this.userId, userId);
+            sessionStorage.setItem(this.userId, userId);
         }
     }
 
     getAuthToken(): string | null {
-        return localStorage.getItem(this.authTokenKey);
+        return sessionStorage.getItem(this.authTokenKey);
     }
 
     getUserRole(): string | null {
-        return localStorage.getItem(this.userRoleKey);
+        return sessionStorage.getItem(this.userRoleKey);
     }
 
     getSessionId(): string | null {
-        return localStorage.getItem(this.sessionId);
+        return sessionStorage.getItem(this.sessionId);
+    }
+
+    setSessionId(id: string): void {
+        sessionStorage.setItem(this.sessionId, id);
+    }
+
+    clearSessionId(): void {
+        sessionStorage.removeItem(this.sessionId);
     }
     
     getUserId(): string | null {
-        return localStorage.getItem(this.userId);
+        return sessionStorage.getItem(this.userId);
     }
  
     isLoggedIn(): boolean {
@@ -42,9 +50,9 @@ export class AuthService {
     }
 
     logout(): void {
-        localStorage.removeItem(this.authTokenKey);
-        localStorage.removeItem(this.userRoleKey);
-        localStorage.removeItem(this.sessionId);
-        localStorage.removeItem(this.userId);
+        sessionStorage.removeItem(this.authTokenKey);
+        sessionStorage.removeItem(this.userRoleKey);
+        sessionStorage.removeItem(this.sessionId);
+        sessionStorage.removeItem(this.userId);
     }
 }

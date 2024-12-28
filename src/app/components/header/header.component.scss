@@ -8,7 +8,7 @@
 .header-user-type {
     color: var(--secondary-light);
     font-size: 0.7em;
-    vertical-align: 2px;
+    margin-top: 4px;
 }
 
 .logout-btn {
@@ -16,10 +16,27 @@
     margin-left: 10px;
     color: var(--secondary);
     background: var(--secondary-lighter);
-    padding: 0px 2px;
+    padding: 0px 3px;
     border-radius: 15px;
+    height: 25px;
 
     &:hover {
         color: var(--primary);
     }
+}
+
+.ng-select {
+    float: right;
+    margin-right: 10px;
+    margin-top: -3px;
+}
+
+:host ::ng-deep .ng-select {
+    text-align: left;
+    width: 90px !important;
+    min-height: 35px;
+    font-size: 0.7em;
+    .ng-select-container {
+        border-radius: 5px;
+    }    
 }

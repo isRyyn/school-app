@@ -16,10 +16,20 @@ h4 {
     background-color: white;
     padding: 8px;
     border-radius: 5px;
+    min-height: 45px;
+    margin-top: 5px;
 }
 
 .download-btn {
     margin-right: 5px;
+}
+
+.radio-label {
+    margin: 0 15px 0 5px;
+}
+
+.unique-id-search {
+    border: solid 1px lightgray;
 }
 
 @media (max-width: 995px) {

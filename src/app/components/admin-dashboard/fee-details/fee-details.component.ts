@@ -13,11 +13,12 @@ import { ActionSelectComponent } from "../../common/action-select/action-select.
 import { forkJoin } from 'rxjs';
 import { LoaderLineComponent } from "../../common/loader-line/loader-line.component";
 import { SharedService } from '../../../services/shared.service';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 @Component({
     selector: 'app-fee-details',
     standalone: true,
-    imports: [CommonModule, NgSelectModule, FormsModule, ReactiveFormsModule, StudentSelectComponent, DatePickerComponent, ActionSelectComponent, LoaderLineComponent],
+    imports: [CommonModule, NgSelectModule, FormsModule, ReactiveFormsModule, StudentSelectComponent, DatePickerComponent, ActionSelectComponent, LoaderLineComponent, MatSlideToggleModule ],
     providers: [ApiService],
     templateUrl: './fee-details.component.html',
     styleUrl: './fee-details.component.scss'
@@ -48,8 +49,10 @@ export class FeeDetailsComponent implements OnInit {
     nameSearch = null;
     monthSearch = null;
     standardSearch = null;
+    uniqueIdSearch = null;
 
     filteredTotal: string = '';
+    showFilteredTotal = false;
 
     constructor(
         private readonly apiService: ApiService,
@@ -80,6 +83,8 @@ export class FeeDetailsComponent implements OnInit {
             registration: new FormControl(),
             course: new FormControl(),
             other: new FormControl(),
+            other2: new FormControl(),
+            other3: new FormControl(),
             copies: new FormControl(),
             dress: new FormControl(),
             shoes: new FormControl(),
@@ -89,7 +94,11 @@ export class FeeDetailsComponent implements OnInit {
             diary: new FormControl(),
             month: new FormControl(null, Validators.required),
             date: new FormControl(new Date(), Validators.required),
-            sessionId: new FormControl()
+            sessionId: new FormControl(),
+            notes: new FormControl(),
+            uniqueId: new FormControl(),
+            discount: new FormControl(),
+            foc: new FormControl(false)
         });
 
         this.studentSelectForm = new FormGroup({
@@ -103,12 +112,33 @@ export class FeeDetailsComponent implements OnInit {
         this.feeForm.valueChanges.subscribe(values => {
             const total = values.monthly + values.registration + values.course + values.copies
              + values.dress + values.shoes + values.diary + values.tieBelt + values.van 
-             + values.socks + values.other;
+             + values.socks + values.other + values.other2 + values.other3;
             this.feeForm.get('total')?.setValue(total, { emitEvent: false });
 
             const deposited = this.feeForm.value.deposited;
-            this.feeForm.get('remaining')?.setValue(total - deposited);
+            const discount = this.feeForm.value.discount;
+
+            if(values.foc !== true) {
+                this.feeForm.get('remaining')?.setValue(total - deposited, { emitEvent: false });
+
+                if(values.discount) {
+                    this.feeForm.get('remaining')?.setValue(total - (deposited + discount), { emitEvent: false });
+                }
+            }
         });
+    }
+
+    focChanged(val: boolean): void {
+        if (val === true) {
+            this.feeForm.get('remaining')?.setValue(0, { emitEvent: false });
+            this.feeForm.get('deposited')?.patchValue(null);
+            this.feeForm.get('deposited')?.disable();
+            this.feeForm.get('discount')?.patchValue(null);
+            this.feeForm.get('discount')?.disable();
+        } else if (val === false) {
+            this.feeForm.get('deposited')?.enable();
+            this.feeForm.get('discount')?.enable();
+        }
     }
 
     loadData(): void {
@@ -201,7 +231,17 @@ export class FeeDetailsComponent implements OnInit {
 
     getStudent(studentId: number): string {
         const student = this.studentsList.find(x => x.id == studentId);
-        return `${student?.firstName} ${student?.lastName}`;
+        return `${student?.firstName} ${student?.lastName || ''}`;
+    }
+
+    getStudentParent(studentId: number): string {
+        const parentId = this.studentsList.find(x => x.id == studentId)?.parentsIds[0];
+        if(parentId) {
+            this.apiService.getParentById(parentId).subscribe(r => {
+                return r.firstName;
+            });
+        }
+        return '';
     }
 
     getClass(standardId: number): string {
@@ -220,20 +260,25 @@ export class FeeDetailsComponent implements OnInit {
             return;
         }
         if(property == 'student') {
-            this.monthSearch = this.standardSearch = null;
+            this.monthSearch = this.standardSearch = this.uniqueIdSearch = null;
             const ids = this.studentsList.filter(x => x.id == value)?.map(y => y.id);
             this.filteredFeesList = this.fullFeeList.filter(x => ids.includes(x.studentId));
             this.isDataFiltered = true;
 
         } else if(property == 'month') {
-            this.nameSearch = this.standardSearch = null;
+            this.nameSearch = this.standardSearch = this.uniqueIdSearch = null;
             this.filteredFeesList = this.fullFeeList.filter(x => x.month.toLowerCase().includes(value.toLowerCase()));
             this.isDataFiltered = true;
 
         } else if(property == 'class') {
-            this.nameSearch = this.monthSearch = null;
+            this.nameSearch = this.monthSearch = this.uniqueIdSearch = null;
             const ids = this.standardsList.filter(x => x.id == value)?.map(y => y.id);
             this.filteredFeesList = this.fullFeeList.filter(x => ids.includes(x.standardId));
+            this.isDataFiltered = true;
+
+        } else if(property == 'uniqueId') {
+            this.nameSearch = this.monthSearch = this.standardSearch = null;        
+            this.filteredFeesList = this.fullFeeList.filter(x => x.uniqueId?.toString().includes(value));
             this.isDataFiltered = true;
         }
         this.calculateTotal();
@@ -286,5 +331,9 @@ export class FeeDetailsComponent implements OnInit {
                 location.reload();
             });
         }
+    }
+
+    totalToggle(event: any): void {
+        this.showFilteredTotal = event.checked;
     }
 }

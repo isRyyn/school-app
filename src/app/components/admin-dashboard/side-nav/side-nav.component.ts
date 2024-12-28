@@ -17,7 +17,7 @@ export class SideNavComponent implements OnInit {
     @Input() isExpanded: boolean = true;
     @Output() emitState: EventEmitter<boolean> = new EventEmitter();
 
-    schoolName: string = 'SCHOOL';
+    schoolName: string = 'ZH Convent';
     pageList: PageModel[] = [];
     pagesLoaded: boolean = false;
     isScreenLarge: boolean = true;

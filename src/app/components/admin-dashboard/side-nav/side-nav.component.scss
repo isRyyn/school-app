@@ -7,6 +7,11 @@
     background: var(--secondary);
     color: var(--secondary-text);
 
+    .school-name {
+        text-decoration: underline;
+        font-size: 22px !important;
+    }
+
     div {
         padding: 10px 20px;
         border-bottom: solid 1px black;
@@ -17,7 +22,7 @@
         }
 
         span {
-            padding-left: 15px;
+            padding-left: 10px;
             font-size: 15px;
         }
     }

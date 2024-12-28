@@ -15,7 +15,7 @@ import { AuthInterceptor } from '../../services/auth.interceptor';
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [FormsModule, HttpClientModule, NgSelectModule, LoginComponent, NgSelectModule, CommonModule, ReactiveFormsModule],
+    imports: [FormsModule, HttpClientModule, NgSelectModule, NgSelectModule, CommonModule, ReactiveFormsModule],
     providers: [
         ApiService,
         { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
             role: new FormControl('ADMIN', Validators.required),
             username: new FormControl('admin', Validators.required),
             password: new FormControl('1234', Validators.required),
-            sessionId: new FormControl(1, Validators.required)
+            sessionId: new FormControl(4, Validators.required)
         });
     }
 

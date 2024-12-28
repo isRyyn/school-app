@@ -4,15 +4,15 @@ import { Observable } from 'rxjs';
 import { FeeModel, MarksModel, PageModel, ParentModel, SessionModel, SessionStandardMapping, StandardModel, StudentModel, SubjectModel, TeacherModel, TransactionModel, TransferCertificateModel, TransferCertificateRegisterModel, UserModel, VehicleModel } from './models';
 import { ExamType, Role } from './enums';
 import { AuthService } from './auth.service';
-import { baseHost, baseUrl } from './app-constants';
+import { baseHost, baseUrl, testHost, testUrl } from './app-constants';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ApiService {
 
-    private baseHost = baseHost;
-    private baseUrl = baseUrl;
+    private baseHost = testHost;
+    private baseUrl = testUrl;
 
     constructor(
         private httpClient: HttpClient,

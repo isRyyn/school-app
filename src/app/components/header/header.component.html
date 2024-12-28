@@ -1,8 +1,19 @@
 <header class="header-container">
-    
-    <div>
-        <app-fullscreen-button></app-fullscreen-button>
-        <span class="header-user-type">{{ user }}</span>
-        <span title="Logout" (click)="logout()" class="logout-btn"><i class="fa-solid fa-power-off"></i></span>
-    </div>
+  <div class="d-flex justify-content-end">
+    <ng-select
+        [(ngModel)]="session"
+        [items]="sessionsList"
+        [clearable]="false"
+        [searchable]="false"
+        bindLabel="name"
+        bindValue="id"
+        (change)="sessionChanged($event)"
+        placeholder="Select session">
+    </ng-select>
+    <app-fullscreen-button></app-fullscreen-button>
+    <div class="header-user-type">{{ user }}</div>
+    <div title="Logout" (click)="logout()" class="logout-btn"
+      ><i class="fa-solid fa-power-off"></i
+    ></div>
+  </div>
 </header>

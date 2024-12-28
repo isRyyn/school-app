@@ -49,7 +49,7 @@ export class StudentSelectComponent implements OnInit {
         if(item?.lastName) {
             label += ` ${item.lastName}`;
         }
-        if(item.uDiasCode) {
+        if(item.uDiasCode && item.uDiasCode !== '0') {
             label += ` (${item?.uDiasCode})`;
         }
         return label;
