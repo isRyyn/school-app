@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
             role: new FormControl('ADMIN', Validators.required),
             username: new FormControl('admin', Validators.required),
             password: new FormControl('1234', Validators.required),
-            sessionId: new FormControl(4, Validators.required)
+            sessionId: new FormControl(1, Validators.required)
         });
     }
 

@@ -4,7 +4,7 @@ import { ApiService } from '../../../services/api.service';
 import { FormControl, FormGroup, FormGroupDirective, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { StudentSelectComponent } from "../../common/student-select/student-select.component";
-import { ArrayObject, FeeModel, StandardModel, StudentModel } from '../../../services/models';
+import { ArrayObject, FeeModel, ParentModel, StandardModel, StudentModel } from '../../../services/models';
 import { BannerType, Month } from '../../../services/enums';
 import { DatePickerComponent } from "../../common/date-picker/date-picker.component";
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -45,6 +45,7 @@ export class FeeDetailsComponent implements OnInit {
     filteredFeesList: FeeModel[] = [];
     studentsList: StudentModel[] = [];
     standardsList: StandardModel[] = [];
+    parentsList: ParentModel[] = [];
 
     nameSearch = null;
     monthSearch = null;
@@ -145,12 +146,14 @@ export class FeeDetailsComponent implements OnInit {
         forkJoin({
             fee: this.apiService.getAllFee(),
             students: this.apiService.getAllStudents(),
-            standard: this.apiService.getAllStandards()
+            standard: this.apiService.getAllStandards(),
+            parents: this.apiService.getAllParents()
         }).subscribe(r => {
             this.fullFeeList = this.filteredFeesList = r.fee;
             this.calculateTotal();
             this.studentsList = r.students;
             this.standardsList = r.standard;
+            this.parentsList = r.parents;
             this.isDataFiltered = true;
         })
     }
@@ -235,13 +238,7 @@ export class FeeDetailsComponent implements OnInit {
     }
 
     getStudentParent(studentId: number): string {
-        const parentId = this.studentsList.find(x => x.id == studentId)?.parentsIds[0];
-        if(parentId) {
-            this.apiService.getParentById(parentId).subscribe(r => {
-                return r.firstName;
-            });
-        }
-        return '';
+        return this.parentsList.find(x => x.childIds.includes(studentId))?.firstName || '';
     }
 
     getClass(standardId: number): string {
@@ -257,6 +254,7 @@ export class FeeDetailsComponent implements OnInit {
         if(value == '') {
             this.filteredFeesList = this.fullFeeList;
             this.isDataFiltered = true;
+            this.calculateTotal();
             return;
         }
         if(property == 'student') {

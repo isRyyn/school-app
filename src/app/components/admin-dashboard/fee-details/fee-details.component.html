@@ -220,7 +220,7 @@
                     <td>{{ fee?.month | titlecase }}</td>
                     <td>{{ fee?.total }}</td>
                     <td>{{ fee?.deposited }}</td>
-                    <td>{{ fee.total - fee.deposited }}</td>
+                    <td>{{ fee.foc ? 'FOC' : fee.total - fee.deposited }}</td>
                     <td>{{ getClass(fee.standardId) }}</td>
                     <td>{{ fee?.date | slice:0:10 }}</td>
                     <td *ngIf="!studentId">

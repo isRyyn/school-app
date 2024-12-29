@@ -115,6 +115,10 @@ export class ApiService {
     /** 
      *  Parents api 
      */
+    getAllParents(): Observable<ParentModel[]> {
+        return this.httpClient.get<ParentModel[]>(`${this.baseUrl}/parents`);
+    }
+
     getParentById(id: number): Observable<ParentModel> {
         return this.httpClient.get<ParentModel>(`${this.baseUrl}/parents/${id}`);
     }
