@@ -198,6 +198,7 @@
                 <tr>
                     <th>S. No</th>
                     <ng-container *ngIf="!studentId">
+                        <th>ID</th>
                         <th>Student</th>
                         <th>Parent's name</th>
                     </ng-container>
@@ -214,6 +215,7 @@
                 <tr *ngFor="let fee of filteredFeesList; let i = index">
                     <td>{{i+1}}</td>
                     <ng-container *ngIf="!studentId">
+                        <td>{{ fee?.uniqueId || '' }}</td>
                         <td>{{ getStudent(fee.studentId) }}</td>
                         <td>{{ getStudentParent(fee.studentId) }}</td>
                     </ng-container>
